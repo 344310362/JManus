@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface Prompt {
   id: string
   builtIn: boolean
@@ -32,7 +34,7 @@ export class PromptApiService {
    * Get all prompts
    */
   static async getAll(): Promise<Prompt[]> {
-    const response = await fetch(this.BASE_URL)
+    const response = await apiFetch(this.BASE_URL)
     if (!response.ok) {
       throw new Error(`Failed to fetch prompts: ${response.statusText}`)
     }
@@ -43,7 +45,7 @@ export class PromptApiService {
    * Get prompts by namespace
    */
   static async getAllByNamespace(namespace: string): Promise<Prompt[]> {
-    const response = await fetch(`${this.BASE_URL}/namespace/${namespace}`)
+    const response = await apiFetch(`${this.BASE_URL}/namespace/${namespace}`)
     if (!response.ok) {
       throw new Error(`Failed to fetch prompts for namespace ${namespace}: ${response.statusText}`)
     }
@@ -56,7 +58,7 @@ export class PromptApiService {
    * Get prompt by ID
    */
   static async getById(id: string): Promise<Prompt> {
-    const response = await fetch(`${this.BASE_URL}/${id}`)
+    const response = await apiFetch(`${this.BASE_URL}/${id}`)
     if (!response.ok) {
       throw new Error(`Failed to fetch prompt ${id}: ${response.statusText}`)
     }
@@ -67,7 +69,7 @@ export class PromptApiService {
    * Create prompt
    */
   static async create(prompt: Omit<Prompt, 'id'>): Promise<Prompt> {
-    const response = await fetch(this.BASE_URL, {
+    const response = await apiFetch(this.BASE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -84,7 +86,7 @@ export class PromptApiService {
    * Update prompt
    */
   static async update(id: string, prompt: Prompt): Promise<Prompt> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
+    const response = await apiFetch(`${this.BASE_URL}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -101,7 +103,7 @@ export class PromptApiService {
    * Delete prompt
    */
   static async delete(id: string): Promise<void> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
+    const response = await apiFetch(`${this.BASE_URL}/${id}`, {
       method: 'DELETE',
     })
     if (!response.ok) {
@@ -113,7 +115,7 @@ export class PromptApiService {
    * Get supported language list
    */
   static async getSupportedLanguages(): Promise<string[]> {
-    const response = await fetch(`${this.BASE_URL}/languages`)
+    const response = await apiFetch(`${this.BASE_URL}/languages`)
     if (!response.ok) {
       throw new Error(`Failed to fetch supported languages: ${response.statusText}`)
     }
@@ -124,7 +126,7 @@ export class PromptApiService {
    * Import content for a specific prompt from resources for a given language to the database
    */
   static async importSpecificPromptFromLanguage(promptName: string, language: string): Promise<void> {
-    const response = await fetch(`${this.BASE_URL}/import/${promptName}/language/${language}`, {
+    const response = await apiFetch(`${this.BASE_URL}/import/${promptName}/language/${language}`, {
       method: 'POST',
     })
     if (!response.ok) {
@@ -136,7 +138,7 @@ export class PromptApiService {
    * Batch reset all prompts to default values for a specified language
    */
   static async importAllPromptsFromLanguage(language: string): Promise<void> {
-    const response = await fetch(`/admin/prompts/switch-language?language=${language}`, {
+    const response = await apiFetch(`/admin/prompts/switch-language?language=${language}`, {
       method: 'POST',
     })
     if (!response.ok) {

@@ -22,16 +22,16 @@ import zh from './zh'
 export const LOCAL_STORAGE_LOCALE = 'LOCAL_STORAGE_LOCALE'
 
 export const localeConfig = reactive({
-  locale: localStorage.getItem(LOCAL_STORAGE_LOCALE) ?? 'en',
+  locale: localStorage.getItem(LOCAL_STORAGE_LOCALE) ?? 'zh',
   opts: [
-    {
-      value: 'en',
-      title: 'English',
-    },
     {
       value: 'zh',
       title: '中文',
     },
+    {
+      value: 'en',
+      title: 'English',
+    }
   ],
 })
 

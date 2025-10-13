@@ -3,6 +3,8 @@
  * Handles API calls for plan parameter requirements
  */
 
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface ParameterRequirements {
   parameters: string[]
   hasParameters: boolean
@@ -19,7 +21,7 @@ export class PlanParameterApiService {
    */
   static async getParameterRequirements(planTemplateId: string): Promise<ParameterRequirements> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${planTemplateId}/parameters`, {
+      const response = await apiFetch(`${this.BASE_URL}/${planTemplateId}/parameters`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',

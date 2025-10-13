@@ -6,11 +6,14 @@
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
+    "build:local": "vite build --mode .env.local",
+    "build:dev": "vite build --mode dev",
     "preview": "vite preview",
     "test:unit": "vitest",
     "test:e2e": "start-server-and-test preview http://localhost:4173 'cypress run --e2e'",
     "test:e2e:dev": "start-server-and-test 'vite dev --port 4173' http://localhost:4173 'cypress open --e2e'",
     "build-only": "vite build",
+    "build:qiankun": "vite build --mode qiankun",
     "type-check": "vue-tsc --build --force",
     "type-check:watch": "vue-tsc --build --force --watch",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
@@ -27,6 +30,8 @@
     "theme:replace-colors": "node scripts/replace-colors.cjs"
   },
   "dependencies": {
+    "qiankun": "^2.10.16",
+    "vite-plugin-qiankun": "^1.0.15",
     "@ant-design/icons-vue": "^7.0.1",
     "@antv/g2": "^5.1.19",
     "@iconify/vue": "^4.1.1",

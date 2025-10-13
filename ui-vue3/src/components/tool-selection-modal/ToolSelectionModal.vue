@@ -420,7 +420,7 @@ watch(visible, (newVisible) => {
 }
 
 .summary-text {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   font-size: 13px;
 }
 
@@ -459,7 +459,7 @@ watch(visible, (newVisible) => {
 }
 
 .collapse-icon {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   transition: transform 0.3s;
 }
 
@@ -473,7 +473,7 @@ watch(visible, (newVisible) => {
 }
 
 .group-count {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   font-size: 13px;
 }
 
@@ -534,7 +534,7 @@ watch(visible, (newVisible) => {
 }
 
 .tool-selection-desc {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   font-size: 13px;
   line-height: 1.4;
 }

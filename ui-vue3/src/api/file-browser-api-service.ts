@@ -15,6 +15,8 @@
  */
 
 // Define interface types
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface FileNode {
     name: string
     path: string
@@ -63,7 +65,7 @@ export class FileBrowserApiService {
      */
     static async getFileTree(planId: string): Promise<FileNode> {
         try {
-            const response = await fetch(`${this.BASE_URL}/tree/${planId}`)
+            const response = await apiFetch(`${this.BASE_URL}/tree/${planId}`)
             const result = await this.handleResponse(response)
             const apiResponse: ApiResponse<FileNode> = await result.json()
 
@@ -83,7 +85,7 @@ export class FileBrowserApiService {
      */
     static async getFileContent(planId: string, filePath: string): Promise<FileContent> {
         try {
-            const response = await fetch(`${this.BASE_URL}/content/${planId}?path=${encodeURIComponent(filePath)}`)
+            const response = await apiFetch(`${this.BASE_URL}/content/${planId}?path=${encodeURIComponent(filePath)}`)
             const result = await this.handleResponse(response)
             const apiResponse: ApiResponse<FileContent> = await result.json()
 
@@ -103,7 +105,7 @@ export class FileBrowserApiService {
      */
     static async downloadFile(planId: string, filePath: string, fileName?: string): Promise<void> {
         try {
-            const response = await fetch(`${this.BASE_URL}/download/${planId}?path=${encodeURIComponent(filePath)}`)
+            const response = await apiFetch(`${this.BASE_URL}/download/${planId}?path=${encodeURIComponent(filePath)}`)
             await this.handleResponse(response)
 
             const blob = await response.blob()

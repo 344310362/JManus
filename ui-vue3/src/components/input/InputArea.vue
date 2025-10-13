@@ -358,7 +358,7 @@ onUnmounted(() => {
   padding: 6px 12px;
   border: none;
   border-radius: 6px;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: var(--text-primary, #ffffff);
   font-size: 12px;
   cursor: pointer;

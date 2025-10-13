@@ -17,6 +17,7 @@
 // Common request methods (TypeScript version, suitable for Vue projects)
 
 import type { PlanExecutionRecordResponse } from '@/types/plan-execution-record'
+import { apiFetch } from '@/utils/api-fetch'
 
 export class CommonApiService {
   private static readonly BASE_URL = '/api/executor'
@@ -24,7 +25,7 @@ export class CommonApiService {
   // Get detailed execution records
   public static async getDetails(planId: string): Promise<PlanExecutionRecordResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/details/${planId}`)
+      const response = await apiFetch(`${this.BASE_URL}/details/${planId}`)
       if (response.status === 404) {
         // 404 returns null
         return null
@@ -54,7 +55,7 @@ export class CommonApiService {
 
   // Submit user form input
   public static async submitFormInput(planId: string, formData: any): Promise<any> {
-    const response = await fetch(`${this.BASE_URL}/submit-input/${planId}`, {
+    const response = await apiFetch(`${this.BASE_URL}/submit-input/${planId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData),
@@ -75,12 +76,12 @@ export class CommonApiService {
     return { success: true }
   }
 
-  /**
+  /** 
    * Get all Prompt list
    */
   static async getAllPrompts(): Promise<any[]> {
     try {
-      const response = await fetch(this.BASE_URL)
+      const response = await apiFetch(this.BASE_URL)
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {

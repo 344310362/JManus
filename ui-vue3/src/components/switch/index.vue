@@ -78,7 +78,7 @@ const handleChange = (event: Event) => {
     font-size: 14px;
     line-height: 20px;
     height: 20px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary, #ffffff);
     transition: color 0.3s;
   }
 

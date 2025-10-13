@@ -20,6 +20,8 @@
  * Responsible for handling all API interactions related to MCP configuration
  */
 
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface McpServer {
   id: number
   mcpServerName: string
@@ -61,7 +63,7 @@ export class McpApiService {
    * Get all MCP server configurations
    */
   public static async getAllMcpServers(): Promise<McpServer[]> {
-    const response = await fetch(`${this.BASE_URL}/list`)
+    const response = await apiFetch(`${this.BASE_URL}/list`)
     if (!response.ok) {
       throw new Error(`Failed to get MCP server list: ${response.status}`)
     }
@@ -73,7 +75,7 @@ export class McpApiService {
    */
   public static async addMcpServer(mcpConfig: McpServerRequest): Promise<ApiResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/add`, {
+      const response = await apiFetch(`${this.BASE_URL}/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -102,7 +104,7 @@ export class McpApiService {
    */
   public static async importMcpServers(jsonData: any): Promise<ApiResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/batch-import`, {
+      const response = await apiFetch(`${this.BASE_URL}/batch-import`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -136,7 +138,7 @@ export class McpApiService {
    */
   public static async saveMcpServer(mcpConfig: McpServerSaveRequest): Promise<ApiResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/server`, {
+      const response = await apiFetch(`${this.BASE_URL}/server`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -174,7 +176,7 @@ export class McpApiService {
    */
   public static async removeMcpServer(id: number): Promise<ApiResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/remove?id=${id}`)
+      const response = await apiFetch(`${this.BASE_URL}/remove?id=${id}`)
       if (!response.ok) {
         throw new Error(`Failed to delete MCP server: ${response.status}`)
       }
@@ -193,7 +195,7 @@ export class McpApiService {
    */
   public static async enableMcpServer(id: number): Promise<ApiResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/enable/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/enable/${id}`, {
         method: 'POST'
       })
       if (!response.ok) {
@@ -215,7 +217,7 @@ export class McpApiService {
    */
   public static async disableMcpServer(id: number): Promise<ApiResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/disable/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/disable/${id}`, {
         method: 'POST'
       })
       if (!response.ok) {

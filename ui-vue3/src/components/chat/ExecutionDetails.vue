@@ -727,7 +727,7 @@ const formatToolParameters = (parameters?: string): string => {
                   
                   .progress-fill {
                     height: 100%;
-                    background: linear-gradient(90deg, var(--accent-primary, #667eea), #764ba2);
+                    background: linear-gradient(90deg, var(--accent-primary, #667eea), #09df75);
                     transition: width 0.3s ease;
                     border-radius: 4px;
                   }

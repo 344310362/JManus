@@ -269,7 +269,7 @@ defineExpose({
   gap: 8px;
   margin-bottom: 4px;
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   font-weight: 500;
   cursor: pointer;
   padding: 4px 2px;
@@ -326,7 +326,7 @@ defineExpose({
 
 .file-size {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   flex-shrink: 0;
 }
 

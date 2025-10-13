@@ -449,7 +449,7 @@ const confirmDelete = async () => {
 .main-title {
   font-size: 1.25rem;
   font-weight: bold;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -465,7 +465,7 @@ const confirmDelete = async () => {
 .close-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -587,7 +587,7 @@ const confirmDelete = async () => {
 
 .preview-line {
   font-size: 0.875rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -662,7 +662,7 @@ const confirmDelete = async () => {
 }
 
 .delete-btn {
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   background: none;
   border: none;
   cursor: pointer;

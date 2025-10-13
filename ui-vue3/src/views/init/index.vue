@@ -544,7 +544,7 @@ onMounted(() => {
 .logo h1 {
   font-size: 48px;
   margin: 0 0 16px 0;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -935,7 +935,7 @@ onMounted(() => {
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: white;
   border: none;
   padding: 14px 32px;
@@ -1109,7 +1109,7 @@ onMounted(() => {
 .gradient-orb {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   opacity: 0.1;
   animation: orbit 20s infinite linear;
 }

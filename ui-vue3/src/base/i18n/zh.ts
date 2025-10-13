@@ -1031,8 +1031,8 @@ const words: I18nType = {
 
   // 首页
   home: {
-    welcomeTitle: '欢迎使用 JManus！',
-    welcomeSubtitle: '您的 Java AI 智能助手，帮助您构建和完成各种任务。',
+    welcomeTitle: '元气精灵',
+    welcomeSubtitle: '您的 AI 智能助手，帮助您构建和完成各种任务。',
     tagline: 'Java AI 智能体',
     inputPlaceholder: '描述您想构建或完成的内容...',
     directButton: '直接进入工作台',

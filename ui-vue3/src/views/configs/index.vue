@@ -165,7 +165,7 @@ const handleNavClick = (categoryKey: string) => {
 }
 
 .config-header h1 {
-  background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

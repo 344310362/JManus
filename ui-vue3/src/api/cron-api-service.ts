@@ -15,6 +15,7 @@
  */
 
 import type { CronConfig } from '@/types/cron-task'
+import { apiFetch } from '@/utils/api-fetch'
 
 export class CronApiService {
   private static readonly BASE_URL = '/api/cron-tasks'
@@ -24,7 +25,7 @@ export class CronApiService {
    */
   static async getAllCronTasks(): Promise<CronConfig[]> {
     try {
-      const response = await fetch(this.BASE_URL)
+      const response = await apiFetch(this.BASE_URL)
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {
@@ -38,7 +39,7 @@ export class CronApiService {
    */
   static async getCronTaskById(id: string): Promise<CronConfig> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`)
+      const response = await apiFetch(`${this.BASE_URL}/${id}`)
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {
@@ -52,7 +53,7 @@ export class CronApiService {
    */
   static async createCronTask(cronConfig: CronConfig): Promise<CronConfig> {
     try {
-      const response = await fetch(this.BASE_URL, {
+      const response = await apiFetch(this.BASE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +73,7 @@ export class CronApiService {
    */
   static async updateCronTask(id: number, cronConfig: CronConfig): Promise<CronConfig> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -92,7 +93,7 @@ export class CronApiService {
    */
   static async updateTaskStatus(id: string, status: number): Promise<void> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}/status?status=${status}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}/status?status=${status}`, {
         method: 'PUT',
       })
       await this.handleResponse(response)
@@ -107,7 +108,7 @@ export class CronApiService {
    */
   static async deleteCronTask(id: string): Promise<void> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}`, {
         method: 'DELETE',
       })
       await this.handleResponse(response)

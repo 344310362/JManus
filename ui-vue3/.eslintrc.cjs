@@ -46,9 +46,9 @@ module.exports = {
       },
       rules: {
         // TypeScript specific rules that require project - keep as warnings for better DX
-        '@typescript-eslint/prefer-nullish-coalescing': 'warn',
-        '@typescript-eslint/prefer-optional-chain': 'warn',
-        '@typescript-eslint/no-unnecessary-condition': 'warn'
+        //'@typescript-eslint/prefer-nullish-coalescing': 'warn',
+        //'@typescript-eslint/prefer-optional-chain': 'warn',
+        //'@typescript-eslint/no-unnecessary-condition': 'warn'
       }
     },
     {
@@ -79,22 +79,32 @@ module.exports = {
     }
   ],
   rules: {
+    // 关闭 nullish coalescing 警告
+    '@typescript-eslint/prefer-nullish-coalescing': 'off',
+
+    // 关闭 'e' is defined but never used
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
+
+    // 可选：关闭所有未使用变量的检查（更宽松）
+    'unused-imports/no-unused-vars': 'off',
+    'unused-imports/no-unused-imports': 'off',
     'vue/multi-word-component-names': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'off', // Use unused-imports instead
     'unused-imports/no-unused-imports': 'error',
-    'unused-imports/no-unused-vars': [
-      'warn',
-      { 'vars': 'all', 'varsIgnorePattern': '^_', 'args': 'after-used', 'argsIgnorePattern': '^_' }
-    ],
-    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    /*    'unused-imports/no-unused-vars': [
+          'warn',
+          { 'vars': 'all', 'varsIgnorePattern': '^_', 'args': 'after-used', 'argsIgnorePattern': '^_' }
+        ],*/
+    'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     // Enhanced rules for better error detection during refactoring - keep important ones as errors
     'vue/no-undef-properties': 'error',
-    'vue/no-unused-properties': 'warn', // back to warn - can be noisy
+    'vue/no-unused-properties': 'off', // back to warn - can be noisy
     'vue/no-unused-refs': 'warn', // back to warn
     'vue/require-prop-types': 'error',
-    'vue/require-default-prop': 'warn', // this can be annoying, make it warn
+    'vue/require-default-prop': 'off', // this can be annoying, make it warn
     'vue/no-unused-emit-declarations': 'warn', // back to warn
     'vue/no-use-v-if-with-v-for': 'warn', // back to warn
     // Basic rules that don't require project

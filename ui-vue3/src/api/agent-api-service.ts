@@ -16,6 +16,7 @@
 
 // Define interface types
 import type {Model} from "@/api/model-api-service";
+import { apiFetch } from '@/utils/api-fetch';
 
 export interface Agent {
   id: string
@@ -71,11 +72,11 @@ export class AgentApiService {
   static async getAllAgents(namespace?:string): Promise<Agent[]> {
     try {
      if(namespace){
-      const response = await fetch(`${this.BASE_URL}/namespace/${namespace}`)
+      const response = await apiFetch(`${this.BASE_URL}/namespace/${namespace}`)
       const result = await this.handleResponse(response)
       return await result.json()
      }else{
-      const response = await fetch(`${this.BASE_URL}`)
+      const response = await apiFetch(`${this.BASE_URL}`)
       const result = await this.handleResponse(response)
       return await result.json()
 
@@ -91,7 +92,7 @@ export class AgentApiService {
    */
   static async getAgentById(id: string): Promise<Agent> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`)
+      const response = await apiFetch(`${this.BASE_URL}/${id}`)
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {
@@ -105,7 +106,7 @@ export class AgentApiService {
    */
   static async createAgent(agentConfig: Omit<Agent, 'id'>): Promise<Agent> {
     try {
-      const response = await fetch(this.BASE_URL, {
+      const response = await apiFetch(this.BASE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -125,7 +126,7 @@ export class AgentApiService {
    */
   static async updateAgent(id: string, agentConfig: Agent): Promise<Agent> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -145,7 +146,7 @@ export class AgentApiService {
    */
   static async deleteAgent(id: string): Promise<void> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}`, {
         method: 'DELETE'
       })
       if (response.status === 400) {
@@ -163,7 +164,7 @@ export class AgentApiService {
    */
   static async getAvailableTools(): Promise<Tool[]> {
     try {
-      const response = await fetch(`${this.BASE_URL}/tools`)
+      const response = await apiFetch(`${this.BASE_URL}/tools`)
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {

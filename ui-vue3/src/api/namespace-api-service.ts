@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface Namespace {
   id: string
   code: string
@@ -45,7 +47,7 @@ export class NamespaceApiService {
    */
   static async getAllNamespaces(): Promise<Namespace[]> {
     try {
-      const response = await fetch(`${this.BASE_URL}`)
+      const response = await apiFetch(`${this.BASE_URL}`)
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {
@@ -59,7 +61,7 @@ export class NamespaceApiService {
    */
   static async getNamespaceById(id: string): Promise<Namespace> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`)
+      const response = await apiFetch(`${this.BASE_URL}/${id}`)
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {
@@ -73,7 +75,7 @@ export class NamespaceApiService {
    */
   static async createNamespace(namespaceConfig: Omit<Namespace, 'id'>): Promise<Namespace> {
     try {
-      const response = await fetch(this.BASE_URL, {
+      const response = await apiFetch(this.BASE_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,7 +95,7 @@ export class NamespaceApiService {
    */
   static async updateNamespace(id: string, namespaceConfig: Namespace): Promise<Namespace> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -113,7 +115,7 @@ export class NamespaceApiService {
    */
   static async deleteNamespace(id: string): Promise<void> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}`, {
         method: 'DELETE',
       })
       if (response.status === 400) {

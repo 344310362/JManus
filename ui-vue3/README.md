@@ -143,7 +143,7 @@ src/
 
 ### Color Palette
 
-- **Primary**: Linear gradient from `#667eea` to `#764ba2`
+- **Primary**: Linear gradient from `#667eea` to `#09df75`
 - **Background**: `#0a0a0a` (Dark)
 - **Surface**: `rgba(255, 255, 255, 0.05)` (Glass effect)
 - **Border**: `rgba(255, 255, 255, 0.1)`

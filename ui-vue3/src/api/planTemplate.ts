@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface PlanTemplateInitRequest {
   language: string
 }
@@ -94,7 +96,7 @@ const handleResponse = async (response: Response) => {
  * Initialize and register plan templates as inner toolcalls
  */
 export const initAndRegisterPlanTemplates = async (data: PlanTemplateInitRequest): Promise<PlanTemplateInitResponse> => {
-  const response = await fetch('/api/plan-template-publish/init-and-register', {
+  const response = await apiFetch('/api/plan-template-publish/init-and-register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -108,7 +110,7 @@ export const initAndRegisterPlanTemplates = async (data: PlanTemplateInitRequest
  * Register specific plan templates as inner toolcalls
  */
 export const registerPlanTemplates = async (data: PlanTemplateRegisterRequest): Promise<PlanTemplateRegisterResponse> => {
-  const response = await fetch('/api/plan-template-publish/register', {
+  const response = await apiFetch('/api/plan-template-publish/register', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -122,7 +124,7 @@ export const registerPlanTemplates = async (data: PlanTemplateRegisterRequest): 
  * Unregister plan templates from inner toolcalls
  */
 export const unregisterPlanTemplates = async (data: PlanTemplateRegisterRequest): Promise<PlanTemplateRegisterResponse> => {
-  const response = await fetch('/api/plan-template-publish/unregister', {
+  const response = await apiFetch('/api/plan-template-publish/unregister', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -136,7 +138,7 @@ export const unregisterPlanTemplates = async (data: PlanTemplateRegisterRequest)
  * Get registration status
  */
 export const getPlanTemplateStatus = async (): Promise<PlanTemplateStatus> => {
-  const response = await fetch('/api/plan-template-publish/status')
+  const response = await apiFetch('/api/plan-template-publish/status')
   return handleResponse(response)
 }
 
@@ -144,6 +146,6 @@ export const getPlanTemplateStatus = async (): Promise<PlanTemplateStatus> => {
  * Get all registered plan templates
  */
 export const getRegisteredPlanTemplates = async (): Promise<RegisteredPlanTemplatesResponse> => {
-  const response = await fetch('/api/plan-template-publish/registered')
+  const response = await apiFetch('/api/plan-template-publish/registered')
   return handleResponse(response)
 }

@@ -912,7 +912,7 @@ defineExpose({
 /* Field description styles */
 .field-description {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   margin-top: 4px;
   line-height: 1.4;
   font-style: italic;
@@ -925,7 +925,7 @@ defineExpose({
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-primary, #ffffff);;
   font-size: 14px;
   transition: all 0.3s ease;
   font-family: inherit;
@@ -961,7 +961,7 @@ defineExpose({
 .params-help-text {
   margin-bottom: 12px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   line-height: 1.4;
   padding: 6px 8px;
   background: rgba(102, 126, 234, 0.1);
@@ -1006,7 +1006,7 @@ defineExpose({
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  color: #fff;
+  color: var(--text-primary, #ffffff);;
   font-size: 14px;
   transition: all 0.3s ease;
 }
@@ -1019,7 +1019,7 @@ defineExpose({
 
 .readonly-input {
   background: rgba(255, 255, 255, 0.02) !important;
-  color: rgba(255, 255, 255, 0.6) !important;
+  color: var(--text-secondary, #ffffff) !important;
   cursor: not-allowed;
   border-color: var(--scrollbar-track, rgba(255, 255, 255, 0.05)) !important;
 }
@@ -1039,7 +1039,7 @@ defineExpose({
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-primary, #ffffff);;
   font-size: 14px;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -1054,7 +1054,7 @@ defineExpose({
   background: transparent;
   border: none;
   outline: none;
-  color: #fff;
+  color: var(--text-primary, #ffffff);;
   font-size: 14px;
   width: 100%;
   cursor: text; /* Allow text input */
@@ -1083,7 +1083,7 @@ defineExpose({
 
 .dropdown-arrow {
   transition: transform 0.3s ease;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   font-size: 16px;
   flex-shrink: 0;
   margin-left: 8px;
@@ -1137,13 +1137,13 @@ defineExpose({
 }
 
 .dropdown-item.custom-input {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   font-style: italic;
   padding-left: 16px; /* Align with other items */
 }
 
 .dropdown-item.custom-input .custom-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   margin-right: 4px;
 }
 
@@ -1167,7 +1167,7 @@ defineExpose({
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  color: #fff;
+  color: var(--text-primary, #ffffff);;
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 14px;
@@ -1380,7 +1380,7 @@ defineExpose({
 .close-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -1427,12 +1427,12 @@ defineExpose({
 }
 
 .select-option.custom-input {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   font-style: italic;
 }
 
 .select-option.custom-input .custom-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   margin-right: 4px;
 }
 
@@ -1545,7 +1545,7 @@ defineExpose({
 
 .checkbox-description {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   line-height: 1.4;
   margin-left: 24px;
 }
@@ -1555,7 +1555,7 @@ defineExpose({
 
 .endpoint-description {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   line-height: 1.4;
   margin-bottom: 8px;
 }
@@ -1598,7 +1598,7 @@ defineExpose({
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-primary, #ffffff);;
   cursor: pointer;
   transition: all 0.3s ease;
   min-height: 48px;
@@ -1618,7 +1618,7 @@ defineExpose({
 }
 
 .copy-icon {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   margin-left: 8px;
   flex-shrink: 0;
   transition: all 0.3s ease;
@@ -1708,7 +1708,7 @@ defineExpose({
   gap: 8px;
   padding: 12px 16px;
   border-radius: 8px;
-  color: #fff;
+  color: var(--text-primary, #ffffff);;
   cursor: pointer;
   z-index: 10000; /* Ensure above modal */
   animation: slideIn 0.3s ease;

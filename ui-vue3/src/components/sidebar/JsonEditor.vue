@@ -403,7 +403,7 @@ const autoResizeTextarea = (event: Event) => {
 
 .agent-count-badge {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   background: rgba(255, 255, 255, 0.1);
   padding: 2px 6px;
   border-radius: 4px;
@@ -491,7 +491,7 @@ const autoResizeTextarea = (event: Event) => {
 .empty-steps {
   text-align: center;
   padding: 40px 20px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
 }
 
 .empty-icon {
@@ -578,7 +578,7 @@ const autoResizeTextarea = (event: Event) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: var(--text-primary);
 }
 

@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 import { fileURLToPath, URL } from 'node:url'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import checker from 'vite-plugin-checker'
+import qiankun from 'vite-plugin-qiankun'
 
-export default defineConfig({
-  base: '/ui',
-  build: {
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  //console.info('env', env)
+  return {
+    base: env.VITE_BASE_PATH || '/ui',
+    build: {
     outDir: './ui',
   },
   server: {
@@ -41,6 +45,7 @@ export default defineConfig({
   plugins: [
     vue(), 
     vueJsx(),
+    qiankun('sc-ai-manuas', { useDevMode: true }),
     checker({
       // Enable TypeScript checking in development
       typescript: true,
@@ -58,4 +63,4 @@ export default defineConfig({
     },
     extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
   },
-})
+}})

@@ -1,3 +1,5 @@
+import { apiFetch } from '@/utils/api-fetch';
+
 export interface AgentEntity {
   id: number
   agentName: string
@@ -44,7 +46,7 @@ const handleResponse = async (response: Response) => {
  * Get all agents
  */
 export const getAllAgents = async (): Promise<AgentEntity[]> => {
-  const response = await fetch('/api/agent-management')
+  const response = await apiFetch('/api/agent-management')
   return handleResponse(response)
 }
 
@@ -52,7 +54,7 @@ export const getAllAgents = async (): Promise<AgentEntity[]> => {
  * Get supported languages
  */
 export const getSupportedLanguages = async (): Promise<AgentLanguageInfo> => {
-  const response = await fetch('/api/agent-management/languages')
+  const response = await apiFetch('/api/agent-management/languages')
   return handleResponse(response)
 }
 
@@ -60,7 +62,7 @@ export const getSupportedLanguages = async (): Promise<AgentLanguageInfo> => {
  * Reset all agents to specific language
  */
 export const resetAllAgents = async (data: ResetAgentsRequest): Promise<ResetAgentsResponse> => {
-  const response = await fetch('/api/agent-management/reset', {
+  const response = await apiFetch('/api/agent-management/reset', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -74,7 +76,7 @@ export const resetAllAgents = async (data: ResetAgentsRequest): Promise<ResetAge
  * Initialize agents with specific language
  */
 export const initializeAgents = async (data: ResetAgentsRequest): Promise<ResetAgentsResponse> => {
-  const response = await fetch('/api/agent-management/initialize', {
+  const response = await apiFetch('/api/agent-management/initialize', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -88,6 +90,6 @@ export const initializeAgents = async (data: ResetAgentsRequest): Promise<ResetA
  * Get agent statistics
  */
 export const getAgentStats = async (): Promise<AgentStats> => {
-  const response = await fetch('/api/agent-management/stats')
+  const response = await apiFetch('/api/agent-management/stats')
   return handleResponse(response)
 }

@@ -606,7 +606,7 @@ defineExpose({
   .params-help-text {
     margin-bottom: 12px;
     font-size: 11px;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary, #ffffff);
     line-height: 1.4;
     padding: 6px 8px;
     background: rgba(102, 126, 234, 0.1);
@@ -807,7 +807,7 @@ defineExpose({
   padding: 8px 12px;
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
@@ -911,7 +911,7 @@ defineExpose({
   transition: all 0.2s ease;
 
   &.btn-primary {
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     color: white;
 
     &:hover:not(:disabled) {
@@ -921,7 +921,7 @@ defineExpose({
   }
 
   &.publish-mcp-btn {
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     color: var(--text-primary, #ffffff);
     border: none;
 

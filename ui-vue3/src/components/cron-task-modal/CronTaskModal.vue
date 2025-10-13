@@ -586,7 +586,7 @@ watch(() => props.modelValue, (newValue) => {
 .close-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -611,7 +611,7 @@ watch(() => props.modelValue, (newValue) => {
   align-items: center;
   justify-content: center;
   height: 200px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   gap: 12px;
 }
 
@@ -713,7 +713,7 @@ watch(() => props.modelValue, (newValue) => {
 
 .task-description {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   line-height: 1.5;
   margin: 4px 0;
   max-width: 80%;
@@ -728,7 +728,7 @@ watch(() => props.modelValue, (newValue) => {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   font-size: 13px;
   padding: 6px 10px;
   background: rgba(255, 255, 255, 0.03);
@@ -1062,7 +1062,7 @@ watch(() => props.modelValue, (newValue) => {
 
 .option-desc {
   font-size: 13px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
 }
 </style>
 

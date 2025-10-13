@@ -1,4 +1,5 @@
 import type { AgentExecutionRecordDetail } from '@/types/agent-execution-detail'
+import { apiFetch } from '@/utils/api-fetch'
 
 const API_BASE_URL = '/api/executor'
 
@@ -9,7 +10,7 @@ const API_BASE_URL = '/api/executor'
  */
 export async function fetchAgentExecutionDetail(stepId: string): Promise<AgentExecutionRecordDetail | null> {
   try {
-    const response = await fetch(`${API_BASE_URL}/agent-execution/${stepId}`)
+    const response = await apiFetch(`${API_BASE_URL}/agent-execution/${stepId}`)
     
     if (!response.ok) {
       if (response.status === 404) {

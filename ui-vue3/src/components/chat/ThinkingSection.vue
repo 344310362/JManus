@@ -132,7 +132,7 @@ const handleStepSelected = (stepId: string) => {
       justify-content: center;
       width: 32px;
       height: 32px;
-      background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
       border-radius: 50%;
       
       .thinking-icon {

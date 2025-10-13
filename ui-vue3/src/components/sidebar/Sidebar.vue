@@ -690,7 +690,7 @@ defineExpose({
       font-size: 20px;
       font-weight: 600;
 
-      background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -730,7 +730,7 @@ defineExpose({
       }
 
       &.active {
-        background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+        background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
         color: white;
         box-shadow: 0 2px 4px var(--selection-bg, rgba(102, 126, 234, 0.3));
       }
@@ -774,7 +774,7 @@ defineExpose({
             margin: 0 0 4px 0;
             font-size: 14px;
             font-weight: 600;
-            color: white;
+            color: var(--text-primary, #ffffff);;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -782,7 +782,7 @@ defineExpose({
 
           .template-id {
             font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--text-primary, #ffffff);;
           }
         }
 
@@ -792,7 +792,7 @@ defineExpose({
           background: transparent;
           border: none;
           border-radius: 4px;
-          color: rgba(255, 255, 255, 0.7);
+          color: var(--text-primary, #ffffff);;
           cursor: pointer;
           display: flex;
           align-items: center;
@@ -854,7 +854,7 @@ defineExpose({
     .new-task-btn {
       width: 100%;
       padding: 12px 16px;
-      background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
       border: none;
       border-radius: 8px;
       color: white;
@@ -895,7 +895,7 @@ defineExpose({
       align-items: center;
       justify-content: center;
       padding: 32px 16px;
-      color: rgba(255, 255, 255, 0.6);
+      color: var(--text-secondary, #ffffff);
       font-size: 14px;
       text-align: center;
       gap: 12px;

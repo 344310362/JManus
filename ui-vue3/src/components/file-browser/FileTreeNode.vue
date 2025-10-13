@@ -251,7 +251,7 @@ onUnmounted(() => {
   width: 16px;
   height: 16px;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   transition: color 0.2s ease;
 }
 
@@ -312,7 +312,7 @@ onUnmounted(() => {
   background: rgba(255, 255, 255, 0.1);
   border: none;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -358,7 +358,7 @@ onUnmounted(() => {
 
 .context-menu-item .iconify {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
 }
 
 .context-menu-divider {

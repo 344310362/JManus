@@ -405,7 +405,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   gap: 12px;
 }
 
@@ -458,7 +458,7 @@ onUnmounted(() => {
 
 .waiting-for-files p {
   margin: 0 0 16px 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -513,7 +513,7 @@ onUnmounted(() => {
 }
 
 .file-size {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   font-size: 12px;
 }
 
@@ -557,7 +557,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   flex: 1;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   gap: 12px;
 }
 
@@ -588,7 +588,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: center;
   flex: 1;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
   gap: 16px;
 }
 

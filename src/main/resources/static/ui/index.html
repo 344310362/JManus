@@ -12,18 +12,48 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License. 
--->
-<!doctype html>
-<html lang="en">
-  <head>
-    <link rel="icon" href="/ui/Java-AI.svg" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JTaskPoilt</title>
-    <script type="module" crossorigin src="/ui/assets/index-C81vyvib.js"></script>
-    <link rel="stylesheet" crossorigin href="/ui/assets/index-DN-vOy2S.css">
+--><!DOCTYPE html><html lang="en"><head>
+    <link rel="icon" href="//dev-sm-ai-manus.exexm.com/ui/Java-AI.svg">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sm-ai-manus</title>
+    <script crossorigin="">import('//dev-sm-ai-manus.exexm.com/ui/assets/index-Dj7jbDy3.js').finally(() => {
+            
+    const qiankunLifeCycle = window.moudleQiankunAppLifeCycles && window.moudleQiankunAppLifeCycles['sc-ai-manuas'];
+    if (qiankunLifeCycle) {
+      window.proxy.vitemount((props) => qiankunLifeCycle.mount(props));
+      window.proxy.viteunmount((props) => qiankunLifeCycle.unmount(props));
+      window.proxy.vitebootstrap(() => qiankunLifeCycle.bootstrap());
+      window.proxy.viteupdate((props) => qiankunLifeCycle.update(props));
+    }
+  
+          })</script>
+    <link rel="stylesheet" crossorigin="" href="//dev-sm-ai-manus.exexm.com/ui/assets/index-DNfg9KMR.css">
   </head>
   <body>
     <div id="app"></div>
-  </body>
-</html>
+
+  
+
+<script>
+  const createDeffer = (hookName) => {
+    const d = new Promise((resolve, reject) => {
+      window.proxy && (window.proxy[`vite${hookName}`] = resolve)
+    })
+    return props => d.then(fn => fn(props));
+  }
+  const bootstrap = createDeffer('bootstrap');
+  const mount = createDeffer('mount');
+  const unmount = createDeffer('unmount');
+  const update = createDeffer('update');
+
+  ;(global => {
+    global.qiankunName = 'sc-ai-manuas';
+    global['sc-ai-manuas'] = {
+      bootstrap,
+      mount,
+      unmount,
+      update
+    };
+  })(window);
+</script></body></html>

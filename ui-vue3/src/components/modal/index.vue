@@ -173,7 +173,7 @@ onUnmounted(() => {
 .close-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   cursor: pointer;
   padding: 4px;
   display: flex;

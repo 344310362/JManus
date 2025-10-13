@@ -16,6 +16,7 @@
 
 import { LlmCheckService } from '@/utils/llm-check'
 import type { InputMessage } from "@/stores/memory"
+import { apiFetch } from '@/utils/api-fetch'
 
 export class DirectApiService {
   private static readonly BASE_URL = '/api/executor'
@@ -29,7 +30,7 @@ export class DirectApiService {
         isVueRequest: true
       }
       
-      const response = await fetch(`${this.BASE_URL}/execute`, {
+      const response = await apiFetch(`${this.BASE_URL}/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)
@@ -70,7 +71,7 @@ export class DirectApiService {
       
       console.log('[DirectApiService] Sending message with default plan:', requestBody)
       
-      const response = await fetch(`${this.BASE_URL}/executeByToolNameAsync`, {
+      const response = await apiFetch(`${this.BASE_URL}/executeByToolNameAsync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody)

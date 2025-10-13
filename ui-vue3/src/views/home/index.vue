@@ -32,13 +32,13 @@
             <ThemeSwitcher />
           </div>
         </div>
-        <div class="logo-container">
+<!--        <div class="logo-container">
           <div class="logo">
             <img src="/Java-AI.svg" alt="JManus" class="java-logo" />
             <h1>JManus</h1>
           </div>
           <span class="tagline">{{ $t('home.tagline') }}</span>
-        </div>
+        </div>-->
       </header>
 
       <!-- Main content -->
@@ -119,10 +119,10 @@ const examples = computed(() => [
   { title: t('home.examples.weather.title'), type: 'message', description: t('home.examples.weather.description'), icon: 'carbon:partly-cloudy', prompt: t('home.examples.weather.prompt') }
 ])
 const plans = computed(() => [
-  { title: t('home.examples.queryplan.title'), type: 'plan-act', description: t('home.examples.queryplan.description'), icon: 'carbon:plan', prompt: t('home.examples.queryplan.prompt'), planJson: { planType: 'simple', title: t('home.examples.queryplan.planTitle'), steps: [{ stepRequirement: t('home.examples.queryplan.step1'), terminateColumns: t('home.examples.queryplan.step1Output') }, { stepRequirement: t('home.examples.queryplan.step2'), terminateColumns: t('home.examples.queryplan.step2Output') }], planTemplateId: 'planTemplate-1749200517403' } },
+ /* { title: t('home.examples.queryplan.title'), type: 'plan-act', description: t('home.examples.queryplan.description'), icon: 'carbon:plan', prompt: t('home.examples.queryplan.prompt'), planJson: { planType: 'simple', title: t('home.examples.queryplan.planTitle'), steps: [{ stepRequirement: t('home.examples.queryplan.step1'), terminateColumns: t('home.examples.queryplan.step1Output') }, { stepRequirement: t('home.examples.queryplan.step2'), terminateColumns: t('home.examples.queryplan.step2Output') }], planTemplateId: 'planTemplate-1749200517403' } },
   { title: t('home.examples.ainovel.title'), type: 'plan-act', description: t('home.examples.ainovel.description'), icon: 'carbon:document-tasks', prompt: t('home.examples.ainovel.prompt'), planJson: { planType: 'simple', title: t('home.examples.ainovel.planTitle'), steps: [{ stepRequirement: t('home.examples.ainovel.step1'), terminateColumns: t('home.examples.ainovel.step1Output') }, { stepRequirement: t('home.examples.ainovel.step2'), terminateColumns: t('home.examples.ainovel.step2Output') }], planTemplateId: 'planTemplate-1753622676988' } },
   { title: t('home.examples.formInputDemo.title'), type: 'plan-act', description: t('home.examples.formInputDemo.description'), icon: 'carbon:watson', prompt: t('home.examples.formInputDemo.prompt'), planJson: { planType: 'simple', title: t('home.examples.formInputDemo.planTitle'), steps: [{ stepRequirement: t('home.examples.formInputDemo.step1'), terminateColumns: t('home.examples.formInputDemo.step1Output') }, { stepRequirement: t('home.examples.formInputDemo.step2'), terminateColumns: t('home.examples.formInputDemo.step2Output') }, { stepRequirement: t('home.examples.formInputDemo.step3'), terminateColumns: t('home.examples.formInputDemo.step3Output') }], planTemplateId: 'planTemplate-forminput-demo-2025' } }
-])
+*/])
 const allCards = computed(() => [...examples.value,  ...plans.value])
 
 const handleCardClick = (item: any) => {
@@ -334,7 +334,7 @@ const selectPlan = async (plan: any) => {
   &.orb-1 {
     width: 400px;
     height: 400px;
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     top: -200px;
     right: -200px;
     animation-delay: 0s;
@@ -410,7 +410,7 @@ const selectPlan = async (plan: any) => {
     font-size: 48px;
     font-weight: 700;
     margin: 0 0 8px 0;
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -503,7 +503,7 @@ const selectPlan = async (plan: any) => {
   height: 40px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: var(--text-primary, #ffffff);
   cursor: pointer;
   display: flex;
@@ -557,7 +557,7 @@ const selectPlan = async (plan: any) => {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
@@ -651,7 +651,7 @@ const selectPlan = async (plan: any) => {
     font-size: 20px;
     font-weight: 600;
     color: var(--text-primary, #ffffff);
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -663,7 +663,7 @@ const selectPlan = async (plan: any) => {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: var(--text-primary, #ffffff);
   font-size: 16px;
   cursor: pointer;

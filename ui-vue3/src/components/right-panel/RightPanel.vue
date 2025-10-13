@@ -1233,7 +1233,7 @@ defineExpose({
   align-items: center;
   justify-content: center;
   height: 100%;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   gap: 24px;
   padding: 40px 20px;
   text-align: center;
@@ -1263,7 +1263,7 @@ defineExpose({
   margin: 0;
   font-size: 14px;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
 }
 
 .tips {
@@ -1315,7 +1315,7 @@ defineExpose({
 }
 
 .tab-item.active {
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: var(--text-primary, #ffffff);
   box-shadow: 0 2px 8px var(--selection-bg, rgba(102, 126, 234, 0.3));
 }

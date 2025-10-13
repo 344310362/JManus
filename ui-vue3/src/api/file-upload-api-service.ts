@@ -17,6 +17,8 @@
 /**
  * File information interface matching FileUploadResult.FileInfo from Java
  */
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface FileInfo {
   originalName: string
   size: number
@@ -86,7 +88,7 @@ export class FileUploadApiService {
         formData.append('files', file)
       })
       
-      const response = await fetch('/api/file-upload/upload', {
+      const response = await apiFetch('/api/file-upload/upload', {
         method: 'POST',
         body: formData,
       })
@@ -114,7 +116,7 @@ export class FileUploadApiService {
     try {
       console.log('[FileUploadApiService] Getting uploaded files for uploadKey:', uploadKey)
       
-      const response = await fetch(`/api/file-upload/files/${encodeURIComponent(uploadKey)}`)
+      const response = await apiFetch(`/api/file-upload/files/${encodeURIComponent(uploadKey)}`)
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -140,7 +142,7 @@ export class FileUploadApiService {
     try {
       console.log('[FileUploadApiService] Deleting file:', fileName, 'from uploadKey:', uploadKey)
       
-      const response = await fetch(`/api/file-upload/files/${encodeURIComponent(uploadKey)}/${encodeURIComponent(fileName)}`, {
+      const response = await apiFetch(`/api/file-upload/files/${encodeURIComponent(uploadKey)}/${encodeURIComponent(fileName)}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -169,7 +171,7 @@ export class FileUploadApiService {
     try {
       console.log('[FileUploadApiService] Getting upload configuration')
       
-      const response = await fetch('/api/file-upload/config')
+      const response = await apiFetch('/api/file-upload/config')
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)

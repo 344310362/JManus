@@ -82,7 +82,7 @@ const { formatTimestamp, formatFileSize } = useMessageFormatting()
   left: 0;
   right: 0;
   height: 2px;
-  background: linear-gradient(90deg, var(--accent-primary, var(--accent-primary, #667eea)), #764ba2);
+  background: linear-gradient(90deg, var(--accent-primary, var(--accent-primary, #667eea)), #09df75);
 }
 
 .user-message-content {

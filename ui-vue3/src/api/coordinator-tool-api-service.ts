@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface CoordinatorToolVO {
   id?: number
   toolName: string
@@ -44,7 +46,7 @@ export class CoordinatorToolApiService {
    */
   public static async getCoordinatorToolConfig(): Promise<CoordinatorToolConfig> {
     try {
-      const response = await fetch(`${this.BASE_URL}/config`, {
+      const response = await apiFetch(`${this.BASE_URL}/config`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -72,7 +74,7 @@ export class CoordinatorToolApiService {
    */
   public static async getAllEndpoints(): Promise<string[]> {
     try {
-      const response = await fetch(`${this.BASE_URL}/endpoints`, {
+      const response = await apiFetch(`${this.BASE_URL}/endpoints`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -98,7 +100,7 @@ export class CoordinatorToolApiService {
     console.log('[CoordinatorToolApiService] Request URL:', `${this.BASE_URL}/get-get-or-new-by-template/${planTemplateId}`)
     
     try {
-      const response = await fetch(`${this.BASE_URL}/get-or-new-by-template/${planTemplateId}`, {
+      const response = await apiFetch(`${this.BASE_URL}/get-or-new-by-template/${planTemplateId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -136,7 +138,7 @@ export class CoordinatorToolApiService {
     console.log('[CoordinatorToolApiService] Request URL:', `${this.BASE_URL}/get-or-new-by-template/${planTemplateId}`)
     
     try {
-      const response = await fetch(`${this.BASE_URL}/get-or-new-by-template/${planTemplateId}`, {
+      const response = await apiFetch(`${this.BASE_URL}/get-or-new-by-template/${planTemplateId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -187,7 +189,7 @@ export class CoordinatorToolApiService {
     console.log('[CoordinatorToolApiService] Cleaned sending data:', JSON.stringify(requestData, null, 2))
     
     try {
-      const response = await fetch(`${this.BASE_URL}`, {
+      const response = await apiFetch(`${this.BASE_URL}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -247,7 +249,7 @@ export class CoordinatorToolApiService {
     console.log('[CoordinatorToolApiService] Cleaned sending data:', requestData)
     
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -290,7 +292,7 @@ export class CoordinatorToolApiService {
     console.log('[CoordinatorToolApiService] Request URL:', `${this.BASE_URL}/${id}`)
     
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

@@ -174,7 +174,7 @@ defineExpose<ToastInstance>({ show })
 
 .toast-btn--primary {
   background: rgba(102, 126, 234, 0.8);
-  color: #fff;
+  color: var(--text-primary, #ffffff);;
   border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
 }
 

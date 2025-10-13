@@ -401,13 +401,13 @@ watch(
 
 .status-label {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
 }
 
 .close-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -488,7 +488,7 @@ watch(
 .time-label {
   font-size: 14px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
 }
 
 .time-value {
@@ -512,7 +512,7 @@ watch(
   transition: all 0.3s;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary, #ffffff);
 }
 
 .template-btn.active {

@@ -225,7 +225,7 @@ onUnmounted(() => {
 }
 
 .chevron {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   transition: transform 0.3s ease;
 }
 
@@ -276,7 +276,7 @@ onUnmounted(() => {
 .close-btn {
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -399,7 +399,7 @@ onUnmounted(() => {
 
 .model-description {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary, #ffffff);
   line-height: 1.3;
 }
 

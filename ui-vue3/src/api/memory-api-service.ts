@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface Memory {
     id: number;
     conversation_id: string;
@@ -53,7 +55,7 @@ export class MemoryApiService {
 
     static async getMemories(): Promise<Memory[]> {
         try {
-            const response = await fetch(`${this.BASE_URL}`)
+            const response = await apiFetch(`${this.BASE_URL}`)
             const result = await this.handleResponse(response)
             const data: MemoryResponse = await result.json()
             return data.memories || []
@@ -65,7 +67,7 @@ export class MemoryApiService {
 
     static async getMemory(conversationId: string): Promise<Memory> {
         try {
-            const response = await fetch(`${this.BASE_URL}/single?conversationId=${conversationId}`)
+            const response = await apiFetch(`${this.BASE_URL}/single?conversationId=${conversationId}`)
             const result = await this.handleResponse(response)
             const data: MemoryResponse = await result.json()
             if (!data.data) {
@@ -80,7 +82,7 @@ export class MemoryApiService {
 
     static async createMemory(conversationId: string, memoryName: string): Promise<Memory> {
         try {
-            const response = await fetch(`${this.BASE_URL}`, {
+            const response = await apiFetch(`${this.BASE_URL}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -104,7 +106,7 @@ export class MemoryApiService {
 
     static async updateMemory(conversationId: string, memoryName: string): Promise<Memory> {
         try {
-            const response = await fetch(`${this.BASE_URL}`, {
+            const response = await apiFetch(`${this.BASE_URL}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -128,7 +130,7 @@ export class MemoryApiService {
 
     static async deleteMemory(conversationId: string): Promise<void> {
         try {
-            const response = await fetch(`${this.BASE_URL}/${conversationId}`, {
+            const response = await apiFetch(`${this.BASE_URL}/${conversationId}`, {
                 method: 'DELETE'
             })
             await this.handleResponse(response)
@@ -140,7 +142,7 @@ export class MemoryApiService {
 
     static async generateConversationId(): Promise<Memory> {
         try {
-            const response = await fetch(`${this.BASE_URL}/generate-id`)
+            const response = await apiFetch(`${this.BASE_URL}/generate-id`)
             const result = await this.handleResponse(response)
             const data: MemoryResponse = await result.json()
             if (!data.data) {

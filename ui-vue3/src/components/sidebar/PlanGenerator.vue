@@ -269,7 +269,7 @@ defineExpose({
   }
 
   &.btn-primary {
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     color: var(--text-primary);
 
     &:hover:not(:disabled) {

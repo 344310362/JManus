@@ -18,7 +18,7 @@
  * Admin API Service
  * Handles all API interactions related to administration configuration
  */
-
+import { apiFetch } from '@/utils/api-fetch'
 export interface ConfigOption {
   value: string
   label: string
@@ -52,7 +52,7 @@ export class AdminApiService {
    */
   public static async getConfigsByGroup(groupName: string): Promise<ConfigItem[]> {
     try {
-      const response = await fetch(`${this.BASE_URL}/group/${groupName}`)
+      const response = await apiFetch(`${this.BASE_URL}/group/${groupName}`)
       if (!response.ok) {
         throw new Error(`Failed to get ${groupName} group configuration: ${response.status}`)
       }

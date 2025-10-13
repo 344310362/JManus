@@ -15,6 +15,8 @@
  */
 
 // Define interface types
+import { apiFetch } from '@/utils/api-fetch'
+
 export interface Model {
     id: string
     headers: Headers | null
@@ -78,7 +80,7 @@ export class ModelApiService {
      */
     static async getAllModels(): Promise<Model[]> {
         try {
-            const response = await fetch(this.BASE_URL)
+            const response = await apiFetch(this.BASE_URL)
             const result = await this.handleResponse(response)
             return await result.json()
         } catch (error) {
@@ -92,7 +94,7 @@ export class ModelApiService {
      */
     static async getAllTypes(): Promise<string[]> {
         try {
-            const response = await fetch(`${this.BASE_URL}/types`)
+            const response = await apiFetch(`${this.BASE_URL}/types`)
             const result = await this.handleResponse(response)
             return await result.json()
         } catch (error) {
@@ -106,7 +108,7 @@ export class ModelApiService {
      */
     static async getModelById(id: string): Promise<Model> {
         try {
-            const response = await fetch(`${this.BASE_URL}/${id}`)
+            const response = await apiFetch(`${this.BASE_URL}/${id}`)
             const result = await this.handleResponse(response)
             return await result.json()
         } catch (error) {
@@ -129,7 +131,7 @@ export class ModelApiService {
                 return value;
             });
 
-            const response = await fetch(this.BASE_URL, {
+            const response = await apiFetch(this.BASE_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -158,7 +160,7 @@ export class ModelApiService {
                 return value;
             });
 
-            const response = await fetch(`${this.BASE_URL}/${id}`, {
+            const response = await apiFetch(`${this.BASE_URL}/${id}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -181,7 +183,7 @@ export class ModelApiService {
      */
     static async deleteModel(id: string): Promise<void> {
         try {
-            const response = await fetch(`${this.BASE_URL}/${id}`, {
+            const response = await apiFetch(`${this.BASE_URL}/${id}`, {
                 method: 'DELETE'
             })
             if (response.status === 400) {
@@ -202,7 +204,7 @@ export class ModelApiService {
      */
     static async validateConfig(request: ValidationRequest): Promise<ValidationResult> {
         try {
-            const response = await fetch(`${this.BASE_URL}/validate`, {
+            const response = await apiFetch(`${this.BASE_URL}/validate`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -222,7 +224,7 @@ export class ModelApiService {
      */
     static async setDefaultModel(id: string): Promise<{success: boolean, message: string}> {
         try {
-            const response = await fetch(`${this.BASE_URL}/${id}/set-default`, {
+            const response = await apiFetch(`${this.BASE_URL}/${id}/set-default`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
