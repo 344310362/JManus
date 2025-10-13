@@ -1,0 +1,17 @@
+FROM registry.cn-beijing.aliyuncs.com/exe/eclipse-temurin:17.0.6_10-jdk-centos7-1
+
+RUN mkdir -p /home/appuser/java_tmp
+
+ARG PORT
+
+ENV PORT=${PORT:-8080}
+
+COPY target/jmanus-4.0.3-SNAPSHOT.jar /home/appuser/app.jar
+
+VOLUME /tmp
+
+EXPOSE ${PORT}
+
+ENV JAVA_OPTS="-XX:+UseContainerSupport  -XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=75.0 -XX:MinRAMPercentage=75.0 -XX:-UseAdaptiveSizePolicy -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/oss/gc.hprof -Djava.io.tmpdir=/home/appuser/java_tmp"
+
+cmd java -Djava.security.egd=file:/dev/./urandom -Dserver.port=${PORT}  ${JAVA_OPTS} -jar /home/appuser/app.jar
