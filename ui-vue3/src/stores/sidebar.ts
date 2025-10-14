@@ -20,7 +20,7 @@ import { PlanActApiService } from '@/api/plan-act-api-service'
 import type { PlanTemplate } from '@/types/plan-template'
 import { i18n } from '@/base/i18n'
 import { Tool } from '@/api/agent-api-service'
-
+import {apiFetch} from "@/utils/api-fetch";
 type TabType = 'list' | 'config'
 
 export class SidebarStore {
@@ -397,7 +397,7 @@ export class SidebarStore {
 
     try {
       console.log('[SidebarStore] Loading available tools...')
-      const response = await fetch('/api/agents/tools')
+      const response = await apiFetch('/api/agents/tools')
       
       if (response.ok) {
         const tools = await response.json()

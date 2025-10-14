@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import {apiFetch} from "@/utils/api-fetch";
 /**
  * LLM configuration check utility class
  * Check if model is configured before performing LLM-related operations
@@ -33,7 +34,7 @@ export class LlmCheckService {
     }
 
     try {
-      const response = await fetch('/api/init/status')
+      const response = await apiFetch('/api/init/status')
       if (!response.ok) {
         throw new Error(`Check failed: ${response.status}`)
       }

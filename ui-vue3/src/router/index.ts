@@ -16,6 +16,7 @@
 
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { routes } from '@/router/defaultRoutes'
+import {apiFetch} from "@/utils/api-fetch";
 
 const options = {
   history: createWebHashHistory('/ui'),
@@ -33,7 +34,7 @@ router.beforeEach(async (to, _from, next) => {
 
   try {
     // Check initialization status from server
-    const response = await fetch('/api/init/status')
+    const response = await apiFetch('/api/init/status')
     const result = await response.json()
     
     if (result.success && !result.initialized) {

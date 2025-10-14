@@ -307,6 +307,7 @@ import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
 import { LlmCheckService } from '@/utils/llm-check'
 import { changeLanguageWithAgentReset, initializePlanTemplates, LOCAL_STORAGE_LOCALE } from '@/base/i18n'
+import { apiFetch } from '@/utils/api-fetch';
 
 const { t, locale } = useI18n()
 const router = useRouter()
@@ -434,7 +435,7 @@ const handleSubmit = async () => {
       requestBody.completionsPath = form.value.completionsPath.trim()
     }
 
-    const response = await fetch('/api/init/save', {
+    const response = await apiFetch('/api/init/save', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -485,7 +486,7 @@ const handleSubmit = async () => {
 // Check if already initialized
 const checkInitStatus = async () => {
   try {
-    const response = await fetch('/api/init/status')
+    const response = await apiFetch('/api/init/status')
     const result = await response.json()
 
     if (result.success && result.initialized) {

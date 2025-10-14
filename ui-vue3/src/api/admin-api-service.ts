@@ -72,7 +72,7 @@ export class AdminApiService {
     }
 
     try {
-      const response = await fetch(`${this.BASE_URL}/batch-update`, {
+      const response = await apiFetch(`${this.BASE_URL}/batch-update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -99,7 +99,7 @@ export class AdminApiService {
    */
   public static async getConfigById(id: number): Promise<ConfigItem> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${id}`)
+      const response = await apiFetch(`${this.BASE_URL}/${id}`)
       if (!response.ok) {
         throw new Error(`Failed to get configuration item: ${response.status}`)
       }
@@ -115,7 +115,7 @@ export class AdminApiService {
    */
   public static async updateConfig(config: ConfigItem): Promise<ApiResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/${config.id}`, {
+      const response = await apiFetch(`${this.BASE_URL}/${config.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -142,7 +142,7 @@ export class AdminApiService {
    */
   public static async resetAllConfigsToDefaults(): Promise<ApiResponse> {
     try {
-      const response = await fetch(`${this.BASE_URL}/reset-all-defaults`, {
+      const response = await apiFetch(`${this.BASE_URL}/reset-all-defaults`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

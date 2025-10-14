@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+import {apiFetch} from "@/utils/api-fetch";
 import { createI18n } from 'vue-i18n'
 import { reactive } from 'vue'
 import en from './en'
@@ -64,7 +64,7 @@ export const changeLanguageWithAgentReset = async (locale: string) => {
 
   try {
     // Reset prompts to the new language
-    const promptResponse = await fetch(`/admin/prompts/switch-language?language=${locale}`, {
+    const promptResponse = await apiFetch(`/admin/prompts/switch-language?language=${locale}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export const changeLanguageWithAgentReset = async (locale: string) => {
     }
 
     // Initialize agents with the new language (used during initial setup)
-    const agentResponse = await fetch('/api/agent-management/initialize', {
+    const agentResponse = await apiFetch('/api/agent-management/initialize', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ export const changeLanguageWithAgentReset = async (locale: string) => {
 export const initializePlanTemplates = async (locale: string) => {
   try {
     // Initialize and register plan templates with the specified language
-    const planTemplateResponse = await fetch('/api/plan-template-publish/init-and-register', {
+    const planTemplateResponse = await apiFetch('/api/plan-template-publish/init-and-register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
