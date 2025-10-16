@@ -1,17 +1,49 @@
-FROM registry.cn-beijing.aliyuncs.com/exe/eclipse-temurin:17.0.6_10-jdk-centos7-1
+FROM registry.cn-beijing.aliyuncs.com/exe/sm-ai-manus:dev-rj-1
 
-RUN mkdir -p /home/appuser/java_tmp
+COPY target/jmanus-4.0.3-SNAPSHOT.jar /app/app.jar
 
-ARG PORT
+# Extract JAR file for faster startup
+RUN mkdir -p /app/extracted && \
+    cd /app/extracted && \
+    jar -xf /app/app.jar && \
+    rm /app/app.jar
 
-ENV PORT=${PORT:-8080}
+# Copy application configuration files
+COPY src/main/resources/application*.yml /app/extracted/BOOT-INF/classes/
+COPY src/main/resources/application-docker.yml /app/extracted/BOOT-INF/classes/
 
-COPY target/jmanus-4.0.3-SNAPSHOT.jar /home/appuser/app.jar
+# Expose port
+EXPOSE 18080
 
-VOLUME /tmp
+RUN mkdir -p /app/java_tmp && \
+    mkdir -p /tmp/oss
 
-EXPOSE ${PORT}
+ENV JAVA_OPTS="-XX:+UseContainerSupport  -XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=75.0 -XX:MinRAMPercentage=75.0 -XX:-UseAdaptiveSizePolicy -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/oss/gc.hprof -Djava.io.tmpdir=/app/java_tmp"
 
-ENV JAVA_OPTS="-XX:+UseContainerSupport  -XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=75.0 -XX:MinRAMPercentage=75.0 -XX:-UseAdaptiveSizePolicy -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=/tmp/oss/gc.hprof -Djava.io.tmpdir=/home/appuser/java_tmp"
+# Create startup script
+RUN echo '#!/bin/bash' > /app/start.sh && \
+    echo 'echo "Starting JManus with Playwright in headless mode..."' >> /app/start.sh && \
+    echo 'echo "Platform: $TARGETPLATFORM"' >> /app/start.sh && \
+    echo 'echo "Architecture: $TARGETARCH"' >> /app/start.sh && \
+    echo 'echo "Java version: $(java -version 2>&1 | head -1)"' >> /app/start.sh && \
+    echo 'echo "Playwright version: $(playwright --version)"' >> /app/start.sh && \
+    echo 'echo "Available browsers:"' >> /app/start.sh && \
+    echo 'ls -la /root/.cache/ms-playwright/' >> /app/start.sh && \
+    echo 'echo "Checking Chromium installation:"' >> /app/start.sh && \
+    echo 'find /root/.cache/ms-playwright -name "chrome*" -type f 2>/dev/null | head -5' >> /app/start.sh && \
+    echo 'echo "Setting Playwright environment variables..."' >> /app/start.sh && \
+    echo 'export PLAYWRIGHT_BROWSERS_PATH=/root/.cache/ms-playwright' >> /app/start.sh && \
+    echo 'export DOCKER_ENV=true' >> /app/start.sh && \
+    echo 'echo "Starting application with docker profile..."' >> /app/start.sh && \
+    echo 'cd /app/extracted' >> /app/start.sh && \
+    echo 'exec java $JAVA_OPTS -cp /app/extracted/BOOT-INF/classes:/app/extracted/BOOT-INF/lib/*:. com.alibaba.cloud.ai.manus.OpenManusSpringBootApplication --spring.profiles.active=mysql,docker' >> /app/start.sh && \
+    chmod +x /app/start.sh
 
-cmd java -Djava.security.egd=file:/dev/./urandom -Dserver.port=${PORT}  ${JAVA_OPTS} -jar /home/appuser/app.jar
+# Add labels for better image management
+LABEL org.opencontainers.image.title="元气精灵"
+LABEL org.opencontainers.image.description="Spring AI Alibaba JManus - Web Automation Platform"
+LABEL org.opencontainers.image.vendor="Alibaba Cloud"
+LABEL org.opencontainers.image.version="${BUILD_VERSION}"
+
+# Set entrypoint
+ENTRYPOINT ["/app/start.sh"]

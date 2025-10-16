@@ -16,6 +16,7 @@
 
 package com.alibaba.cloud.ai.manus.planning;
 
+import com.alibaba.cloud.ai.manus.tool.devops.ServiceOperateTool;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -274,6 +275,7 @@ public class PlanningFactory implements IPlanningFactory {
 			toolDefinitions.add(new CronTool(cronService, objectMapper));
 			toolDefinitions.add(new MarkdownConverterTool(unifiedDirectoryManager, applicationContext));
 			// toolDefinitions.add(new ExcelProcessorTool(excelProcessingService));
+			toolDefinitions.add(new ServiceOperateTool());
 		}
 		else {
 			toolDefinitions.add(new TerminateTool(planId, expectedReturnInfo));

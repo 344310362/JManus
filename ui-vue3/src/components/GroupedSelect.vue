@@ -192,7 +192,7 @@ onUnmounted(() => {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -268,7 +268,7 @@ onUnmounted(() => {
 
 .dropdown-header h3 {
   margin: 0;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 16px;
   font-weight: 600;
 }
@@ -285,7 +285,7 @@ onUnmounted(() => {
 
 .close-btn:hover {
   background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .search-container {
@@ -300,7 +300,7 @@ onUnmounted(() => {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 14px;
   outline: none;
   transition: all 0.3s ease;
@@ -368,7 +368,7 @@ onUnmounted(() => {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s ease;
   text-align: left;
@@ -394,7 +394,7 @@ onUnmounted(() => {
   font-weight: 500;
   font-size: 14px;
   margin-bottom: 4px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .model-description {

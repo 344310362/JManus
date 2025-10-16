@@ -667,8 +667,8 @@ const words: I18nType = {
 
   // 聊天组件
   chat: {
-    botName: 'JManus:',
-    thinkingLabel: 'JManus 思考/处理',
+    botName: '元气精灵:',
+    thinkingLabel: '元气精灵 思考/处理',
     processing: '处理中...',
     step: '步骤',
     stepNumber: '步骤 {number}',
@@ -734,7 +734,7 @@ const words: I18nType = {
 
   // 输入组件
   input: {
-    placeholder: '向 JManus 发送消息',
+    placeholder: '向 元气精灵 发送消息',
     send: '发送',
     planMode: 'PLAN-ACT计划模式',
     waiting: '等待用户输入...',

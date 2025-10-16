@@ -811,7 +811,7 @@ const newChat = () => {
   border-right: none; /* Remove the original border, which will be provided by the resizer */
   display: flex;
   flex-direction: column;
-  height: 100vh; /* Use fixed height */
+  height: 95vh; /* Use fixed height */
   overflow: hidden; /* Prevent panel itself overflow */
   transition: width 0.1s ease; /* Smooth transition */
 }

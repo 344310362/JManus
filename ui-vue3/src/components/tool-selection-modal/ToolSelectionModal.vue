@@ -383,7 +383,7 @@ watch(visible, (newVisible) => {
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 14px;
   transition: all 0.3s;
 }
@@ -408,7 +408,7 @@ watch(visible, (newVisible) => {
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 14px;
   cursor: pointer;
 }
@@ -437,7 +437,7 @@ watch(visible, (newVisible) => {
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  background: var(--scrollbar-track, var(--bg-primary-rgb));
   cursor: pointer;
   transition: all 0.3s;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -469,7 +469,7 @@ watch(visible, (newVisible) => {
 
 .group-name {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .group-count {
@@ -487,7 +487,7 @@ watch(visible, (newVisible) => {
   align-items: center;
   gap: 6px;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary, #667eea);
   font-size: 13px;
 }
 
@@ -529,7 +529,7 @@ watch(visible, (newVisible) => {
 
 .tool-selection-name {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   margin-bottom: 4px;
 }
 

@@ -887,7 +887,7 @@ defineExpose({
   margin: 0;
   font-size: 16px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 8px;
 }
@@ -900,7 +900,7 @@ defineExpose({
 
 .form-item label {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 14px;
   margin: 0; /* Remove default margin */
 }
@@ -987,7 +987,7 @@ defineExpose({
 
 .parameter-table th {
   background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-weight: 500;
   padding: 12px;
   text-align: left;
@@ -1406,7 +1406,7 @@ defineExpose({
   padding: 12px 18px;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.2s ease;
   text-align: left;
@@ -1539,7 +1539,7 @@ defineExpose({
 
 .checkbox-text {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 14px;
 }
 
@@ -1614,7 +1614,7 @@ defineExpose({
   font-size: 14px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   word-break: break-all;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .copy-icon {

@@ -264,7 +264,7 @@ const selectOption = (option: { id: string }) => {
 
 .select-option:hover {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .select-option.active {

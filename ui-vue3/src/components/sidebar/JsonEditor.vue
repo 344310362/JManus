@@ -320,7 +320,7 @@ const autoResizeTextarea = (event: Event) => {
 .form-label {
   font-size: 10px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .form-input,

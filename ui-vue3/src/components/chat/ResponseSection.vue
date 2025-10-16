@@ -18,6 +18,7 @@
     <div class="response-header">
       <div class="response-avatar">
         <Icon icon="carbon:bot" class="bot-icon" />
+<!--        <img :src="botAvatar" class="bot-icon" alt="bot avatar" />-->
       </div>
       <div class="response-name">{{ $t('chat.botName') }}</div>
       
@@ -95,7 +96,7 @@ import { Icon } from '@iconify/vue'
 import { useMessageFormatting } from './composables/useMessageFormatting'
 import UserInputForm from './UserInputForm.vue'
 import type { UserInputWaitState } from '@/types/plan-execution-record'
-
+import { computed } from 'vue'
 interface Props {
   content?: string
   isStreaming?: boolean
@@ -117,6 +118,11 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const { formatResponseText, formatTimestamp } = useMessageFormatting()
+
+const botAvatar = computed(() => {
+  const base = import.meta.env.VITE_BASE_URL || ''
+  return `${base}/assets/img/yuanqi.png`
+})
 
 // Methods
 const copyToClipboard = async () => {
@@ -160,13 +166,13 @@ const handleUserInputSubmitted = (inputData: any) => {
       justify-content: center;
       width: 32px;
       height: 32px;
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      background: linear-gradient(135deg, #488388 0%, #1ebd7b 100%);
       border-radius: 50%;
       flex-shrink: 0;
       
       .bot-icon {
         font-size: 16px;
-        color: var(--text-primary, #ffffff);
+        color: #f0f8ff;
       }
     }
     

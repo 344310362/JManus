@@ -1362,7 +1362,7 @@ onMounted(() => {
 
 .action-btn:hover {
   background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-secondary);
   border-color: rgba(255, 255, 255, 0.25);
 }
 

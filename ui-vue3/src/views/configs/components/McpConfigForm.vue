@@ -290,7 +290,7 @@ const handleConnectionTypeUpdate = (value: string | null) => {
 }
 
 .instructions-list strong {
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-secondary);
   font-weight: 600;
   display: block;
   margin-bottom: 6px;
@@ -305,7 +305,7 @@ const handleConnectionTypeUpdate = (value: string | null) => {
 
 .instructions-list ul li {
   margin-bottom: 3px;
-  color: rgba(255, 255, 255, 0.75);
+  color: var(--text-tertiary);
   font-size: 13px;
   line-height: 1.4;
 }

@@ -107,7 +107,7 @@ onUnmounted(() => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(var(--bg-primary-rgb));
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -145,7 +145,7 @@ onUnmounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .status-icon {
@@ -183,7 +183,7 @@ onUnmounted(() => {
 }
 
 .close-btn:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .modal-content {

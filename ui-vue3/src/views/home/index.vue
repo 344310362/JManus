@@ -375,7 +375,7 @@ const selectPlan = async (plan: any) => {
 
 .header {
   position: relative;
-  z-index: 1000;
+  z-index: 10;
   padding: 32px 32px 0;
 }
 

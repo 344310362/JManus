@@ -89,7 +89,7 @@ RUN apt-get update && \
 RUN npm install -g playwright
 
 # Copy JAR file from builder stage
-COPY target/jmanus.jar app.jar
+COPY target/jmanus-4.0.3-SNAPSHOT.jar app.jar
 
 # Install Playwright browsers using Java Playwright
 RUN java -jar app.jar playwright-init

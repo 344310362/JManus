@@ -140,7 +140,7 @@ defineExpose<ToastInstance>({ show })
 .toast-title {
   font-size: 18px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 /* Toast content */

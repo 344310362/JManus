@@ -767,7 +767,7 @@ defineExpose({
     margin-top: 8px;
 
     strong {
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--text-primary);
       font-size: 10px;
       display: block;
       margin-bottom: 4px;
@@ -875,7 +875,7 @@ defineExpose({
     margin-top: 8px;
 
     strong {
-      color: rgba(255, 255, 255, 0.9);
+      color: var(--text-primary);
       font-size: 10px;
       display: block;
       margin-bottom: 4px;

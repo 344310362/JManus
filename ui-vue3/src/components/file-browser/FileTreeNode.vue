@@ -347,7 +347,7 @@ onUnmounted(() => {
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 13px;
   transition: background-color 0.2s ease;
 }
@@ -379,7 +379,7 @@ onUnmounted(() => {
 
 /* File specific styles */
 .node-content.is-file .node-name {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 /* Animation for expanding/collapsing */

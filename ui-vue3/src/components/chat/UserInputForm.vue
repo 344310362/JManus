@@ -335,7 +335,7 @@ onUnmounted(() => {
 .user-input-form-container {
   margin-top: 20px;
   padding: 16px;
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(var(--bg-primary-rgb));
   border: 1px solid rgba(102, 126, 234, 0.2);
   border-radius: 8px;
   
@@ -425,7 +425,7 @@ onUnmounted(() => {
         cursor: pointer;
         
         option {
-          background: #2d3748;
+          background: var(--bg-secondary);
           color: var(--text-primary, #ffffff);
         }
       }

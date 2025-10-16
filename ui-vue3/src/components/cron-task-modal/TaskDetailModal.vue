@@ -384,7 +384,7 @@ watch(
   margin: 0;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .header-actions {
@@ -417,7 +417,7 @@ watch(
 }
 
 .close-btn:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .modal-content {
@@ -439,7 +439,7 @@ watch(
 .form-label {
   font-size: 14px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .form-input,
@@ -449,7 +449,7 @@ watch(
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 12px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 14px;
   transition: all 0.3s;
 }
@@ -493,7 +493,7 @@ watch(
 
 .time-value {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .template-toggle {

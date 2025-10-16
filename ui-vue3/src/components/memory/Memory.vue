@@ -475,7 +475,7 @@ const confirmDelete = async () => {
 }
 
 .close-btn:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .search-bar {
@@ -571,7 +571,7 @@ const confirmDelete = async () => {
 
 .sender-name {
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -770,7 +770,7 @@ const confirmDelete = async () => {
 .cancel-btn {
   background-color: #333333;
   border: 1px solid #444444;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .cancel-btn:hover {

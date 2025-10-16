@@ -553,7 +553,7 @@ watch(() => props.modelValue, (newValue) => {
   margin: 0;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .header-actions {
@@ -596,7 +596,7 @@ watch(() => props.modelValue, (newValue) => {
 }
 
 .close-btn:hover {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .modal-content {
@@ -921,7 +921,7 @@ watch(() => props.modelValue, (newValue) => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .confirm-content {
