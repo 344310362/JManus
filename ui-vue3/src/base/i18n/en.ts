@@ -449,12 +449,12 @@ const words: I18nType = {
         forceOverrideFromYaml:
           'Force override of agents with the same name using the YAML configuration file',
       },
-      infiniteContext: {
-        enabled: 'Whether to enable infinite context',
-        parallelThreads: 'Number of parallel processing threads',
-        taskContextSize:
-          'Character count threshold for triggering infinite context (number of characters)',
-      },
+      // infiniteContext: { // TEMPORARILY COMMENTED OUT
+      //   enabled: 'Whether to enable infinite context',
+      //   parallelThreads: 'Number of parallel processing threads',
+      //   taskContextSize:
+      //     'Character count threshold for triggering infinite context (number of characters)',
+      // },
       fileSystem: {
         allowExternalAccess: 'Whether to allow file operations beyond the working directory',
       },
@@ -1065,7 +1065,7 @@ const words: I18nType = {
   home: {
     welcomeTitle: 'Welcome to JManus!',
     welcomeSubtitle:
-      'Your Java AI intelligent assistant, helping you build and complete various tasks.',
+      'hello {nickname}, helping you build and complete various tasks.',
     tagline: 'Java AI Agent',
     inputPlaceholder: 'Describe what you want to build or accomplish...',
     directButton: 'Enter Workbench Directly',

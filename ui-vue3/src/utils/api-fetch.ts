@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { userStore } from "@/stores/user"
 
 // Unified fetch method with base URL from environment variable
 const BASE_URL = import.meta.env.VITE_BASE_URL || '';
@@ -23,6 +24,19 @@ export async function apiFetch(input: RequestInfo | URL, init?: RequestInit): Pr
   
   // Prepend base URL if it's a relative path and doesn't already start with http
   const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url.startsWith('/') ? url : `/${url}`}`;
-  
-  return fetch(fullUrl, init);
+
+  // 获取 userStore 实例（注意：必须在组件 setup 或已初始化 Pinia 的上下文中调用）
+  const token = userStore.token;
+  const headers = new Headers(init?.headers || {});
+  if (token) {
+    headers.set('Authorization', `Bearer ${token}`);
+  }
+
+  // 构造新的 init 配置
+  const finalInit: RequestInit = {
+    ...init,
+    headers,
+  };
+
+  return fetch(fullUrl, finalInit);
 }

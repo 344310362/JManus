@@ -1,0 +1,29 @@
+spring:
+  cloud:
+    nacos:
+      server-addr: prod-nacos.exexm.com:8848
+      username: prod-user
+      password: prod-password
+      discovery:
+        enabled: true
+        register-enabled: true
+        namespace: prod
+        group: PROD_GROUP
+        metadata:
+          version: 1.0.0
+      config:
+        namespace: prod
+        group: PROD_GROUP
+        file-extension: yaml
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yaml
+
+# Environment variables for bootstrap.yml
+NACOS_SERVER_ADDR: prod-nacos.exexm.com:8848
+NACOS_USERNAME: prod-user
+NACOS_PASSWORD: prod-password
+NACOS_CONFIG_NAMESPACE: prod
+NACOS_CONFIG_GROUP: PROD_GROUP
+NACOS_DISCOVERY_NAMESPACE: prod
+NACOS_DISCOVERY_GROUP: PROD_GROUP

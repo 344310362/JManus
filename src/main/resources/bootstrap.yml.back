@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: sm-ai-manus
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+      username: ${NACOS_USERNAME:nacos}
+      password: ${NACOS_PASSWORD:nacos}
+      config:
+        namespace: ${NACOS_CONFIG_NAMESPACE:local}
+        group: ${NACOS_CONFIG_GROUP:DEFAULT_GROUP}
+        file-extension: yaml
+      discovery:
+        namespace: ${NACOS_DISCOVERY_NAMESPACE:local}
+        group: ${NACOS_DISCOVERY_GROUP:DEFAULT_GROUP}
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yaml
+      
+# This section defines default values for environment-specific properties
+# They will be overridden by profile-specific files
+NACOS_SERVER_ADDR: localhost:8848
+NACOS_USERNAME: nacos
+NACOS_PASSWORD: nacos
+NACOS_CONFIG_NAMESPACE: local
+NACOS_CONFIG_GROUP: DEFAULT_GROUP
+NACOS_DISCOVERY_NAMESPACE: local
+NACOS_DISCOVERY_GROUP: DEFAULT_GROUP

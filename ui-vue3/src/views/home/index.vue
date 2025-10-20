@@ -47,7 +47,7 @@
           <!-- Welcome section -->
           <div class="welcome-section">
             <h2 class="welcome-title">{{ $t('home.welcomeTitle') }}</h2>
-            <p class="welcome-subtitle">{{ $t('home.welcomeSubtitle') }}</p>
+            <p class="welcome-subtitle">{{ $t('home.welcomeSubtitle',{nickname: userStore.user.nickname}) }}</p>
             <button class="direct-button" @click="goToDirectPage">{{ $t('home.directButton') }}</button>
           </div>
 
@@ -68,7 +68,7 @@
             </div>
           </div>
           <!-- All examples and plans -->
-          <div class="examples-section">
+<!--          <div class="examples-section">
             <div class="examples-grid">
               <div v-for="item in allCards" :key="item.title" class="card-with-type">
                 <BlurCard
@@ -78,7 +78,7 @@
                 <span class="card-type">{{ item.type }}</span>
               </div>
             </div>
-          </div>
+          </div>-->
         </div>
       </main>
     </div>
@@ -99,7 +99,7 @@ const router = useRouter()
 const taskStore = useTaskStore()
 const userInput = ref('')
 const textareaRef = ref<HTMLTextAreaElement>()
-
+import { userStore } from "@/stores/user"
 const { t } = useI18n()
 
 const goToDirectPage = () => {

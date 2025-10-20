@@ -1,0 +1,20 @@
+spring:
+  cloud:
+    nacos:
+      server-addr: intra-t-nacos.exexm.com:8848
+      username: nacos
+      password: nacos
+      discovery:
+        enabled: true
+        register-enabled: true
+        namespace: local
+        group: DEFAULT_GROUP
+        metadata:
+          version: 1.0.0
+      config:
+        namespace: local
+        group: DEFAULT_GROUP
+        file-extension: yaml
+  config:
+    import:
+      - optional:nacos:${spring.application.name}.yaml

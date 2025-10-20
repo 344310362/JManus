@@ -14,17 +14,10 @@ import router from './router'
 import { i18n } from './base/i18n'
 import { themeConfig } from './utils/theme'
 import actions from '@/qiankun/actions'
+import { userStore } from "@/stores/user"
+
 // qiankun 相关辅助
 import { renderWithQiankun, qiankunWindow,type QiankunProps } from 'vite-plugin-qiankun/dist/helper'
-
-/*
-const pinia = createPinia()
-const app = createApp(App)
-
-// Initialize theme
-themeConfig.initTheme()
-
-app.use(pinia).use(Antd).use(Vue3ColorPicker).use(i18n).use(router).mount('#app')*/
 
 
 // 全局应用实例
@@ -34,8 +27,21 @@ let mountPoint: Element | null = null
 // 渲染函数
 function render(props: QiankunProps = {}) {
     console.log('render function is called with props:', props);
-    const { container } = props
+    const { container,    userVo,
+        accessToken,onGoToLogin } = props
 
+    userStore.setUserInfo({
+        permissions: [],
+        roles: [],
+        user: userVo,
+        token: accessToken
+    })
+    console.log('userStore.user:', userStore.user);
+
+    if (!accessToken) {
+        onGoToLogin();
+        return;
+    }
     // 指定挂载节点（防止 ID 冲突）
     mountPoint = container?.querySelector('#app') || document.querySelector('#app')
 

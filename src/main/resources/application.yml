@@ -1,12 +1,10 @@
 server:
   port: 18080
 spring:
-  config:
-    import: classpath:application-database-tool.yml
   application:
-    name: spring-ai-alibaba-openmanus
+    name: sm-ai-manus
   profiles:
-    active: mysql
+    active: mysql,local
   main:
     allow-circular-references: true
     lazy-initialization: false

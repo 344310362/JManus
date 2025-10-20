@@ -448,11 +448,11 @@ const words: I18nType = {
       agents: {
         forceOverrideFromYaml: '强制使用YAML配置文件覆盖同名Agent',
       },
-      infiniteContext: {
-        enabled: '是否开启无限上下文',
-        parallelThreads: '并行处理线程数',
-        taskContextSize: '触发无限上下文的字符数阈值(字符数)',
-      },
+      // infiniteContext: { // 临时注释掉
+      //   enabled: '是否开启无限上下文',
+      //   parallelThreads: '并行处理线程数',
+      //   taskContextSize: '触发无限上下文的字符数阈值(字符数)',
+      // },
       fileSystem: {
         allowExternalAccess: '是否允许文件操作超出工作目录',
       },
@@ -1032,7 +1032,7 @@ const words: I18nType = {
   // 首页
   home: {
     welcomeTitle: '元气精灵',
-    welcomeSubtitle: '您的 AI 智能助手，帮助您构建和完成各种任务。',
+    welcomeSubtitle: '你好，{nickname} 有什么任务需要我为你服务',
     tagline: 'Java AI 智能体',
     inputPlaceholder: '描述您想构建或完成的内容...',
     directButton: '直接进入工作台',
