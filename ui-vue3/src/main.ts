@@ -38,9 +38,11 @@ function render(props: QiankunProps = {}) {
     })
     console.log('userStore.user:', userStore.user);
 
-    if (!accessToken) {
+    if (container  && !accessToken) {
+      if (typeof onGoToLogin === 'function') {
         onGoToLogin();
-        return;
+      }
+      return;
     }
     // 指定挂载节点（防止 ID 冲突）
     mountPoint = container?.querySelector('#app') || document.querySelector('#app')
