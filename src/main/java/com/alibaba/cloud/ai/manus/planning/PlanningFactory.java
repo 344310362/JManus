@@ -164,9 +164,6 @@ public class PlanningFactory {
 	@Autowired
 	private JsxGeneratorOperator jsxGeneratorOperator;
 
-	@Autowired
-	private ApplicationContext applicationContext;
-
 	public PlanningFactory(ChromeDriverService chromeDriverService, PlanExecutionRecorder recorder,
 			ManusProperties manusProperties, TextFileService textFileService, McpService mcpService,
 			SmartContentSavingService innerStorageService, UnifiedDirectoryManager unifiedDirectoryManager,
@@ -282,7 +279,8 @@ public class PlanningFactory {
 				.add(new MarkdownConverterTool(unifiedDirectoryManager, new PdfOcrProcessor(unifiedDirectoryManager,
 						llmService, manusProperties, new ImageRecognitionExecutorPool(manusProperties))));
 			// toolDefinitions.add(new ExcelProcessorTool(excelProcessingService));
-			toolDefinitions.add(new ServiceOperateTool());
+			ServiceOperateTool serviceOperateTool = new ServiceOperateTool();
+			toolDefinitions.add(serviceOperateTool);
 			toolDefinitions.add(new HRTool());
 		}
 		else {

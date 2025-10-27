@@ -40,6 +40,7 @@
 
         <!-- Playwright Configuration -->
         <playwright.version>1.53.0</playwright.version>
+        <sm-cloud-version>2025.10-SNAPSHOT</sm-cloud-version>
 
 
     </properties>
@@ -80,6 +81,13 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+        </dependency>
+
+        <!--sm-cloud-->
+        <dependency>
+            <groupId>cn.iocoder.cloud</groupId>
+            <artifactId>smcloud-module-devops-api</artifactId>
+            <version>${sm-cloud-version}</version>
         </dependency>
 
         <dependency>

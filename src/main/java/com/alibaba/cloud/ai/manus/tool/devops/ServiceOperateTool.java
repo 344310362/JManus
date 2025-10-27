@@ -1,15 +1,26 @@
 package com.alibaba.cloud.ai.manus.tool.devops;
 
+import cn.iocoder.cloud.devops.api.service.ServiceApi;
+import cn.iocoder.cloud.devops.api.service.dto.ServiceOperateReqDTO;
+import cn.iocoder.yudao.framework.common.pojo.CommonResult;
+import com.alibaba.cloud.ai.manus.config.rpc.AuthContext;
 import com.alibaba.cloud.ai.manus.tool.AbstractBaseTool;
 import com.alibaba.cloud.ai.manus.tool.code.ToolExecuteResult;
+import com.alibaba.cloud.ai.manus.utils.ServiceHelper;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.ServiceOperateInput> {
 
     private static final Logger log = LoggerFactory.getLogger(ServiceOperateTool.class);
     private static final String TOOL_NAME = "service_manager";
+    
+    // Lazy-loaded Dubbo service API
+    private ServiceApi serviceApi;
 
     private static final String[] KNOWN_SERVICES = {
         "user-service", "order-service", "payment-gateway", "inventory-api", "notification-center"
@@ -133,9 +144,26 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
 
     private ToolExecuteResult executeDeploy(String service, String env) {
         log.info("✅ Deploying service '{}' in environment '{}'", service, env);
-        return new ToolExecuteResult(
+
+        StringBuilder resultBuilder = new StringBuilder(
             "✅ Deploy initiated for service '" + service + "' in environment '" + env + "'.\n" +
-                "📌 Deployment ID: deploy-" + System.currentTimeMillis()
+                "📌 Deployment ID: deploy-" + System.currentTimeMillis()+ "'.\n"
+        );
+        // Example of using the injected ServiceApi
+        ServiceApi api = getServiceApi();
+        if (api != null) {
+            ServiceOperateReqDTO reqDTO = new ServiceOperateReqDTO();
+            reqDTO.setService(service);
+            reqDTO.setEnvironment(env);
+            AuthContext.setContextPlanId(rootPlanId);
+            CommonResult result = api.executeDeploy(reqDTO);
+            resultBuilder.append(JSON.toJSON( result));
+            log.info("ServiceApi result "+ result);
+        } else {
+            log.warn("ServiceApi is not available");
+        }
+        
+        return new ToolExecuteResult(resultBuilder.toString()
         );
     }
 
@@ -244,6 +272,18 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
         public void setEnvironment(String environment) { this.environment = environment; }
         public Integer getTargetReplicas() { return targetReplicas; }
         public void setTargetReplicas(Integer targetReplicas) { this.targetReplicas = targetReplicas; }
+    }
+
+    // Lazy initialization of ServiceApi
+    private ServiceApi getServiceApi() {
+        if (serviceApi == null ) {
+            try {
+                serviceApi = ServiceHelper.getFeignBean(ServiceApi.class);
+            } catch (Exception e) {
+                log.warn("Failed to get ServiceApi bean from context: {}", e.getMessage());
+            }
+        }
+        return serviceApi;
     }
 
     // ===== Overrides =====

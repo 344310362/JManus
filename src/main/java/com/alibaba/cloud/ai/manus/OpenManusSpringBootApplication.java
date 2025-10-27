@@ -17,9 +17,13 @@
 package com.alibaba.cloud.ai.manus;
 
 import com.microsoft.playwright.Playwright;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -30,7 +34,8 @@ import java.io.IOException;
 @EnableScheduling
 @EnableJpaRepositories(basePackages = { "com.alibaba.cloud.ai.manus" })
 @EntityScan(basePackages = { "com.alibaba.cloud.ai.manus" })
-@ComponentScan(basePackages = { "com.alibaba.cloud.ai.manus" })
+@EnableFeignClients(basePackages = {"cn.iocoder.cloud.devops.api"})
+@ComponentScan(basePackages = { "com.alibaba.cloud.ai.manus","cn.iocoder.cloud.devops.api" })
 public class OpenManusSpringBootApplication {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -43,5 +48,23 @@ public class OpenManusSpringBootApplication {
 			SpringApplication.run(OpenManusSpringBootApplication.class, args);
 		}
 	}
+
+	@Bean
+	public ApplicationRunner checkFeignClients(ApplicationContext ctx) {
+		return args -> {
+			System.out.println("===== Registered Feign Clients =====");
+			String[] feignBeans = ctx.getBeanNamesForAnnotation(org.springframework.cloud.openfeign.FeignClient.class);
+			for (String name : feignBeans) {
+				System.out.println("Feign Bean: " + name);
+			}
+
+			String[] allBeans = ctx.getBeanNamesForType(cn.iocoder.cloud.devops.api.service.ServiceApi.class);
+			System.out.println("===== ServiceApi Beans =====");
+			for (String name : allBeans) {
+				System.out.println("Bean: " + name);
+			}
+		};
+	}
+
 
 }

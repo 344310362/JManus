@@ -15,6 +15,8 @@
  */
 package com.alibaba.cloud.ai.manus.runtime.controller;
 
+import com.alibaba.cloud.ai.manus.config.rpc.AuthContext;
+import com.alibaba.cloud.ai.manus.config.rpc.LoginUserRequestInterceptor;
 import com.alibaba.cloud.ai.manus.event.JmanusListener;
 import com.alibaba.cloud.ai.manus.event.PlanExceptionEvent;
 import com.alibaba.cloud.ai.manus.event.PlanExceptionClearedEvent;
@@ -42,6 +44,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,6 +60,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 @RestController
 @RequestMapping("/api/executor")
@@ -492,6 +498,16 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 			currentPlanId = planIdDispatcher.generatePlanId();
 			rootPlanId = currentPlanId;
 			logger.info("🆕 Generated new planId: {}", currentPlanId);
+
+			ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+			if(attributes != null){
+				HttpServletRequest request = attributes.getRequest();
+				String currentToken = request.getHeader("Authorization");
+				if (currentToken != null) {
+					AuthContext.setToken(rootPlanId,currentToken);
+					System.out.println("Authorization: " + currentToken);
+				}
+			}
 
 			// Generate conversation ID if not provided
 			if (!StringUtils.hasText(conversationId)) {

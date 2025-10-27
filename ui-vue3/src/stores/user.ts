@@ -50,6 +50,10 @@ export class UserStore implements UserInfoVO {
   token: string = ''
 
   // 设置用户完整信息
+
+  updateAccessToken(accessToken: string) {
+    this.token = accessToken
+  }
   setUserInfo(userInfo: {
     permissions: string[]
     roles: string[]

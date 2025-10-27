@@ -24,7 +24,7 @@ import org.springframework.web.reactive.result.method.annotation.ResponseEntityE
 /**
  * @author dahua
  */
-@ControllerAdvice
+@ControllerAdvice(name = "manusGlobalExceptionHandler")
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	/**

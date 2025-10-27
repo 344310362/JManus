@@ -38,12 +38,19 @@ function render(props: QiankunProps = {}) {
     })
     console.log('userStore.user:', userStore.user);
 
+    // 让主应用跳转登录页
     if (container  && !accessToken) {
       if (typeof onGoToLogin === 'function') {
         onGoToLogin();
       }
       return;
     }
+
+    window.addEventListener('tokenUpdated', (e) => {
+        userStore.updateAccessToken(e.detail.accessToken);
+        console.log('token updated:', e.detail.accessToken)
+    });
+
     // 指定挂载节点（防止 ID 冲突）
     mountPoint = container?.querySelector('#app') || document.querySelector('#app')
 

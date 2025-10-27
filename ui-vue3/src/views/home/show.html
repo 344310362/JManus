@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>元气小精灵 - 新一代企业智能体</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #10b981, #059669, #047857);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-color: #22c55e;
+        }
+        .feature-icon {
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-white">
+<div id="app">
+    <!-- Header -->
+    <header class="relative overflow-hidden bg-white shadow-sm">
+        <div class="container mx-auto px-6 py-4">
+            <nav class="flex justify-between items-center">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <span class="text-2xl font-bold gradient-text">元气小精灵</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#problems" class="text-gray-600 hover:text-green-600 transition-colors font-medium">痛点</a>
+                    <a href="#solution" class="text-gray-600 hover:text-green-600 transition-colors font-medium">解决方案</a>
+                    <a href="#features" class="text-gray-600 hover:text-green-600 transition-colors font-medium">核心特性</a>
+                    <a href="#vision" class="text-gray-600 hover:text-green-600 transition-colors font-medium">愿景</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative py-20 px-6 bg-gradient-to-br from-green-50 to-white">
+        <div class="container mx-auto max-w-4xl text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 leading-tight animate__animated animate__fadeInDown">
+                <span class="gradient-text">元气小精灵</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 mb-8 leading-relaxed animate__animated animate__fadeInUp animate__delay-1s">
+                主动、协同、智能的新一代企业智能体
+            </p>
+            <div class="inline-flex items-center space-x-3 bg-green-100 rounded-full px-6 py-3 border border-green-200 animate__animated animate__fadeInUp animate__delay-2s">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-green-600" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.35-.472-.675-1.047-.945-1.667z" clip-rule="evenodd" />
+                    <path d="M13.643 12.357a1 1 0 10-1.414 1.414l1.414-1.414zM11.515 10.227a1 1 0 10-1.414 1.414l1.414-1.414zM9.387 8.099a1 1 0 10-1.414 1.414l1.414-1.414z" />
+                </svg>
+                <span class="text-green-700 font-medium">让智能真正服务于业务</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problems Section -->
+    <section id="problems" class="py-20 px-6 bg-white">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16 animate__animated animate__fadeIn">
+                <h2 class="text-4xl font-bold mb-4 text-gray-900">现有智能体的局限</h2>
+                <p class="text-xl text-gray-600">你是否也深有体会？</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Problem 1 -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-200 card-hover animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-red-600">依赖人工驱动</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        仅在"用户提问 → 系统应答"的模式下运作，数据背后的价值仍需人力挖掘，无法主动洞察业务变化。
+                    </p>
+                </div>
+
+                <!-- Problem 2 -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-200 card-hover animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-orange-600">告警即终点</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        虽然能识别风险并发出告警，但在信息过载的环境中，大量关键问题被淹没，缺乏后续的自动跟进与闭环处理。
+                    </p>
+                </div>
+
+                <!-- Problem 3 -->
+                <div class="bg-white rounded-2xl p-8 border border-gray-200 card-hover animate__animated animate__fadeInUp animate__delay-3s mx-auto lg:mx-0">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-4 text-yellow-600">工具割裂，协同困难</h3>
+                    <p class="text-gray-600 leading-relaxed">
+                        各类智能体往往"各自为政"，无法跨系统联动，缺乏统一调度与协同机制，导致效率低下、重复建设。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Solution Section -->
+    <section id="solution" class="py-20 px-6 bg-gradient-to-r from-green-50 to-white">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16 animate__animated animate__fadeIn">
+                <h2 class="text-4xl font-bold mb-6 text-gray-900">元气小精灵解决方案</h2>
+                <p class="text-xl text-gray-700 max-w-3xl mx-auto">
+                    我们依托企业成熟的数字化底座，创新提出"多模态主动感知 + 事件驱动触发"的混合智能机制
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div class="space-y-8">
+                    <div class="flex items-start space-x-4 animate__animated animate__fadeInLeft animate__delay-1s">
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-700">主动感知</h3>
+                            <p class="text-gray-600">
+                                不再等待指令，而是通过多源数据（日志、指标、文档、消息等）实时感知业务状态
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 animate__animated animate__fadeInLeft animate__delay-2s">
+                        <div class="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-700">事件驱动</h3>
+                            <p class="text-gray-600">
+                                一旦识别关键事件（如异常波动、流程卡点、目标达成），立即触发对应动作，避免传统定时轮询带来的资源浪费
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 animate__animated animate__fadeInLeft animate__delay-3s">
+                        <div class="w-8 h-8 bg-green-700 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-700">自主闭环</h3>
+                            <p class="text-gray-600">
+                                无需人工干预，即可完成从发现问题、分析原因到执行建议甚至生成报告的全流程
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 animate__animated animate__fadeInLeft animate__delay-4s">
+                        <div class="w-8 h-8 bg-green-800 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold mb-2 text-green-700">透明可溯</h3>
+                            <p class="text-gray-600">
+                                每天自动生成工作日报，清晰记录其贡献与行动轨迹，让你随时掌握它的价值
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative animate__animated animate__fadeInRight animate__delay-2s">
+                    <div class="bg-gradient-to-br from-green-100 to-white rounded-2xl p-8 border border-green-200 floating">
+                        <div class="bg-white rounded-xl p-6 shadow-sm">
+                            <div class="flex items-center space-x-3 mb-6">
+                                <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+                                <span class="text-green-600 font-mono text-sm">元气小精灵工作日报</span>
+                            </div>
+                            <div class="space-y-3 text-sm">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">异常检测</span>
+                                    <span class="text-green-600">✓ 完成</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">根因分析</span>
+                                    <span class="text-green-600">✓ 完成</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">自动修复</span>
+                                    <span class="text-green-600">✓ 完成</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-500">报告生成</span>
+                                    <span class="text-green-600">✓ 完成</span>
+                                </div>
+                                <div class="pt-4 border-t border-gray-100">
+                                    <div class="flex justify-between">
+                                        <span class="text-gray-500">今日贡献</span>
+                                        <span class="text-green-700 font-semibold">节省 3.2 小时</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 px-6 bg-white">
+        <div class="container mx-auto max-w-6xl">
+            <div class="text-center mb-16 animate__animated animate__fadeIn">
+                <h2 class="text-4xl font-bold mb-4 text-gray-900">核心能力</h2>
+                <p class="text-xl text-gray-600">让智能真正服务于业务</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white rounded-2xl p-6 border border-gray-200 card-hover feature-card animate__animated animate__fadeInUp animate__delay-1s">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center text-gray-900">多模态感知</h3>
+                    <p class="text-gray-600 text-center">整合日志、指标、文档、消息等多源数据</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 border border-gray-200 card-hover feature-card animate__animated animate__fadeInUp animate__delay-2s">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center text-gray-900">智能决策</h3>
+                    <p class="text-gray-600 text-center">基于业务上下文自动制定最优策略</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 border border-gray-200 card-hover feature-card animate__animated animate__fadeInUp animate__delay-3s">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center text-gray-900">自然交互</h3>
+                    <p class="text-gray-600 text-center">支持对话式操作，降低使用门槛</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 border border-gray-200 card-hover feature-card animate__animated animate__fadeInUp animate__delay-4s">
+                    <div class="w-16 h-16 bg-gradient-to-r from-green-400 to-green-600 rounded-xl flex items-center justify-center mx-auto mb-4 feature-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2 text-center text-gray-900">安全可靠</h3>
+                    <p class="text-gray-600 text-center">企业级安全架构，保障数据隐私</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section id="vision" class="py-20 px-6 bg-gradient-to-r from-green-50 to-white">
+        <div class="container mx-auto max-w-4xl text-center">
+            <div class="bg-white rounded-3xl p-12 border border-green-100 shadow-lg animate__animated animate__fadeIn">
+                <div class="text-6xl mb-8">✨</div>
+                <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-relaxed text-gray-900">
+                    元气小精灵，不只是一个工具
+                </h2>
+                <p class="text-xl text-gray-700 mb-8 leading-relaxed">
+                    更是你值得信赖的数字同事——
+                    <br />
+                    <span class="text-green-600 font-semibold">默默耕耘，主动担当，让智能真正服务于业务。</span>
+                </p>
+                <div class="inline-flex items-center space-x-3 bg-gradient-to-r from-green-100 to-green-50 rounded-full px-8 py-4 border border-green-200">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span class="text-lg font-medium text-green-700">开启智能协作新时代</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 px-6 bg-gray-50 border-t border-gray-200">
+        <div class="container mx-auto text-center">
+            <div class="flex items-center justify-center space-x-3 mb-4">
+                <div class="w-8 h-8 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <span class="text-xl font-bold text-gray-900">元气小精灵</span>
+            </div>
+            <p class="text-gray-600">主动 · 协同 · 智能</p>
+        </div>
+    </footer>
+</div>
+
+<script>
+    const { createApp, ref, onMounted } = Vue;
+
+    createApp({
+        setup() {
+            const isVisible = ref(false);
+
+            onMounted(() => {
+                // 简单的滚动动画触发
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                // 观察所有卡片元素
+                document.querySelectorAll('.card-hover').forEach(card => {
+                    observer.observe(card);
+                });
+            });
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>

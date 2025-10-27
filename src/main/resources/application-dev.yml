@@ -1,29 +1,20 @@
 spring:
   cloud:
     nacos:
-      server-addr: dev-nacos.exexm.com:8848
-      username: dev-user
-      password: dev-password
+      server-addr: intra-t-nacos.exexm.com:8848
+      username: nacos
+      password: nacos
       discovery:
         enabled: true
         register-enabled: true
         namespace: dev
-        group: DEV_GROUP
+        group: DEFAULT_GROUP
         metadata:
           version: 1.0.0
       config:
         namespace: dev
-        group: DEV_GROUP
+        group: DEFAULT_GROUP
         file-extension: yaml
   config:
     import:
       - optional:nacos:${spring.application.name}.yaml
-
-# Environment variables for bootstrap.yml
-NACOS_SERVER_ADDR: dev-nacos.exexm.com:8848
-NACOS_USERNAME: dev-user
-NACOS_PASSWORD: dev-password
-NACOS_CONFIG_NAMESPACE: dev
-NACOS_CONFIG_GROUP: DEV_GROUP
-NACOS_DISCOVERY_NAMESPACE: dev
-NACOS_DISCOVERY_GROUP: DEV_GROUP

@@ -1,6 +1,6 @@
 FROM registry.cn-beijing.aliyuncs.com/exe/sm-ai-manus:dev-rj-1
 
-COPY target/jmanus-4.0.3-SNAPSHOT.jar /app/app.jar
+COPY target/jmanus-4.0.4.jar /app/app.jar
 
 # Extract JAR file for faster startup
 RUN mkdir -p /app/extracted && \
@@ -36,7 +36,7 @@ RUN echo '#!/bin/bash' > /app/start.sh && \
     echo 'export DOCKER_ENV=true' >> /app/start.sh && \
     echo 'echo "Starting application with docker profile..."' >> /app/start.sh && \
     echo 'cd /app/extracted' >> /app/start.sh && \
-    echo 'exec java $JAVA_OPTS -cp /app/extracted/BOOT-INF/classes:/app/extracted/BOOT-INF/lib/*:. com.alibaba.cloud.ai.manus.OpenManusSpringBootApplication --spring.profiles.active=mysql,docker' >> /app/start.sh && \
+    echo 'exec java $JAVA_OPTS -cp /app/extracted/BOOT-INF/classes:/app/extracted/BOOT-INF/lib/*:. com.alibaba.cloud.ai.manus.OpenManusSpringBootApplication' >> /app/start.sh && \
     chmod +x /app/start.sh
 
 # Add labels for better image management
