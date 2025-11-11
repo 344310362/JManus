@@ -27,6 +27,7 @@ export default defineConfig(({ mode }) => {
     base: env.VITE_BASE_PATH || '/ui',
     build: {
     outDir: './ui',
+    sourcemap: true, // Enable source maps for production builds
   },
   server: {
     open: true, // Automatically open browser on startup
@@ -51,7 +52,7 @@ export default defineConfig(({ mode }) => {
       typescript: true,
       // Temporarily disable Vue template type checking due to @volar/typescript compatibility issue
       // vueTsc: true,
-      // Enable ESLint checking
+      // Temporarily disable ESLint checking during debugging to avoid conflicts
       eslint: {
         lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"'
       }

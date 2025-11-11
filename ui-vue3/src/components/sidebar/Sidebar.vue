@@ -14,7 +14,11 @@
  * limitations under the License.
 -->
 <template>
-  <div class="sidebar-wrapper" :class="{ 'sidebar-wrapper-collapsed': sidebarStore.isCollapsed }" :style="{ width: sidebarWidth + '%' }">
+  <div
+      class="sidebar-wrapper"
+      :class="{ 'sidebar-wrapper-collapsed': sidebarStore.isCollapsed }"
+      :style="{ width: sidebarWidth + '%' }"
+  >
     <div class="sidebar-content">
       <div class="sidebar-content-header">
         <div class="sidebar-content-title">{{ $t('sidebar.title') }}</div>
@@ -23,18 +27,18 @@
       <!-- Tab Switcher -->
       <div class="tab-switcher">
         <button
-          class="tab-button"
-          :class="{ active: sidebarStore.currentTab === 'list' }"
-          @click="sidebarStore.switchToTab('list')"
+            class="tab-button"
+            :class="{ active: sidebarStore.currentTab === 'list' }"
+            @click="sidebarStore.switchToTab('list')"
         >
           <Icon icon="carbon:list" width="16" />
           {{ $t('sidebar.templateList') }}
         </button>
         <button
-          class="tab-button"
-          :class="{ active: sidebarStore.currentTab === 'config' }"
-          @click="sidebarStore.switchToTab('config')"
-          :disabled="!sidebarStore.selectedTemplate"
+            class="tab-button"
+            :class="{ active: sidebarStore.currentTab === 'config' }"
+            @click="sidebarStore.switchToTab('config')"
+            :disabled="!sidebarStore.selectedTemplate"
         >
           <Icon icon="carbon:settings" width="16" />
           {{ $t('sidebar.configuration') }}
@@ -44,7 +48,10 @@
       <!-- List Tab Content -->
       <div v-if="sidebarStore.currentTab === 'list'" class="tab-content">
         <div class="new-task-section">
-          <button class="new-task-btn" @click="sidebarStore.createNewTemplate(sidebarStore.planType)">
+          <button
+              class="new-task-btn"
+              @click="() => sidebarStore.createNewTemplate(sidebarStore.planType)"
+          >
             <Icon icon="carbon:add" width="16" />
             {{ $t('sidebar.newPlan') }}
             <span class="shortcut">⌘ K</span>
@@ -62,7 +69,9 @@
           <div v-else-if="sidebarStore.errorMessage" class="error-state">
             <Icon icon="carbon:warning" width="20" />
             <span>{{ sidebarStore.errorMessage }}</span>
-            <button @click="sidebarStore.loadPlanTemplateList" class="retry-btn">{{ $t('sidebar.retry') }}</button>
+            <button @click="sidebarStore.loadPlanTemplateList" class="retry-btn">
+              {{ $t('sidebar.retry') }}
+            </button>
           </div>
 
           <!-- Empty state -->
@@ -73,15 +82,15 @@
 
           <!-- Plan template list -->
           <div
-            v-else
-            v-for="template in sidebarStore.sortedTemplates"
-            :key="template.id"
-            class="sidebar-content-list-item"
-            :class="{
+              v-else
+              v-for="template in sidebarStore.sortedTemplates"
+              :key="template.id"
+              class="sidebar-content-list-item"
+              :class="{
               'sidebar-content-list-item-active':
                 template.id === sidebarStore.currentPlanTemplateId,
             }"
-            @click="sidebarStore.selectTemplate(template)"
+              @click="sidebarStore.selectTemplate(template)"
           >
             <div class="task-icon">
               <Icon icon="carbon:document" width="20" />
@@ -93,13 +102,17 @@
               </div>
             </div>
             <div class="task-time">
-              {{ getRelativeTimeString(sidebarStore.parseDateTime(template.updateTime || template.createTime)) }}
+              {{
+              getRelativeTimeString(
+              sidebarStore.parseDateTime(template.updateTime || template.createTime)
+              )
+              }}
             </div>
             <div class="task-actions">
               <button
-                class="delete-task-btn"
-                :title="$t('sidebar.deleteTemplate')"
-                @click.stop="sidebarStore.deleteTemplate(template)"
+                  class="delete-task-btn"
+                  :title="$t('sidebar.deleteTemplate')"
+                  @click.stop="sidebarStore.deleteTemplate(template)"
               >
                 <Icon icon="carbon:close" width="16" />
               </button>
@@ -122,72 +135,63 @@
             </button>
           </div>
 
-          <!-- Section 1: Plan Generator -->
-          <PlanGenerator
-            :generator-prompt="sidebarStore.generatorPrompt"
-            :json-content="sidebarStore.jsonContent"
-            :is-generating="sidebarStore.isGenerating"
-            :plan-type="sidebarStore.planType"
-            @generate-plan="handleGeneratePlan"
-            @update-plan="handleUpdatePlan"
-            @update-generator-prompt="handleUpdateGeneratorPrompt"
-            @update-plan-type="handleUpdatePlanType"
-          />
-
           <!-- Section 2: JSON Editor (Conditional based on plan type) -->
           <!-- Use JsonEditorV2 for dynamic_agent type -->
           <JsonEditorV2
-            v-if="sidebarStore.planType === 'dynamic_agent'"
-            :json-content="sidebarStore.jsonContent"
-            :can-rollback="sidebarStore.canRollback"
-            :can-restore="sidebarStore.canRestore"
-            :is-generating="sidebarStore.isGenerating"
-            :is-executing="sidebarStore.isExecuting"
-            :current-plan-template-id="sidebarStore.currentPlanTemplateId || ''"
-            @rollback="handleRollback"
-            @restore="handleRestore"
-            @save="handleSaveTemplate"
-            @update:json-content="(value: string) => sidebarStore.jsonContent = value"
+              v-if="sidebarStore.planType === 'dynamic_agent'"
+              :key="sidebarStore.currentPlanTemplateId || 'default'"
+              :json-content="sidebarStore.jsonContent"
+              :can-rollback="sidebarStore.canRollback"
+              :can-restore="sidebarStore.canRestore"
+              :is-generating="sidebarStore.isGenerating"
+              :is-executing="sidebarStore.isExecuting"
+              :current-plan-template-id="sidebarStore.currentPlanTemplateId || ''"
+              @rollback="handleRollback"
+              @restore="handleRestore"
+              @save="handleSaveTemplate"
+              @copy-plan="handleCopyPlan"
+              @update:json-content="(value: string) => (sidebarStore.jsonContent = value)"
           />
-          
+
           <!-- Use JsonEditor for simple or other types -->
           <JsonEditor
-            v-else
-            :json-content="sidebarStore.jsonContent"
-            :can-rollback="sidebarStore.canRollback"
-            :can-restore="sidebarStore.canRestore"
-            :is-generating="sidebarStore.isGenerating"
-            :is-executing="sidebarStore.isExecuting"
-            :current-plan-template-id="sidebarStore.currentPlanTemplateId || ''"
-            @rollback="handleRollback"
-            @restore="handleRestore"
-            @save="handleSaveTemplate"
-            @update:json-content="(value: string) => sidebarStore.jsonContent = value"
+              v-else
+              :key="'simple-' + (sidebarStore.currentPlanTemplateId || 'default')"
+              :json-content="sidebarStore.jsonContent"
+              :can-rollback="sidebarStore.canRollback"
+              :can-restore="sidebarStore.canRestore"
+              :is-generating="sidebarStore.isGenerating"
+              :is-executing="sidebarStore.isExecuting"
+              :current-plan-template-id="sidebarStore.currentPlanTemplateId || ''"
+              @rollback="handleRollback"
+              @restore="handleRestore"
+              @save="handleSaveTemplate"
+              @update:json-content="(value: string) => (sidebarStore.jsonContent = value)"
           />
 
           <!-- Section 3: Execution Controller -->
           <ExecutionController
-            ref="executionControllerRef"
-            :current-plan-template-id="sidebarStore.currentPlanTemplateId || ''"
-            :is-executing="sidebarStore.isExecuting"
-            :is-generating="sidebarStore.isGenerating"
-            :show-publish-button="showPublishButton"
-            :tool-info="currentToolInfo"
-            @execute-plan="handleExecutePlan"
-            @publish-mcp-service="handlePublishMcpService"
-            @clear-params="handleClearExecutionParams"
-            @update-execution-params="handleUpdateExecutionParams"
+              ref="executionControllerRef"
+              :current-plan-template-id="sidebarStore.currentPlanTemplateId || ''"
+              :is-executing="sidebarStore.isExecuting"
+              :is-generating="sidebarStore.isGenerating"
+              :show-publish-button="showPublishButton"
+              :tool-info="currentToolInfo"
+              @execute-plan="handleExecutePlan"
+              @publish-mcp-service="handlePublishMcpService"
+              @clear-params="handleClearExecutionParams"
+              @update-execution-params="handleUpdateExecutionParams"
           />
         </div>
       </div>
     </div>
-    
+
     <!-- Sidebar Resizer -->
     <div
-      class="sidebar-resizer"
-      @mousedown="startResize"
-      @dblclick="resetSidebarWidth"
-      :title="$t('sidebar.resizeHint')"
+        class="sidebar-resizer"
+        @mousedown="startResize"
+        @dblclick="resetSidebarWidth"
+        :title="$t('sidebar.resizeHint')"
     >
       <div class="resizer-line"></div>
     </div>
@@ -195,29 +199,64 @@
 
   <!-- Publish MCP Service Modal -->
   <PublishServiceModal
-    ref="publishMcpModalRef"
-    v-model="showPublishMcpModal"
-    :plan-template-id="sidebarStore.currentPlanTemplateId || ''"
-    :plan-title="sidebarStore.selectedTemplate?.title || ''"
-    :plan-description="sidebarStore.selectedTemplate?.description || ''"
-    @published="handleMcpServicePublished"
+      ref="publishMcpModalRef"
+      v-model="showPublishMcpModal"
+      :plan-template-id="sidebarStore.currentPlanTemplateId || ''"
+      :plan-description="sidebarStore.selectedTemplate?.description || ''"
+      @published="handleMcpServicePublished"
   />
+
+  <!-- Copy Plan Modal -->
+  <div v-if="showCopyPlanModal" class="modal-overlay" @click="closeCopyPlanModal">
+    <div class="modal-content" @click.stop>
+      <div class="modal-header">
+        <h3>{{ $t('sidebar.copyPlan') }}</h3>
+        <button class="close-btn" @click="closeCopyPlanModal">
+          <Icon icon="carbon:close" width="16" />
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <label class="form-label">{{ $t('sidebar.newPlanTitle') }}</label>
+          <input
+              v-model="newPlanTitle"
+              type="text"
+              class="form-input"
+              :placeholder="$t('sidebar.enterNewPlanTitle')"
+              @keyup.enter="confirmCopyPlan"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" @click="closeCopyPlanModal">
+          {{ $t('common.cancel') }}
+        </button>
+        <button
+            class="btn btn-primary"
+            @click="confirmCopyPlan"
+            :disabled="!newPlanTitle.trim() || isCopyingPlan"
+        >
+          <Icon v-if="isCopyingPlan" icon="carbon:loading" width="16" class="spinning" />
+          {{ isCopyingPlan ? $t('sidebar.copying') : $t('sidebar.copyPlan') }}
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, computed, onUnmounted, watch } from 'vue'
-import { Icon } from '@iconify/vue'
-import { useI18n } from 'vue-i18n'
-import { sidebarStore } from '@/stores/sidebar'
-import PublishServiceModal from '@/components/publish-service-modal/PublishServiceModal.vue'
-import type { CoordinatorToolVO, CoordinatorToolConfig } from '@/api/coordinator-tool-api-service'
+import type { CoordinatorToolConfig, CoordinatorToolVO } from '@/api/coordinator-tool-api-service'
 import { CoordinatorToolApiService } from '@/api/coordinator-tool-api-service'
+import PublishServiceModal from '@/components/publish-service-modal/PublishServiceModal.vue'
+import { useToast } from '@/plugins/useToast'
+import { sidebarStore } from '@/stores/sidebar'
+import type { PlanExecutionRequestPayload } from '@/types/plan-execution'
+import { Icon } from '@iconify/vue'
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
+import ExecutionController from './ExecutionController.vue'
 import JsonEditor from './JsonEditor.vue'
 import JsonEditorV2 from './JsonEditorV2.vue'
-import ExecutionController from './ExecutionController.vue'
-import type { PlanExecutionRequestPayload } from '@/types/plan-execution'
-import PlanGenerator from './PlanGenerator.vue'
-import { useToast } from '@/plugins/useToast'
 
 const { t } = useI18n()
 const toast = useToast()
@@ -240,22 +279,35 @@ const currentToolInfo = ref<CoordinatorToolVO>({
   enableHttpService: false,
   enableMcpService: false,
   enableInternalToolcall: false,
-  serviceGroup: ''
+  serviceGroup: '',
 })
 const publishMcpModalRef = ref<InstanceType<typeof PublishServiceModal> | null>(null)
-
-
 
 // CoordinatorTool configuration
 const coordinatorToolConfig = ref<CoordinatorToolConfig>({
   enabled: true,
-  success: true
+  success: true,
 })
 
 // Computed property: whether to show publish MCP service button
 const showPublishButton = computed(() => {
   return coordinatorToolConfig.value.enabled
 })
+
+// Watch for changes in currentPlanTemplateId and jsonContent
+watch(
+    () => sidebarStore.currentPlanTemplateId,
+    (newId, oldId) => {
+      console.log('[Sidebar] currentPlanTemplateId changed from', oldId, 'to', newId)
+    }
+)
+
+watch(
+    () => sidebarStore.jsonContent,
+    (newContent, oldContent) => {
+      console.log('[Sidebar] jsonContent changed from', oldContent, 'to', newContent)
+    }
+)
 
 // Load CoordinatorTool configuration
 const loadCoordinatorToolConfig = async () => {
@@ -268,12 +320,10 @@ const loadCoordinatorToolConfig = async () => {
     coordinatorToolConfig.value = {
       enabled: true,
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error'
+      message: error instanceof Error ? error.message : 'Unknown error',
     }
   }
 }
-
-
 
 // Use pinia store
 // Use TS object-implemented sidebarStore
@@ -289,9 +339,19 @@ const handleSaveTemplate = async () => {
     const saveResult = await sidebarStore.saveTemplate()
 
     if (saveResult?.duplicate) {
-      toast.success(t('sidebar.saveCompleted', { message: saveResult.message, versionCount: saveResult.versionCount }))
+      toast.success(
+          t('sidebar.saveCompleted', {
+            message: saveResult.message,
+            versionCount: saveResult.versionCount,
+          })
+      )
     } else if (saveResult?.saved) {
-      toast.success(t('sidebar.saveSuccess', { message: saveResult.message, versionCount: saveResult.versionCount }))
+      toast.success(
+          t('sidebar.saveSuccess', {
+            message: saveResult.message,
+            versionCount: saveResult.versionCount,
+          })
+      )
       // Refresh parameter requirements after successful save
       refreshParameterRequirements()
     } else if (saveResult?.message) {
@@ -305,47 +365,51 @@ const handleSaveTemplate = async () => {
 
 // Method to refresh parameter requirements
 const refreshParameterRequirements = async () => {
-  // Add a small delay to ensure the backend has processed the new template
-  await new Promise(resolve => setTimeout(resolve, 500))
-  
+  // Add a delay to ensure the backend has processed the new template and committed the transaction
+  await new Promise(resolve => setTimeout(resolve, 1000))
+
+  console.log(
+      '[Sidebar] 🔄 Refreshing parameter requirements for templateId:',
+      sidebarStore.currentPlanTemplateId
+  )
+
+  // Use nextTick to ensure all reactive updates are complete
+  await nextTick()
+
   // Get ExecutionController component through ref and call its refresh method
   if (executionControllerRef.value) {
+    console.log('[Sidebar] 📞 Calling ExecutionController.loadParameterRequirements()')
     executionControllerRef.value.loadParameterRequirements()
+
+    // Add a retry mechanism in case the first call fails due to timing
+    setTimeout(() => {
+      if (executionControllerRef.value) {
+        console.log(
+            '[Sidebar] 🔄 Retry: Calling ExecutionController.loadParameterRequirements() again'
+        )
+        executionControllerRef.value.loadParameterRequirements()
+      }
+    }, 2000) // Increased delay to 2 seconds for database transaction commit
+  } else {
+    console.warn('[Sidebar] ⚠️ ExecutionController ref not available')
   }
-  
+
   // Refresh parameter requirements in PublishMcpServiceModal
   if (publishMcpModalRef.value) {
+    console.log('[Sidebar] 📞 Calling PublishMcpServiceModal.loadParameterRequirements()')
     publishMcpModalRef.value.loadParameterRequirements()
-  }
-}
-
-const handleGeneratePlan = async () => {
-  try {
-    await sidebarStore.generatePlan()
-    toast.success(t('sidebar.generateSuccess', { templateId: sidebarStore.selectedTemplate?.id ?? t('sidebar.unknown') }))
-  } catch (error: any) {
-    console.error('Failed to generate plan:', error)
-    toast.error(t('sidebar.generateFailed') + ': ' + error.message)
-  }
-}
-
-const handleUpdatePlan = async () => {
-  try {
-    await sidebarStore.updatePlan()
-    toast.success(t('sidebar.updateSuccess'))
-  } catch (error: any) {
-    console.error('Failed to update plan:', error)
-    toast.error(t('sidebar.updateFailed') + ': ' + error.message)
+  } else {
+    console.warn('[Sidebar] ⚠️ PublishMcpServiceModal ref not available')
   }
 }
 
 // Version control handlers
 const handleRollback = () => {
   try {
-    if (sidebarStore && typeof sidebarStore.rollbackVersion === 'function') {
+    if (typeof sidebarStore.rollbackVersion === 'function') {
       sidebarStore.rollbackVersion()
     } else {
-      console.warn('sidebarStore or rollbackVersion method is not available')
+      console.warn('rollbackVersion method is not available')
     }
   } catch (error) {
     console.error('Error during rollback operation:', error)
@@ -355,10 +419,10 @@ const handleRollback = () => {
 
 const handleRestore = () => {
   try {
-    if (sidebarStore && typeof sidebarStore.restoreVersion === 'function') {
+    if (typeof sidebarStore.restoreVersion === 'function') {
       sidebarStore.restoreVersion()
     } else {
-      console.warn('sidebarStore or restoreVersion method is not available')
+      console.warn('restoreVersion method is not available')
     }
   } catch (error) {
     console.error('Error during restore operation:', error)
@@ -367,11 +431,14 @@ const handleRestore = () => {
 }
 
 const handleExecutePlan = async (payload: PlanExecutionRequestPayload) => {
-  console.log('[Sidebar] 🎯 handleExecutePlan called with payload:', JSON.stringify(payload, null, 2))
+  console.log(
+      '[Sidebar] 🎯 handleExecutePlan called with payload:',
+      JSON.stringify(payload, null, 2)
+  )
   console.log('[Sidebar] 📊 Current sidebarStore state:', {
     currentPlanTemplateId: sidebarStore.currentPlanTemplateId,
     selectedTemplate: sidebarStore.selectedTemplate?.id,
-    jsonContent: sidebarStore.jsonContent?.substring(0, 100) + '...'
+    jsonContent: sidebarStore.jsonContent.substring(0, 100) + '...',
   })
 
   try {
@@ -388,16 +455,16 @@ const handleExecutePlan = async (payload: PlanExecutionRequestPayload) => {
     const finalPlanData = {
       ...planData,
       uploadedFiles: payload.uploadedFiles,
-      uploadKey: payload.uploadKey
+      uploadKey: payload.uploadKey,
     }
-    
+
     if (payload.replacementParams && Object.keys(payload.replacementParams).length > 0) {
       console.log('[Sidebar] 🔄 Processing replacement parameters:', payload.replacementParams)
       finalPlanData.replacementParams = payload.replacementParams
     }
-    
+
     console.log('[Sidebar] ✅ Final plan data:', JSON.stringify(finalPlanData, null, 2))
-    
+
     // Use the prepared plan data for the payload
     const finalPayload: PlanExecutionRequestPayload = {
       ...payload,
@@ -405,10 +472,13 @@ const handleExecutePlan = async (payload: PlanExecutionRequestPayload) => {
       planData: finalPlanData.planData,
       params: finalPlanData.params,
       uploadedFiles: finalPlanData.uploadedFiles,
-      uploadKey: finalPlanData.uploadKey
+      uploadKey: finalPlanData.uploadKey,
     }
-    
-    console.log('[Sidebar] 📤 Emitting planExecutionRequested with final payload:', JSON.stringify(finalPayload, null, 2))
+
+    console.log(
+        '[Sidebar] 📤 Emitting planExecutionRequested with final payload:',
+        JSON.stringify(finalPayload, null, 2)
+    )
     emit('planExecutionRequested', finalPayload)
 
     console.log('[Sidebar] ✅ Event emitted successfully')
@@ -432,21 +502,26 @@ const handleExecutePlan = async (payload: PlanExecutionRequestPayload) => {
 // MCP service publishing related state
 const showPublishMcpModal = ref(false)
 
+// Copy plan related state
+const showCopyPlanModal = ref(false)
+const newPlanTitle = ref('')
+const isCopyingPlan = ref(false)
+
 const handlePublishMcpService = () => {
   console.log('[Sidebar] Publish MCP service button clicked')
   console.log('[Sidebar] currentPlanTemplateId:', sidebarStore.currentPlanTemplateId)
-  
+
   if (!sidebarStore.currentPlanTemplateId) {
     console.log('[Sidebar] No plan template selected, showing warning')
     toast.error(t('mcpService.selectPlanTemplateFirst'))
     return
   }
-  
+
   console.log('[Sidebar] Opening publish MCP service modal')
   showPublishMcpModal.value = true
 }
 
-const handleMcpServicePublished = (tool: CoordinatorToolVO | null) => {
+const handleMcpServicePublished = async (tool: CoordinatorToolVO | null) => {
   if (tool === null) {
     console.log('MCP service deleted successfully')
     toast.success(t('mcpService.deleteSuccess'))
@@ -459,7 +534,7 @@ const handleMcpServicePublished = (tool: CoordinatorToolVO | null) => {
       enableHttpService: false,
       enableMcpService: false,
       enableInternalToolcall: false,
-      serviceGroup: ''
+      serviceGroup: '',
     }
   } else {
     console.log('MCP service published successfully:', tool)
@@ -467,10 +542,14 @@ const handleMcpServicePublished = (tool: CoordinatorToolVO | null) => {
     // Update tool information
     currentToolInfo.value = {
       ...tool,
-      toolName: tool.toolName || '',
-      serviceGroup: tool.serviceGroup || ''
+      toolName: tool.toolName,
+      serviceGroup: tool.serviceGroup ?? '',
     }
   }
+
+  // Reload available tools to include the newly published service
+  console.log('[Sidebar] 🔄 Reloading available tools after service publish/delete')
+  await sidebarStore.loadAvailableTools()
 }
 
 // Execution Controller event handlers
@@ -482,13 +561,64 @@ const handleUpdateExecutionParams = (params: string) => {
   sidebarStore.executionParams = params
 }
 
-// Plan Generator event handlers
-const handleUpdateGeneratorPrompt = (prompt: string) => {
-  sidebarStore.generatorPrompt = prompt
+// Copy plan handler functions
+const handleCopyPlan = () => {
+  console.log('[Sidebar] Copy plan clicked')
+
+  if (!sidebarStore.selectedTemplate) {
+    console.log('[Sidebar] No template selected, cannot copy')
+    toast.error(t('sidebar.selectPlanFirst'))
+    return
+  }
+
+  newPlanTitle.value = (sidebarStore.selectedTemplate.title ?? t('sidebar.unnamedPlan')) + ' (copy)'
+  console.log('[Sidebar] Opening copy plan modal')
+  showCopyPlanModal.value = true
 }
 
-const handleUpdatePlanType = (planType: string) => {
-  sidebarStore.planType = planType
+const closeCopyPlanModal = () => {
+  showCopyPlanModal.value = false
+  newPlanTitle.value = ''
+  isCopyingPlan.value = false
+}
+
+const confirmCopyPlan = async () => {
+  if (!newPlanTitle.value.trim()) {
+    toast.error(t('sidebar.titleRequired'))
+    return
+  }
+
+  if (!sidebarStore.selectedTemplate || !sidebarStore.jsonContent) {
+    toast.error(t('sidebar.noPlanToCopy'))
+    return
+  }
+
+  isCopyingPlan.value = true
+
+  try {
+    const currentPlan = JSON.parse(sidebarStore.jsonContent)
+    const newPlan = {
+      ...currentPlan,
+      title: newPlanTitle.value.trim(),
+      planTemplateId: '', // New plan should not have the same template ID
+    }
+
+    const { PlanActApiService } = await import('@/api/plan-act-api-service')
+    const result = await PlanActApiService.savePlanTemplate('', JSON.stringify(newPlan))
+
+    if (result.saved) {
+      toast.success(t('sidebar.copyPlanSuccess', { title: newPlanTitle.value.trim() }))
+      await sidebarStore.loadPlanTemplateList()
+      closeCopyPlanModal()
+    } else {
+      toast.error(t('sidebar.copyPlanFailed', { message: result.message || 'Unknown error' }))
+    }
+  } catch (error: any) {
+    console.error('[Sidebar] Error copying plan:', error)
+    toast.error(t('sidebar.copyPlanFailed', { message: error.message || 'Unknown error' }))
+  } finally {
+    isCopyingPlan.value = false
+  }
 }
 
 // Load tool information when plan template changes
@@ -502,7 +632,7 @@ const loadToolInfo = async (planTemplateId: string | null) => {
       enableHttpService: false,
       enableMcpService: false,
       enableInternalToolcall: false,
-      serviceGroup: ''
+      serviceGroup: '',
     }
     return
   }
@@ -512,8 +642,8 @@ const loadToolInfo = async (planTemplateId: string | null) => {
     if (toolData) {
       currentToolInfo.value = {
         ...toolData,
-        toolName: toolData.toolName || '',
-        serviceGroup: toolData.serviceGroup || ''
+        toolName: toolData.toolName,
+        serviceGroup: toolData.serviceGroup ?? '',
       }
     } else {
       // No tool found or not published, don't show any call examples
@@ -525,7 +655,7 @@ const loadToolInfo = async (planTemplateId: string | null) => {
         enableHttpService: false,
         enableMcpService: false,
         enableInternalToolcall: false,
-        serviceGroup: ''
+        serviceGroup: '',
       }
     }
   } catch (error) {
@@ -538,7 +668,7 @@ const loadToolInfo = async (planTemplateId: string | null) => {
       enableHttpService: false,
       enableMcpService: false,
       enableInternalToolcall: false,
-      serviceGroup: ''
+      serviceGroup: '',
     }
   }
 }
@@ -616,9 +746,13 @@ const resetSidebarWidth = () => {
 }
 
 // Watch for plan template changes to load tool information
-watch(() => sidebarStore.currentPlanTemplateId, (newPlanTemplateId) => {
-  loadToolInfo(newPlanTemplateId)
-}, { immediate: true })
+watch(
+    () => sidebarStore.currentPlanTemplateId,
+    newPlanTemplateId => {
+      loadToolInfo(newPlanTemplateId)
+    },
+    { immediate: true }
+)
 
 // Lifecycle
 onMounted(() => {
@@ -669,14 +803,14 @@ defineExpose({
   }
 }
 
-  .sidebar-content {
-    height: 100%;
-    width: 100%;
-    padding: 12px 0 12px 12px;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.3s ease-in-out;
-    flex: 1;
+.sidebar-content {
+  height: 100%;
+  width: 100%;
+  padding: 12px 0 12px 12px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease-in-out;
+  flex: 1;
 
   .sidebar-content-header {
     display: flex;
@@ -688,7 +822,6 @@ defineExpose({
     .sidebar-content-title {
       font-size: 20px;
       font-weight: 600;
-
       background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -725,7 +858,7 @@ defineExpose({
 
       &:hover:not(:disabled) {
         background: rgba(255, 255, 255, 0.1);
-        color: var(--text-primary);
+        color: rgba(255, 255, 255, 0.9);
       }
 
       &.active {
@@ -791,7 +924,7 @@ defineExpose({
           background: transparent;
           border: none;
           border-radius: 4px;
-          color: var(--text-primary, #ffffff);;
+          color: var(--text-primary, #ffffff);
           cursor: pointer;
           display: flex;
           align-items: center;
@@ -805,142 +938,150 @@ defineExpose({
         }
       }
 
-
-        .json-editor {
-          width: 100%;
-          background: rgba(0, 0, 0, 0.3);
-          border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
-          border-radius: 6px;
-          color: white;
-          font-size: 12px;
-          font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-          padding: 8px;
-          resize: vertical;
-          min-height: 100px;
-
-          &:focus {
-            outline: none;
-            border-color: var(--accent-primary, #667eea);
-            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
-          }
-
-          &::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-          }
-        }
-
-        .json-editor {
-            min-height: 200px;
-            font-size: 11px;
-            line-height: 1.5;
-            white-space: pre-wrap;
-            overflow-wrap: break-word;
-            word-break: break-word;
-            tab-size: 2;
-            font-variant-ligatures: none;
-        }
-
-
-      }
-    }
-  }
-
-
-  .new-task-section {
-    margin-bottom: 16px;
-    padding-right: 12px;
-
-    .new-task-btn {
-      width: 100%;
-      padding: 12px 16px;
-      background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-      border: none;
-      border-radius: 8px;
-      color: white;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-
-      &:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px var(--selection-bg, rgba(102, 126, 234, 0.3));
-      }
-
-      .shortcut {
+      .json-editor {
+        width: 100%;
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
+        border-radius: 6px;
+        color: white;
         font-size: 12px;
-        opacity: 0.8;
-        margin-left: auto;
+        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        padding: 8px;
+        resize: vertical;
+        min-height: 100px;
+
+        &:focus {
+          outline: none;
+          border-color: var(--accent-primary, #667eea);
+          box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+
+        &::placeholder {
+          color: rgba(255, 255, 255, 0.4);
+        }
+      }
+
+      .json-editor {
+        min-height: 200px;
+        font-size: 11px;
+        line-height: 1.5;
+        white-space: pre-wrap;
+        overflow-wrap: break-word;
+        word-break: break-word;
+        tab-size: 2;
+        font-variant-ligatures: none;
       }
     }
   }
+}
 
-  .sidebar-content-list {
+.new-task-section {
+  margin-bottom: 16px;
+  padding-right: 12px;
+
+  .new-task-btn {
+    width: 100%;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    }
+
+    .shortcut {
+      font-size: 12px;
+      opacity: 0.8;
+      margin-left: auto;
+    }
+  }
+}
+
+.sidebar-content-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 12px;
+
+  .loading-state,
+  .error-state,
+  .empty-state {
     display: flex;
     flex-direction: column;
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 12px;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    color: var(--text-secondary, #ffffff);
+    font-size: 14px;
+    text-align: center;
+    gap: 12px;
 
-    .loading-state,
-    .error-state,
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 32px 16px;
-      color: var(--text-secondary, #ffffff);
-      font-size: 14px;
-      text-align: center;
-      gap: 12px;
-
-      .spinning {
-        animation: spin 1s linear infinite;
-      }
-
-      .retry-btn {
-        padding: 8px 16px;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
-        border-radius: 4px;
-        color: white;
-        cursor: pointer;
-        font-size: 12px;
-        transition: background-color 0.2s ease;
-
-        &:hover {
-          background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
-        }
-      }
+    .spinning {
+      animation: spin 1s linear infinite;
     }
 
-    .sidebar-content-list-item {
-      display: flex;
-      align-items: flex-start;
-      padding: 12px;
-      margin-bottom: 8px;
-      background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
+    .retry-btn {
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
+      border-radius: 4px;
+      color: white;
       cursor: pointer;
-      transition: all 0.2s ease;
-      position: relative;
+      font-size: 12px;
+      transition: background-color 0.2s ease;
 
       &:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
-        transform: translateY(-1px);
+        background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
       }
+    }
+  }
 
-      &.sidebar-content-list-item-active {
-        border: 2px solid var(--accent-primary, #667eea);
-        background: rgba(102, 126, 234, 0.1);
-      }
+  .sidebar-content-list-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 12px;
+    margin-bottom: 8px;
+    background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
+      transform: translateY(-1px);
+    }
+
+    &.sidebar-content-list-item-active {
+      border: 2px solid var(--accent-primary, #667eea);
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+
+    .task-icon {
+      margin-right: 12px;
+      color: #667eea;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .task-details {
+      flex: 1;
+      min-width: 0;
 
       .task-icon {
         margin-right: 12px;
@@ -983,36 +1124,36 @@ defineExpose({
         right: 40px;
       }
 
-      .task-actions {
+    .task-actions {
+      display: flex;
+      align-items: center;
+      margin-left: 8px;
+      flex-shrink: 0;
+
+      .delete-task-btn {
+        width: 24px;
+        height: 24px;
+        background: transparent;
+        border: none;
+        border-radius: 4px;
+        color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
         display: flex;
         align-items: center;
-        margin-left: 8px;
-        flex-shrink: 0;
+        justify-content: center;
+        transition: all 0.2s ease;
+        position: absolute;
+        top: 12px;
+        right: 12px;
 
-        .delete-task-btn {
-          width: 24px;
-          height: 24px;
-          background: transparent;
-          border: none;
-          border-radius: 4px;
-          color: rgba(255, 255, 255, 0.5);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s ease;
-          position: absolute;
-          top: 12px;
-          right: 12px;
-
-          &:hover {
-            background: rgba(255, 0, 0, 0.2);
-            color: #ff6b6b;
-          }
+        &:hover {
+          background: rgba(255, 0, 0, 0.2);
+          color: #ff6b6b;
         }
       }
     }
   }
+}
 
 @keyframes spin {
   from {
@@ -1027,7 +1168,7 @@ defineExpose({
 .sidebar-resizer {
   width: 6px;
   height: 100vh;
-  background: var(--bg-secondary, #1a1a1a);
+  background: #1a1a1a;
   cursor: col-resize;
   position: relative;
   display: flex;
@@ -1037,7 +1178,7 @@ defineExpose({
   flex-shrink: 0;
 
   &:hover {
-    background: var(--bg-tertiary, #2a2a2a);
+    background: #2a2a2a;
 
     .resizer-line {
       background: #4a90e2;
@@ -1056,5 +1197,150 @@ defineExpose({
   background: #3a3a3a;
   border-radius: 1px;
   transition: all 0.2s ease;
+}
+
+/* Copy Plan Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 0;
+  min-width: 400px;
+  max-width: 500px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.form-input {
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  font-size: 13px;
+  transition: all 0.2s ease;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, #5566dd 0%, #653b91 100%);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

@@ -26,7 +26,8 @@ const words: I18nType = {
   init: {
     welcome: '欢迎使用 JManus',
     welcomeStep: '欢迎使用 JManus',
-    description: '首次使用需要配置 LLM 服务来启用 AI 功能。您可以选择使用阿里云百炼服务或自定义 OpenAI 兼容的 API 服务。',
+    description:
+      '首次使用需要配置 LLM 服务来启用 AI 功能。您可以选择使用阿里云百炼服务或自定义 OpenAI 兼容的 API 服务。',
     languageStepDescription: '请选择您的语言偏好，这将作为默认界面语言。',
     stepLanguage: '语言选择',
     stepModel: '模型配置',
@@ -62,10 +63,12 @@ const words: I18nType = {
     saveFailed: '保存配置失败',
     networkError: '网络错误，请检查您的网络连接',
     successMessage: '配置保存成功！正在跳转到主页面...',
-    restartRequired: 'API密钥已保存成功！为了使配置生效，需要重启应用程序。\n\n点击"确定"立即重启，点击"取消"稍后手动重启。',
+    restartRequired:
+      'API密钥已保存成功！为了使配置生效，需要重启应用程序。\n\n点击"确定"立即重启，点击"取消"稍后手动重启。',
     simplifiedChinese: '简体中文',
     completionsPath: 'Completions Path',
-    completionsPathPlaceholder: '聊天模型端点，各平台路径不同。如未填写默认配置是：/v1/chat/completions',
+    completionsPathPlaceholder:
+      '聊天模型端点，各平台路径不同。如未填写默认配置是：/v1/chat/completions',
   },
 
   // 通用按钮和操作
@@ -87,6 +90,7 @@ const words: I18nType = {
     search: '搜索',
     loading: '加载中...',
     parameters: '参数',
+    success: '成功',
   },
 
   // 文件浏览器
@@ -314,7 +318,8 @@ const words: I18nType = {
       topP: 'Top P',
       topPPlaceholder: '留空使用模型默认值',
       completionsPath: 'Completions Path',
-      completionsPathPlaceholder: '聊天模型端点，各平台路径不同。如未填写默认配置是：/v1/chat/completions',
+      completionsPathPlaceholder:
+        '聊天模型端点，各平台路径不同。如未填写默认配置是：/v1/chat/completions',
     },
     // MCP配置页面
     mcpConfig: {
@@ -352,7 +357,8 @@ const words: I18nType = {
       invalidServerConfig: '❌ 服务器配置无效: {serverId} - 服务器配置必须是对象',
       invalidArgs: '❌ args字段必须是数组: {serverId} - 请将args改为数组格式',
       invalidEnv: '❌ env字段必须是对象: {serverId} - 请将env改为对象格式',
-      invalidArgsType: '❌ args数组元素必须是字符串: {serverId}, 索引: {index} - 请确保所有参数都是字符串',
+      invalidArgsType:
+        '❌ args数组元素必须是字符串: {serverId}, 索引: {index} - 请确保所有参数都是字符串',
       invalidEnvType: '❌ env对象值必须是字符串: {serverId}, 键: {key} - 环境变量值必须是字符串',
       missingUrl: '❌ 缺少url字段: {serverId} - 没有command时必须有url',
       invalidUrl: '❌ url格式无效: {serverId} - 请检查URL格式是否正确',
@@ -385,10 +391,12 @@ const words: I18nType = {
       batchImportTip: '如果需要批量配置MCP服务，可以使用右上角的全部导入功能',
       configureMcpService: '配置MCP服务',
       fillServiceName: '填写服务名称',
-      selectConnectionType: '选择连接类型:本地选择 STUDIO 以及输入 Command、Args和Env。远程选择 SSE 或 STREAMING 以及输入 URL',
+      selectConnectionType:
+        '选择连接类型:本地选择 STUDIO 以及输入 Command、Args和Env。远程选择 SSE 或 STREAMING 以及输入 URL',
       clickSaveToComplete: '点击保存按钮完成MCP配置，MCP工具将自动注册到系统中',
       configureAgentUsage: '配置Agent使用',
-      createAgentTip: '在Agent配置页面创建新的Agent，为Agent添加刚配置的MCP服务，这样可以减少工具冲突，提高Agent选择工具的准确性',
+      createAgentTip:
+        '在Agent配置页面创建新的Agent，为Agent添加刚配置的MCP服务，这样可以减少工具冲突，提高Agent选择工具的准确性',
       copyJsonConfig: '把完整的JSON配置复制到上面的输入框(可以参考配置示例)，然后点击导入',
       command: 'Command',
       args: 'Args',
@@ -411,11 +419,13 @@ const words: I18nType = {
       jsonNumberError: '❌ JSON数字格式错误 - 请检查数字格式',
       jsonStringError: '❌ JSON字符串格式错误 - 请检查引号是否配对',
       jsonSyntaxErrorWithMessage: '❌ JSON语法错误: {message}',
-      correctFormatExample: '💡 正确格式示例: {"mcpServers": {"server-id": {"name": "服务器名称", "url": "服务器地址"}}}',
+      correctFormatExample:
+        '💡 正确格式示例: {"mcpServers": {"server-id": {"name": "服务器名称", "url": "服务器地址"}}}',
       commandPlaceholder: '例如: uvx',
       urlPlaceholder: '例如: https://mcp.example.com/server',
       argsPlaceholder: '每行一个参数，例如:\n--from\nmysql_mcp_server_pro\n--mode\nstdio',
-      envPlaceholder: '键值对格式，每行一个，例如:\nMYSQL_HOST:127.0.0.1\nMYSQL_PORT:3306\nMYSQL_USER:root',
+      envPlaceholder:
+        '键值对格式，每行一个，例如:\nMYSQL_HOST:127.0.0.1\nMYSQL_PORT:3306\nMYSQL_USER:root',
       connectionTypePlaceholder: '请选择连接类型',
       argsFormatError: 'Args格式错误，请输入有效的JSON数组',
       envFormatError: 'Env格式错误，请输入有效的JSON对象',
@@ -460,6 +470,13 @@ const words: I18nType = {
         connectionTimeoutSeconds: 'MCP连接超时时间(秒)',
         maxRetryCount: 'MCP连接最大重试次数',
         maxConcurrentConnections: 'MCP最大并发连接数',
+      },
+      imageRecognition: {
+        poolSize: '线程池大小',
+        modelName: '模型名称',
+        dpi: 'DPI',
+        imageType: '图像类型',
+        maxRetryAttempts: '最大重试次数',
       },
       systemSettings: {
         systemName: '系统名称',
@@ -550,7 +567,7 @@ const words: I18nType = {
       title: '命名空间配置',
       name: '命名空间名称',
       code: '命名空间编码',
-      host:"域名",
+      host: '域名',
       description: '命名空间描述',
       loadDetailsFailed: '加载namespace详情失败',
       selectNameSpaceHint: '请选择一个命名空间进行配置',
@@ -642,7 +659,6 @@ const words: I18nType = {
     promptPlaceholder: '描述您想要生成的计划...',
     generating: '生成中...',
     generate: '生成计划',
-    updatePlan: '更新计划',
     executing: '执行中...',
     execute: '执行计划',
     executionParams: '执行参数',
@@ -729,14 +745,15 @@ const words: I18nType = {
     errorMessage: '错误信息',
     triggeredByTool: '由工具触发',
     planExecution: '计划执行',
-    userInputRequired: '需要用户输入'
+    userInputRequired: '需要用户输入',
   },
 
   // 输入组件
   input: {
     placeholder: '向 元气精灵 发送消息',
     send: '发送',
-    planMode: 'PLAN-ACT计划模式',
+    stop: '停止',
+    planMode: 'Func-Agent模式',
     waiting: '等待用户输入...',
     maxLength: '最大长度',
     charactersRemaining: '剩余字符',
@@ -756,17 +773,17 @@ const words: I18nType = {
 
   // 侧边栏
   sidebar: {
-    title: 'PLAN-ACT 计划模板名字',
+    title: 'Func-Agent 编辑器',
     templateList: '模板列表',
     configuration: '配置',
-    newPlan: '新建计划',
+    newPlan: '新建Func-Agent计划',
     loading: '加载中...',
     retry: '重试',
     noTemplates: '没有可用的计划模板',
     unnamedPlan: '未命名计划',
     noDescription: '无描述',
     deleteTemplate: '删除此计划模板',
-  jsonTemplate: 'plan-act计划模板编辑器',
+    jsonTemplate: 'Func-Agent计划模板编辑器',
     rollback: '回滚',
     restore: '恢复',
     jsonPlaceholder:
@@ -775,8 +792,6 @@ const words: I18nType = {
     generatorPlaceholder:
       'step1 : 在这里用自然语言输入你希望完成的任务，尽可能详细，然后点击生成计划，就可以生产一个可重复执行的精确计划',
     generating: '生成中...',
-    generatePlan: '生成计划',
-    updatePlan: '更新计划',
     executionController: '执行控制器',
     executionParams: '执行参数',
     executionParamsPlaceholder: '输入执行参数...',
@@ -784,7 +799,8 @@ const words: I18nType = {
       '在重复执行时，你可以将step2里面的一些内容设置为变量，然后在这里指定该变量的具体值。例如json里面设置 变量1 ，然后在这里则设置 变量1=阿里巴巴 。 就可以实现类似函数的参数的效果。',
     clearParams: '清空参数',
     parameterRequirements: '参数要求',
-    parameterRequirementsHelp: '你可以在模版编辑器的 "任务要求" 栏目里面通过<<参数名>>的方式植入可变参数（可以是多个），当选择保存以后，就可以在后面的发布服务中使用这些可变参数了',
+    parameterRequirementsHelp:
+      '你可以在模版编辑器的 "任务要求" 栏目里面通过<<参数名>>的方式植入可变参数（可以是多个），当选择保存以后，就可以在后面的发布服务中使用这些可变参数了',
     clearAllParams: '清空所有参数',
     noParametersRequired: '此计划模板不需要任何参数',
     fillAllRequiredParameters: '请填写所有必需的参数',
@@ -792,34 +808,45 @@ const words: I18nType = {
     statusApiUrl: '状态查询 API',
     executing: '执行中...',
     executePlan: '执行计划',
-  publishMcpService: '发布为工具服务',
-  updateServiceStatus: '更新服务状态',
-  
-  // Execution Controller - Call Examples
-  internalCall: '内部调用',
-  internalCallDescription: '您已将此计划-行动发布为内部方法。您可以在代理配置的添加工具部分找到此工具的方法并添加和使用它。',
-  internalMethodCall: '内部方法调用',
-  toolName: '工具名称',
-  serviceGroup: '服务组',
-  internalCallUsage: '在代理配置中添加此工具后，您可以直接在代理中调用此方法',
-  internalCallExample: '在代理配置的"添加工具"部分中，搜索并添加此工具，然后在代理中直接调用它',
-  
-  httpCallExample: 'HTTP调用示例',
-  httpCallDescription: '您已将此计划-行动发布为HTTP服务。您可以根据下面的示例调用它。',
-  httpServiceCall: 'HTTP服务调用',
-  httpEndpoint: 'HTTP端点',
-  httpCallUsage: '通过HTTP POST接口调用',
-  
-  mcpCall: 'MCP调用',
-  mcpCallDescription: '您已将此计划-行动发布为MCP服务。您可以通过MCP流式或SSE方法使用它。',
-  mcpServiceCall: 'MCP服务调用',
-  mcpEndpoint: 'MCP端点',
-  mcpCallUsage: '通过MCP协议使用流式或SSE方法调用',
-  mcpCallExample: '通过MCP客户端连接到此服务，使用流式或SSE方法进行调用',
-  
-  usage: '用法',
-  example: '示例',
-  enterValueFor: '为{param}输入值',
+    publishMcpService: '发布为工具服务',
+    updateServiceStatus: '更新服务状态',
+
+    // Execution Controller - Call Examples
+    internalCall: '内部调用',
+    internalCallDescription:
+      '您已将此计划-行动发布为内部方法。您可以在代理配置的添加工具部分找到此工具的方法并添加和使用它。',
+    internalMethodCall: '内部方法调用',
+    toolName: '工具名称',
+    serviceGroup: '服务组',
+    internalCallUsage: '在代理配置中添加此工具后，您可以直接在代理中调用此方法',
+    internalCallExample: '在代理配置的"添加工具"部分中，搜索并添加此工具，然后在代理中直接调用它',
+
+    httpCallExample: 'HTTP调用示例',
+    httpCallDescription: '您已将此计划-行动发布为HTTP服务。您可以根据下面的示例调用它。',
+    httpServiceCall: 'HTTP服务调用',
+    httpEndpoint: 'HTTP端点',
+    httpCallUsage: '通过HTTP POST接口调用',
+
+    mcpCall: 'MCP调用',
+    mcpCallDescription: '您已将此计划-行动发布为MCP服务。您可以通过MCP流式或SSE方法使用它。',
+    mcpServiceCall: 'MCP服务调用',
+    mcpEndpoint: 'MCP端点',
+    mcpCallUsage: '通过MCP协议使用流式或SSE方法调用',
+    mcpCallExample: '通过MCP客户端连接到此服务，使用流式或SSE方法进行调用',
+
+    usage: '用法',
+    example: '示例',
+    enterValueFor: '为{param}输入值',
+    copyPlan: '复制计划',
+    newPlanTitle: '新计划标题',
+    enterNewPlanTitle: '输入新计划标题',
+    copying: '复制中...',
+    selectPlanFirst: '请先选择一个计划模板',
+    titleRequired: '标题不能为空',
+    noPlanToCopy: '没有可复制的计划',
+    copyPlanSuccess: '计划复制成功: {title}',
+    copyPlanFailed: '计划复制失败: {message}',
+
     newTemplate: '新建模板',
     templateName: '模板名称',
     templateDescription: '模板描述',
@@ -859,16 +886,19 @@ const words: I18nType = {
     defaultExecutionPlanTitle: '执行计划',
 
     // JsonEditor 相关
-  planId: '计划模板ID',
+    planId: '计划模板ID',
     steps: '步骤',
-  tasks: '任务列表',
+    tasks: '任务列表',
     subtask: '子任务',
     agent: '智能体',
     selectAgent: '选择智能体',
-  stepRequirement: '任务需求',
-  stepRequirementPlaceholder: '请输入任务的具体需求和描述...',
-  terminateColumns: '任务输出要求描述',
-  terminateColumnsPlaceholder: '指定结构化返回值，如果指定，则返回为一个json 列表 ，每一行都是你指定的col。 例如： col1,col2 ，最后会输出 [(col1:val1,col2:val2), (col1:val3,col2:val4)]',
+    stepRequirement: '任务需求',
+    stepRequirementPlaceholder: '请输入任务的具体需求和描述...',
+    terminateColumns: '任务输出要求描述',
+    terminateColumnsPlaceholder:
+      '指定结构化返回值，如果指定，则返回为一个json 列表 ，每一行都是你指定的col。 例如： col1,col2 ，最后会输出 [(col1:val1,col2:val2), (col1:val3,col2:val4)]',
+    preview: '预览',
+    systemWillReturnListWithTableHeaderFormat: '系统将以json格式返回一个多行列表，表头为',
     titlePlaceholder: '请输入计划标题...',
     moveUp: '上移',
     moveDown: '下移',
@@ -883,30 +913,32 @@ const words: I18nType = {
     agentLoadError: '加载智能体失败',
     retryLoadAgents: '重新加载智能体',
     availableTools: '可用工具',
-    
+
     // Plan Type Selection
     planType: '计划类型',
     simplePlan: '简单计划（逐步会废弃，请慎用）',
     advancedPlan: '高级计划（MapReduce）',
     dynamicAgentPlan: '动态智能体计划',
-    dynamicAgentInstruction: '使用动态智能体计划，直接输入指令而无需经过生成过程。请直接在动态智能体计划部分构建您的计划。',
-    
+    dynamicAgentInstruction:
+      '使用动态智能体计划，直接输入指令而无需经过生成过程。请直接在动态智能体计划部分构建您的计划。',
+
     // Tool Selection
     selectedTools: '已选工具',
     addTools: '添加工具',
     removeTool: '移除工具',
-  clearAllTools: '清空所有工具',
-  noToolsSelected: '未选择任何工具',
-  planTypeError: '计划类型错误',
-  
-  // 模型和工具键
-  modelName: '模型名称',
-  modelNameDescription: '指定模型名字用于处理特定任务（如图片识别等），如不指定则使用默认的模型',
-  noModelSelected: '空',
-  noTools: '未选择工具，模型将从所有注册的工具（包括mcp工具）自主选择适当工具进行任务，如要更精确请帮助模型选择精准的工具，效果会更好一些',
-  addTool: '添加工具',
-  toolPlaceholder: '请输入工具',
-  addRemoveTools: '添加/删除工具',
+    clearAllTools: '清空所有工具',
+    noToolsSelected: '未选择任何工具',
+    planTypeError: '计划类型错误',
+
+    // 模型和工具键
+    modelName: '模型名称',
+    modelNameDescription: '指定模型名字用于处理特定任务（如图片识别等），如不指定则使用默认的模型',
+    noModelSelected: '空',
+    noTools:
+      '未选择工具，模型将从所有注册的工具（包括mcp工具）自主选择适当工具进行任务，如要更精确请帮助模型选择精准的工具，效果会更好一些',
+    addTool: '添加工具',
+    toolPlaceholder: '请输入工具',
+    addRemoveTools: '添加/删除工具',
 
     // 通用错误信息
     loadingFailed: '加载失败',
@@ -924,7 +956,7 @@ const words: I18nType = {
     sortByStatus: '按启用状态排序',
     summary: '共 {groups} 个服务组，{tools} 个工具 (已选择 {selected} 个)',
     enableAll: '启用全部',
-    noToolsFound: '没有找到工具'
+    noToolsFound: '没有找到工具',
   },
 
   // 直接执行页面
@@ -1040,44 +1072,32 @@ const words: I18nType = {
       stockPrice: {
         title: '查询股价',
         description: '获取今天阿里巴巴的最新股价（Agent可以使用浏览器工具）',
-        prompt: '用浏览器基于百度，查询今天阿里巴巴的股价，并返回最新股价',
+        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/stock-price-query.md',
       },
       weather: {
-        title: '查询天气',
-        description: '获取北京今天的天气情况（Agent可以使用MCP工具服务）',
-        prompt: '用浏览器，基于百度，查询北京今天的天气',
+        title: 'IP查询',
+        description: '查询指定IP地址的地理位置和相关信息（Agent可以使用MCP工具服务）',
+        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/ip-query.md',
       },
       queryplan: {
-        title: '查询一个人的信息',
-        description: '查询 沈询 阿里的所有信息（用于展示无限上下文能力）',
-        prompt: '用浏览器，基于百度，查询计划',
-        planTitle: '查询 沈询 阿里的所有信息（用于展示无限上下文能力）',
-        step1: '[BROWSER_AGENT] 通过 百度 查询 沈询 阿里 ， 获取第一页的html 百度数据，合并聚拢 到 html_data 的目录里',
-        step1Output: '存放的目录路径',
-        step2: '[TEXT_FILE_AGENT] 从 html_data 目录中找到所有的有效关于沈询 阿里 的网页链接，输出到 link.md里面',
-        step2Output: 'url地址，说明',
+        title: '增强型调研搜索',
+        description: '通过搜索引擎，下载和阅读多个页面，总结关键信息（展示函数化调用）',
+        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/query-plan.md',
       },
       ainovel: {
         title: 'AI小说创作',
         description: '人工智能逐步击败人类主题小说（用于展示超长内容的输出）',
-        prompt: '创建一个关于人工智能逐步击败人类的小说，包含10个章节',
-        planTitle: '人工智能逐步击败人类小说创作计划',
-        step1: '[TEXT_FILE_AGENT] 创建小说的大标题和子章节标题的文件,期望是一有10个子章节的的小说，提纲输出到novel.md里，每一个子章节用二级标题，在当前步骤只需要写章节的标题即可,小说的大标题是《人工智能逐步击败人类》',
-        step1Output: '文件的名字',
-        step2: '[TEXT_FILE_AGENT] 从novel.md文件获取子标题信息，然后依次完善每一个章节的具体内容，每个轮次只完善一个子章节的内容，用replace来更新内容，每个章节要求有3000字的内容，不要每更新一个章节就查询一下文档的全部内容',
-        step2Output: '文件的名字',
+        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/ai-novel.md',
       },
       formInputDemo: {
         title: 'AI智能动态表单演示',
         description: '体验AI智能分析用户需求并动态生成相关表单字段的能力',
-        prompt: '演示AI如何根据用户问题智能生成针对性的表单字段',
-        planTitle: 'AI智能动态表单演示计划',
-        step1: '[INTELLIGENT_FORM_AGENT] 要求用户输入咨询类型，咨询类型有三种，一个是业务咨询，一个是技术咨询，还有一个是架构咨询',
-        step1Output: '业务类型',
-        step2: '[DEFAULT_AGENT] 如果是技术咨询，则输出：技术咨询请拨打10086\n'+'如果是架构咨询，则输出：架构咨询可以联系沈询\n'+'其他则输出空，不属于我的范围',
-        step2Output: '',
-        step3: '[DEFAULT_AGENT] 如果是业务咨询，则输出：业务咨询，可以通过官网链接 www.yida.com 来提交',
-        step3Output: '',
+        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/form-input-demo.md',
+      },
+      imagePdfRecognition: {
+        title: '图片与PDF识别',
+        description: '上传图片或PDF文件，使用OCR技术提取文本内容（展示文件处理，以及被集成能力）',
+        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/image-pdf-recognition.md',
       },
     },
   },
@@ -1118,7 +1138,7 @@ const words: I18nType = {
       executing: '执行中',
       pending: '待执行',
       inProgress: '进行中',
-      unknown: '未知'
+      unknown: '未知',
     },
     // 嵌套子计划相关
     nestedSubPlans: '嵌套子计划',
@@ -1204,7 +1224,7 @@ const words: I18nType = {
   mcpService: {
     title: 'MCP服务',
     createService: '创建MCP服务',
-    updateService: '更新MCP服务',
+    updateService: '更新服务',
     endpoint: '端点',
     endpointRequired: '端点 *',
     endpointPlaceholder: '请选择或输入端点',
@@ -1227,14 +1247,16 @@ const words: I18nType = {
     toolDescription: '工具描述',
     toolDescriptionRequired: '工具描述 *',
     toolDescriptionPlaceholder: '请输入工具描述',
-    toolDescriptionDescription: '告知模型，在什么时候需要使用这个工具，写的越详细（什么时候选择，什么时候不选择），模型选工具的准确性越高。',
+    toolDescriptionDescription:
+      '告知模型，在什么时候需要使用这个工具，写的越详细（什么时候选择，什么时候不选择），模型选工具的准确性越高。',
     serviceGroup: '服务组 *',
     serviceGroupPlaceholder: '请输入服务组',
     serviceGroupDescription: '用来分组工具，方便你从大量工具里面找到你的那个工具。',
     parameterConfig: '参数配置',
     parameterConfigDescription: '使用 {placeholder} 可以在原始的执行内容里面新增参数并增加描述',
     parameterName: '参数名称',
-    parameterDescription: '参数描述(告知模型这个参数要怎么填才符合你的要求，也是越详细加有例子最好)',
+    parameterDescription:
+      '参数描述(告知模型这个参数要怎么填才符合你的要求，也是越详细加有例子最好)',
     addParameter: '添加参数',
     removeParameter: '删除参数',
     save: '保存',
@@ -1246,21 +1268,22 @@ const words: I18nType = {
     publishAsHttpService: '发布为HTTP服务',
     publishAsHttpServiceDescription: '勾选后将发布为HTTP POST服务，可以通过HTTP接口调用此功能',
     publishAsInternalToolcall: '发布为内部工具调用',
-    publishAsInternalToolcallDescription: '勾选后将发布为内部工具，可以在智能体配置中添加此工具并使用',
+    publishAsInternalToolcallDescription:
+      '勾选后将发布为内部工具，可以在智能体配置中添加此工具并使用',
     publishing: '发布中...',
     delete: '删除',
     deleting: '删除中...',
     published: '已发布',
     unpublished: '未发布',
-    saveSuccess: 'MCP服务保存成功',
-    saveFailed: '保存MCP服务失败',
-    publishSuccess: 'MCP服务发布成功',
+    saveSuccess: '服务保存成功',
+    saveFailed: '服务保存失败',
+    publishSuccess: '服务发布成功',
     httpPublishSuccess: 'HTTP服务发布成功',
-    publishFailed: '发布MCP服务失败',
-    deleteSuccess: 'MCP服务删除成功',
-    deleteFailed: '删除MCP服务失败',
+    publishFailed: '服务发布失败',
+    deleteSuccess: '服务删除成功',
+    deleteFailed: '服务删除失败',
     deleteConfirm: '确认删除',
-    deleteConfirmMessage: '确定要删除这个MCP服务吗？此操作不可撤销。',
+    deleteConfirmMessage: '确定要删除这个服务吗？此操作不可撤销。',
     loadEndpointsFailed: '加载端点失败',
     loadToolDataFailed: '加载工具数据失败',
     parseInputSchemaFailed: '解析输入模式失败',
@@ -1272,6 +1295,11 @@ const words: I18nType = {
     toolNameRequiredError: '工具名称不能为空',
     toolDescriptionRequiredError: '工具描述不能为空',
   },
+
+  // Missing translation keys for basicConfig.vue
+  dpi: 'DPI',
+  imageType: '图像类型',
+  maxRetryAttempts: '最大重试次数',
 
   // 通用占位符
   memory: {

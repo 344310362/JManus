@@ -52,3 +52,11 @@ h2-data copy/
 extensions/
 .vscode/*
 .cursor/rules/my-custom-rule.mdc
+build-self-contained/*
+src/.DS_Store
+**/.DS_Store
+
+# Python
+.venv/
+ui-vue3/.npmrc
+.cursor/rules/1.mdc

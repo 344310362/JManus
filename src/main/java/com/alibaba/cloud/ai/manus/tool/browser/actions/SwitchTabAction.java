@@ -22,8 +22,6 @@ import com.alibaba.cloud.ai.manus.tool.code.ToolExecuteResult;
 
 public class SwitchTabAction extends BrowserAction {
 
-	private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(SwitchTabAction.class);
-
 	public SwitchTabAction(BrowserUseTool browserUseTool) {
 		super(browserUseTool);
 	}
@@ -40,6 +38,10 @@ public class SwitchTabAction extends BrowserAction {
 		if (targetPage == null) {
 			return new ToolExecuteResult("Tab ID " + tabId + " does not exist");
 		}
+
+		// Update the current page in DriverWrapper
+		getDriverWrapper().setCurrentPage(targetPage);
+
 		return new ToolExecuteResult("Successfully switched to tab " + tabId);
 	}
 

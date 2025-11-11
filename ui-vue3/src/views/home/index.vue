@@ -27,18 +27,15 @@
       <!-- Header -->
       <header class="header">
         <div class="header-top">
-          <div class="header-controls">
-            <LanguageSwitcher />
-            <ThemeSwitcher />
-          </div>
+          <LanguageSwitcher />
         </div>
-<!--        <div class="logo-container">
+        <div class="logo-container">
           <div class="logo">
             <img src="/Java-AI.svg" alt="JManus" class="java-logo" />
             <h1>JManus</h1>
           </div>
           <span class="tagline">{{ $t('home.tagline') }}</span>
-        </div>-->
+        </div>
       </header>
 
       <!-- Main content -->
@@ -47,7 +44,7 @@
           <!-- Welcome section -->
           <div class="welcome-section">
             <h2 class="welcome-title">{{ $t('home.welcomeTitle') }}</h2>
-            <p class="welcome-subtitle">{{ $t('home.welcomeSubtitle',{nickname: userStore.user.nickname}) }}</p>
+            <p class="welcome-subtitle">{{ $t('home.welcomeSubtitle') }}</p>
             <button class="direct-button" @click="goToDirectPage">{{ $t('home.directButton') }}</button>
           </div>
 
@@ -68,17 +65,17 @@
             </div>
           </div>
           <!-- All examples and plans -->
-<!--          <div class="examples-section">
+          <div class="examples-section">
             <div class="examples-grid">
               <div v-for="item in allCards" :key="item.title" class="card-with-type">
                 <BlurCard
                     :content="item"
                     @clickCard="handleCardClick(item)"
                 />
-                <span class="card-type">{{ item.type }}</span>
+                <span class="card-type">{{ item.type === 'github' ? 'GitHub' : item.type }}</span>
               </div>
             </div>
-          </div>-->
+          </div>
         </div>
       </main>
     </div>
@@ -90,16 +87,15 @@ import { ref, nextTick, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
-//import BlurCard from '@/components/blurCard/BlurCard.vue'
+import BlurCard from '@/components/blurCard/BlurCard.vue'
 import LanguageSwitcher from '@/components/language-switcher/LanguageSwitcher.vue'
-import ThemeSwitcher from '@/components/theme-switcher/ThemeSwitcher.vue'
 import { useTaskStore } from '@/stores/task'
 
 const router = useRouter()
 const taskStore = useTaskStore()
 const userInput = ref('')
 const textareaRef = ref<HTMLTextAreaElement>()
-import { userStore } from "@/stores/user"
+
 const { t } = useI18n()
 
 const goToDirectPage = () => {
@@ -115,18 +111,28 @@ const goToDirectPage = () => {
 }
 
 const examples = computed(() => [
-  { title: t('home.examples.stockPrice.title'), type: 'message', description: t('home.examples.stockPrice.description'), icon: 'carbon:chart-line-data', prompt: t('home.examples.stockPrice.prompt') },
-  { title: t('home.examples.weather.title'), type: 'message', description: t('home.examples.weather.description'), icon: 'carbon:partly-cloudy', prompt: t('home.examples.weather.prompt') }
+  { title: t('home.examples.stockPrice.title'), type: 'github', description: t('home.examples.stockPrice.description'), icon: 'carbon:chart-line-data', url: t('home.examples.stockPrice.url') },
+  { title: t('home.examples.weather.title'), type: 'github', description: t('home.examples.weather.description'), icon: 'carbon:location', url: t('home.examples.weather.url') },
+  { title: t('home.examples.imagePdfRecognition.title'), type: 'github', description: t('home.examples.imagePdfRecognition.description'), icon: 'carbon:document-view', url: t('home.examples.imagePdfRecognition.url') }
 ])
 const plans = computed(() => [
- /* { title: t('home.examples.queryplan.title'), type: 'plan-act', description: t('home.examples.queryplan.description'), icon: 'carbon:plan', prompt: t('home.examples.queryplan.prompt'), planJson: { planType: 'simple', title: t('home.examples.queryplan.planTitle'), steps: [{ stepRequirement: t('home.examples.queryplan.step1'), terminateColumns: t('home.examples.queryplan.step1Output') }, { stepRequirement: t('home.examples.queryplan.step2'), terminateColumns: t('home.examples.queryplan.step2Output') }], planTemplateId: 'planTemplate-1749200517403' } },
-  { title: t('home.examples.ainovel.title'), type: 'plan-act', description: t('home.examples.ainovel.description'), icon: 'carbon:document-tasks', prompt: t('home.examples.ainovel.prompt'), planJson: { planType: 'simple', title: t('home.examples.ainovel.planTitle'), steps: [{ stepRequirement: t('home.examples.ainovel.step1'), terminateColumns: t('home.examples.ainovel.step1Output') }, { stepRequirement: t('home.examples.ainovel.step2'), terminateColumns: t('home.examples.ainovel.step2Output') }], planTemplateId: 'planTemplate-1753622676988' } },
-  { title: t('home.examples.formInputDemo.title'), type: 'plan-act', description: t('home.examples.formInputDemo.description'), icon: 'carbon:watson', prompt: t('home.examples.formInputDemo.prompt'), planJson: { planType: 'simple', title: t('home.examples.formInputDemo.planTitle'), steps: [{ stepRequirement: t('home.examples.formInputDemo.step1'), terminateColumns: t('home.examples.formInputDemo.step1Output') }, { stepRequirement: t('home.examples.formInputDemo.step2'), terminateColumns: t('home.examples.formInputDemo.step2Output') }, { stepRequirement: t('home.examples.formInputDemo.step3'), terminateColumns: t('home.examples.formInputDemo.step3Output') }], planTemplateId: 'planTemplate-forminput-demo-2025' } }
-*/])
+  { title: t('home.examples.queryplan.title'), type: 'github', description: t('home.examples.queryplan.description'), icon: 'carbon:plan', url: t('home.examples.queryplan.url') },
+  { title: t('home.examples.ainovel.title'), type: 'github', description: t('home.examples.ainovel.description'), icon: 'carbon:document-tasks', url: t('home.examples.ainovel.url') },
+  { title: t('home.examples.formInputDemo.title'), type: 'github', description: t('home.examples.formInputDemo.description'), icon: 'carbon:watson', url: t('home.examples.formInputDemo.url') }
+])
 const allCards = computed(() => [...examples.value,  ...plans.value])
 
+const openGitHubPage = (item: any) => {
+  console.log('[Home] openGitHubPage called with item:', item)
+  if (item.url) {
+    window.open(item.url, '_blank')
+  }
+}
+
 const handleCardClick = (item: any) => {
-  if (item.type === 'message') {
+  if (item.type === 'github') {
+    openGitHubPage(item)
+  } else if (item.type === 'message') {
     selectExample(item)
   } else if (item.type === 'plan-act') {
     selectPlan(item)
@@ -147,7 +153,7 @@ import { sidebarStore } from '@/stores/sidebar'
 
 const saveJsonPlanToTemplate = async (jsonPlan: any) => {
   try {
-    sidebarStore.createNewTemplate(jsonPlan.planType);
+    await sidebarStore.createNewTemplate(jsonPlan.planType);
     sidebarStore.jsonContent = JSON.stringify(jsonPlan);
     const saveResult = await sidebarStore.saveTemplate();
     if (saveResult?.duplicate) {
@@ -306,7 +312,7 @@ const selectPlan = async (plan: any) => {
 .welcome-container {
   flex: 1;
   height: 100vh;
-  background: var(--bg-primary, #0a0a0a);
+  background: #0a0a0a;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -334,7 +340,7 @@ const selectPlan = async (plan: any) => {
   &.orb-1 {
     width: 400px;
     height: 400px;
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     top: -200px;
     right: -200px;
     animation-delay: 0s;
@@ -375,7 +381,7 @@ const selectPlan = async (plan: any) => {
 
 .header {
   position: relative;
-  z-index: 10;
+  z-index: 1000;
   padding: 32px 32px 0;
 }
 
@@ -385,11 +391,6 @@ const selectPlan = async (plan: any) => {
   margin-bottom: 20px;
   position: relative;
   z-index: 1001;
-}
-
-.header-controls {
-  display: flex;
-  gap: 12px;
 }
 
 .logo-container {
@@ -410,7 +411,7 @@ const selectPlan = async (plan: any) => {
     font-size: 48px;
     font-weight: 700;
     margin: 0 0 8px 0;
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -446,7 +447,7 @@ const selectPlan = async (plan: any) => {
 .welcome-title {
   font-size: 32px;
   font-weight: 600;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   margin: 0 0 16px 0;
 }
 
@@ -463,7 +464,7 @@ const selectPlan = async (plan: any) => {
 
 .input-container {
   position: relative;
-  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 20px;
@@ -472,7 +473,7 @@ const selectPlan = async (plan: any) => {
   transition: all 0.3s ease;
 
   &:focus-within {
-    border-color: var(--accent-primary, #667eea);
+    border-color: #667eea;
     box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
   }
 }
@@ -482,7 +483,7 @@ const selectPlan = async (plan: any) => {
   background: transparent;
   border: none;
   outline: none;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   font-size: 16px;
   line-height: 1.5;
   resize: none;
@@ -503,8 +504,8 @@ const selectPlan = async (plan: any) => {
   height: 40px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-  color: var(--text-primary, #ffffff);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -557,7 +558,7 @@ const selectPlan = async (plan: any) => {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
@@ -568,7 +569,7 @@ const selectPlan = async (plan: any) => {
 
 // .example-card {
 //   background: rgba(255, 255, 255, 0.03);
-//   border: 1px solid var(--border-secondary);
+//   border: 1px solid rgba(255, 255, 255, 0.08);
 //   border-radius: 12px;
 //   padding: 20px;
 //   cursor: pointer;
@@ -579,8 +580,8 @@ const selectPlan = async (plan: any) => {
 //   gap: 16px;
 
 //   &:hover {
-//     background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-//     border-color: var(--selection-bg, rgba(102, 126, 234, 0.3));
+//     background: rgba(255, 255, 255, 0.05);
+//     border-color: rgba(102, 126, 234, 0.3);
 //     transform: translateY(-2px);
 //     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 //   }
@@ -588,7 +589,7 @@ const selectPlan = async (plan: any) => {
 
 // .example-icon {
 //   font-size: 24px;
-//   color: var(--accent-primary, #667eea);
+//   color: #667eea;
 //   margin-top: 4px;
 //   flex-shrink: 0;
 // }
@@ -597,7 +598,7 @@ const selectPlan = async (plan: any) => {
 //   h3 {
 //     font-size: 16px;
 //     font-weight: 600;
-//     color: var(--text-primary, #ffffff);
+//     color: #ffffff;
 //     margin: 0 0 8px 0;
 //   }
 
@@ -613,7 +614,7 @@ const selectPlan = async (plan: any) => {
 .config-view {
   flex: 1;
   height: 100vh;
-  background: var(--bg-primary, #0a0a0a);
+  background: #0a0a0a;
   display: flex;
   flex-direction: column;
   position: relative;
@@ -623,7 +624,7 @@ const selectPlan = async (plan: any) => {
   display: flex;
   align-items: center;
   padding: 16px 24px;
-  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  background: rgba(255, 255, 255, 0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   gap: 16px;
 
@@ -633,16 +634,16 @@ const selectPlan = async (plan: any) => {
     gap: 8px;
     padding: 8px 16px;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
-    color: var(--text-primary, #ffffff);
+    color: #ffffff;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
       background: rgba(255, 255, 255, 0.15);
-      border-color: var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
+      border-color: rgba(255, 255, 255, 0.3);
       transform: translateY(-1px);
     }
   }
@@ -650,8 +651,8 @@ const selectPlan = async (plan: any) => {
   .config-title {
     font-size: 20px;
     font-weight: 600;
-    color: var(--text-primary, #ffffff);
-    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+    color: #ffffff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -663,8 +664,8 @@ const selectPlan = async (plan: any) => {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-  color: var(--text-primary, #ffffff);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;

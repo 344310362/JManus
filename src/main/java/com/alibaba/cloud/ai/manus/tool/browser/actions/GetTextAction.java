@@ -16,13 +16,14 @@
 package com.alibaba.cloud.ai.manus.tool.browser.actions;
 
 import com.microsoft.playwright.Page;
-
 import com.alibaba.cloud.ai.manus.tool.browser.BrowserUseTool;
 import com.alibaba.cloud.ai.manus.tool.code.ToolExecuteResult;
 
 public class GetTextAction extends BrowserAction {
 
 	private final static org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(GetTextAction.class);
+
+	// Removed the static initialization block, directly using string constants
 
 	public GetTextAction(BrowserUseTool browserUseTool) {
 		super(browserUseTool);
@@ -34,9 +35,17 @@ public class GetTextAction extends BrowserAction {
 		StringBuilder allText = new StringBuilder();
 		for (com.microsoft.playwright.Frame frame : page.frames()) {
 			try {
-				String text = frame.innerText("body");
+				// frame.evaluate(READABILITY_JS);
+				// frame.evaluate(TURNDOWNSERVICE_JS);
+				String text = frame.innerText("html");
+				// String textMd = (String) frame.evaluate(CONVERSE_FRAME_TO_MARKDOWN_JS);
 				if (text != null && !text.isEmpty()) {
+					allText.append("<inner_text>\n");
 					allText.append(text).append("\\n");
+					allText.append("</inner_text>\n");
+					// allText.append("<inner_text_md>\n");
+					// allText.append(textMd).append("\\n");
+					// allText.append("</inner_text_md>\n");
 				}
 			}
 			catch (Exception e) {

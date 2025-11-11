@@ -7,8 +7,7 @@
     <groupId>com.jmanus</groupId>
     <name>JManus - AI Agent Management System</name>
     <artifactId>jmanus</artifactId>
-    <version>4.0.4</version>
-    <packaging>jar</packaging>
+    <version>4.1.3</version>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -40,7 +39,7 @@
 
         <!-- Playwright Configuration -->
         <playwright.version>1.53.0</playwright.version>
-        <sm-cloud-version>2025.10-SNAPSHOT</sm-cloud-version>
+        <playwright.version>1.55.0</playwright.version>
 
 
     </properties>
@@ -373,7 +372,7 @@
 
 
     <build>
-        <finalName>jmanus-${version}</finalName>
+        <finalName>jmanus</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

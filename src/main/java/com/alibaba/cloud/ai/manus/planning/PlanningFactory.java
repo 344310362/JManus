@@ -48,7 +48,6 @@ import org.springframework.web.client.RestClient;
 import com.alibaba.cloud.ai.manus.agent.ToolCallbackProvider;
 import com.alibaba.cloud.ai.manus.config.ManusProperties;
 import com.alibaba.cloud.ai.manus.cron.service.CronService;
-import com.alibaba.cloud.ai.manus.agent.entity.DynamicAgentEntity;
 import com.alibaba.cloud.ai.manus.agent.service.AgentService;
 import com.alibaba.cloud.ai.manus.llm.LlmService;
 import com.alibaba.cloud.ai.manus.llm.StreamingResponseHandler;
@@ -56,16 +55,10 @@ import com.alibaba.cloud.ai.manus.mcp.model.vo.McpServiceEntity;
 import com.alibaba.cloud.ai.manus.mcp.model.vo.McpTool;
 import com.alibaba.cloud.ai.manus.mcp.service.McpService;
 import com.alibaba.cloud.ai.manus.mcp.service.McpStateHolderService;
-import com.alibaba.cloud.ai.manus.planning.service.PlanCreator;
 import com.alibaba.cloud.ai.manus.planning.service.PlanFinalizer;
-import com.alibaba.cloud.ai.manus.planning.service.IPlanCreator;
-import com.alibaba.cloud.ai.manus.planning.service.DynamicAgentPlanCreator;
 import com.alibaba.cloud.ai.manus.prompt.service.PromptService;
 import com.alibaba.cloud.ai.manus.recorder.service.PlanExecutionRecorder;
 import com.alibaba.cloud.ai.manus.tool.FormInputTool;
-import com.alibaba.cloud.ai.manus.tool.PlanningTool;
-import com.alibaba.cloud.ai.manus.tool.PlanningToolInterface;
-import com.alibaba.cloud.ai.manus.tool.DynamicAgentPlanningTool;
 import com.alibaba.cloud.ai.manus.tool.TerminateTool;
 import com.alibaba.cloud.ai.manus.tool.ToolCallBiFunctionDef;
 import com.alibaba.cloud.ai.manus.tool.bash.Bash;
@@ -91,6 +84,7 @@ import com.alibaba.cloud.ai.manus.tool.jsxGenerator.JsxGeneratorOperator;
 import com.alibaba.cloud.ai.manus.tool.excelProcessor.IExcelProcessingService;
 import com.alibaba.cloud.ai.manus.tool.convertToMarkdown.MarkdownConverterTool;
 import com.alibaba.cloud.ai.manus.tool.convertToMarkdown.PdfOcrProcessor;
+import com.alibaba.cloud.ai.manus.tool.convertToMarkdown.ImageOcrProcessor;
 import com.alibaba.cloud.ai.manus.runtime.executor.ImageRecognitionExecutorPool;
 import com.alibaba.cloud.ai.manus.subplan.service.SubplanToolService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -118,8 +112,6 @@ public class PlanningFactory {
 	private final DataSourceService dataSourceService;
 
 	private final TableProcessingService tableProcessingService;
-
-	private final IExcelProcessingService excelProcessingService;
 
 	private final static Logger log = LoggerFactory.getLogger(PlanningFactory.class);
 
@@ -152,23 +144,30 @@ public class PlanningFactory {
 	@Autowired
 	private SubplanToolService subplanToolService;
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private AgentService agentService;
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private PptGeneratorOperator pptGeneratorOperator;
 
 	@Value("${agent.init}")
 	private Boolean agentInit = true;
 
+	@SuppressWarnings("unused")
 	@Autowired
 	private JsxGeneratorOperator jsxGeneratorOperator;
 
+	@SuppressWarnings("unused")
+	@Autowired
+	private ApplicationContext applicationContext;
+
 	public PlanningFactory(ChromeDriverService chromeDriverService, PlanExecutionRecorder recorder,
-			ManusProperties manusProperties, TextFileService textFileService, McpService mcpService,
-			SmartContentSavingService innerStorageService, UnifiedDirectoryManager unifiedDirectoryManager,
-			DataSourceService dataSourceService, TableProcessingService tableProcessingService,
-			IExcelProcessingService excelProcessingService) {
+		ManusProperties manusProperties, TextFileService textFileService, McpService mcpService,
+		SmartContentSavingService innerStorageService, UnifiedDirectoryManager unifiedDirectoryManager,
+		DataSourceService dataSourceService, TableProcessingService tableProcessingService,
+		IExcelProcessingService excelProcessingService) {
 		this.chromeDriverService = chromeDriverService;
 		this.recorder = recorder;
 		this.manusProperties = manusProperties;
@@ -178,28 +177,6 @@ public class PlanningFactory {
 		this.unifiedDirectoryManager = unifiedDirectoryManager;
 		this.dataSourceService = dataSourceService;
 		this.tableProcessingService = tableProcessingService;
-		this.excelProcessingService = excelProcessingService;
-	}
-
-	/**
-	 * Create a plan creator based on plan type
-	 * @param planType the type of plan to create ("dynamic_agent" for dynamic agent
-	 * plans, any other value for standard plans)
-	 * @return configured plan creator instance
-	 */
-	public IPlanCreator createPlanCreator(String planType) {
-		if ("dynamic_agent".equals(planType)) {
-			DynamicAgentPlanningTool dynamicAgentPlanningTool = new DynamicAgentPlanningTool();
-			return new DynamicAgentPlanCreator(llmService, dynamicAgentPlanningTool, recorder, promptService,
-					manusProperties, streamingResponseHandler, agentService);
-		}
-		else {
-			// Get all dynamic agents from the database for simple plans
-			List<DynamicAgentEntity> agentEntities = agentService.getAllAgents();
-			PlanningToolInterface planningTool = new PlanningTool();
-			return new PlanCreator(agentEntities, llmService, planningTool, recorder, promptService, manusProperties,
-					streamingResponseHandler);
-		}
 	}
 
 	/**
@@ -232,7 +209,7 @@ public class PlanningFactory {
 	}
 
 	public Map<String, ToolCallBackContext> toolCallbackMap(String planId, String rootPlanId,
-			String expectedReturnInfo) {
+		String expectedReturnInfo) {
 
 		Boolean infiniteContextEnabled = manusProperties.getInfiniteContextEnabled();
 		Map<String, ToolCallBackContext> toolCallbackMap = new HashMap<>();
@@ -265,9 +242,9 @@ public class PlanningFactory {
 			toolDefinitions.add(new FormInputTool(objectMapper));
 			if (infiniteContextEnabled) {
 				toolDefinitions.add(new DataSplitTool(planId, manusProperties, sharedStateManager,
-						unifiedDirectoryManager, objectMapper, tableProcessingService));
+					unifiedDirectoryManager, objectMapper, tableProcessingService));
 				toolDefinitions.add(new MapOutputTool(planId, manusProperties, sharedStateManager,
-						unifiedDirectoryManager, objectMapper));
+					unifiedDirectoryManager, objectMapper));
 				toolDefinitions
 					.add(new ReduceOperationTool(planId, manusProperties, sharedStateManager, unifiedDirectoryManager));
 				toolDefinitions
@@ -275,9 +252,11 @@ public class PlanningFactory {
 
 			}
 			toolDefinitions.add(new CronTool(cronService, objectMapper));
-			toolDefinitions
-				.add(new MarkdownConverterTool(unifiedDirectoryManager, new PdfOcrProcessor(unifiedDirectoryManager,
-						llmService, manusProperties, new ImageRecognitionExecutorPool(manusProperties))));
+			toolDefinitions.add(new MarkdownConverterTool(unifiedDirectoryManager,
+				new PdfOcrProcessor(unifiedDirectoryManager, llmService, manusProperties,
+					new ImageRecognitionExecutorPool(manusProperties)),
+				new ImageOcrProcessor(unifiedDirectoryManager, llmService, manusProperties,
+					new ImageRecognitionExecutorPool(manusProperties))));
 			// toolDefinitions.add(new ExcelProcessorTool(excelProcessingService));
 			ServiceOperateTool serviceOperateTool = new ServiceOperateTool();
 			toolDefinitions.add(serviceOperateTool);
@@ -294,7 +273,7 @@ public class PlanningFactory {
 			for (ToolCallback tCallback : tCallbacks) {
 				// The serviceGroup is the name of the tool
 				toolDefinitions.add(new McpTool(tCallback, serviceGroup, planId, new McpStateHolderService(),
-						innerStorageService, objectMapper));
+					innerStorageService, objectMapper));
 			}
 		}
 		// Create FunctionToolCallback for each tool
@@ -312,7 +291,7 @@ public class PlanningFactory {
 				toolDefinition.setRootPlanId(rootPlanId);
 				log.info("Registering tool: {}", toolDefinition.getName());
 				ToolCallBackContext functionToolcallbackContext = new ToolCallBackContext(functionToolcallback,
-						toolDefinition);
+					toolDefinition);
 				toolCallbackMap.put(toolDefinition.getName(), functionToolcallbackContext);
 			}
 			catch (Exception e) {
@@ -336,12 +315,13 @@ public class PlanningFactory {
 		return toolCallbackMap;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Bean
 	public RestClient.Builder createRestClient() {
 		// Create RequestConfig and set the timeout (10 minutes for all timeouts)
 		RequestConfig requestConfig = RequestConfig.custom()
 			.setConnectTimeout(Timeout.of(10, TimeUnit.MINUTES)) // Set the connection
-																	// timeout
+			// timeout
 			.setResponseTimeout(Timeout.of(10, TimeUnit.MINUTES))
 			.setConnectionRequestTimeout(Timeout.of(10, TimeUnit.MINUTES))
 			.build();

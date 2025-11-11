@@ -11,12 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 name: "Close Invalid Issue"
+
 on:
   schedule:
     - cron: "0 0,8,16 * * *"
+
 permissions:
   contents: read
+
 jobs:
   stale:
     permissions:
@@ -31,13 +35,13 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: |
             This issue has been marked as invalid question. Please provide more information by following the issue template. The issue will be closed in 1 day if no further activity occurs.
-            
+
             **To keep this issue open, please:**
             - Provide a clear description of the problem
             - Include steps to reproduce (if applicable)
             - Add relevant error messages or logs
             - Specify your environment details
-            
+
             Thank you for your understanding!
           stale-issue-label: "stale"
           days-before-stale: 0
