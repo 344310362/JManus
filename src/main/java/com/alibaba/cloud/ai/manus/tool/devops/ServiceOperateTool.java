@@ -7,18 +7,16 @@ import com.alibaba.cloud.ai.manus.config.rpc.AuthContext;
 import com.alibaba.cloud.ai.manus.tool.AbstractBaseTool;
 import com.alibaba.cloud.ai.manus.tool.code.ToolExecuteResult;
 import com.alibaba.cloud.ai.manus.utils.ServiceHelper;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.ApplicationContext;
 
 public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.ServiceOperateInput> {
 
     private static final Logger log = LoggerFactory.getLogger(ServiceOperateTool.class);
     private static final String TOOL_NAME = "service_manager";
-    
+
     // Lazy-loaded Dubbo service API
     private ServiceApi serviceApi;
 
@@ -38,6 +36,7 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
         String action = input.getAction();
         String serviceName = input.getServiceName();
         String environment = input.getEnvironment();
+        String ip = input.getIp();
 
         // 1. Validate action
         if (action == null || action.trim().isEmpty()) {
@@ -110,6 +109,7 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
         // 6. Dispatch
         return switch (action.toLowerCase()) {
             case "deploy" -> executeDeploy(serviceName, environment);
+            case "search_ip" -> search_ip(ip);
             case "build" -> executeBuild(serviceName, environment);
             case "delete" -> executeDelete(serviceName, environment);
             case "modify" -> executeModify(serviceName, environment);
@@ -157,15 +157,38 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
             reqDTO.setEnvironment(env);
             AuthContext.setContextPlanId(rootPlanId);
             CommonResult result = api.executeDeploy(reqDTO);
-            resultBuilder.append(JSON.toJSON( result));
+            if (result.isSuccess()) {
+                resultBuilder.append("✅ Deployment successful.\n");
+            } else {
+                resultBuilder.append("❌ Deployment failed:").append(result.getMsg());
+            }
             log.info("ServiceApi result "+ result);
         } else {
             log.warn("ServiceApi is not available");
         }
-        
+
         return new ToolExecuteResult(resultBuilder.toString()
         );
     }
+
+  private ToolExecuteResult search_ip(String ip) {
+    ServiceApi api = getServiceApi();
+    StringBuilder resultBuilder = new StringBuilder();
+    ServiceOperateReqDTO reqDTO = new ServiceOperateReqDTO();
+    reqDTO.setIp(ip);
+    AuthContext.setContextPlanId(rootPlanId);
+    CommonResult result = api.searchIp(ip);
+    if (result.isSuccess()) {
+      resultBuilder.append("✅ the ip info: ").append(JSONObject.toJSONString(result.getData()));
+    } else {
+      resultBuilder.append("❌ ip search failed:").append(result.getMsg());
+    }
+    log.info("ServiceApi result "+ result);
+
+    return new ToolExecuteResult(
+      resultBuilder.toString()
+    );
+  }
 
     private ToolExecuteResult executeBuild(String service, String env) {
         log.info("✅ Triggering build for service '{}' in '{}'", service, env);
@@ -211,6 +234,7 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
             "▶️ Service '" + service + "' resumed in environment '" + env + "'."
         );
     }
+
 
     private ToolExecuteResult executeQueryEvents(String service, String env) {
         log.info("🔍 Querying events for service '{}' in environment '{}'", service, env);
@@ -261,6 +285,9 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
         @JsonProperty("target_replicas")
         private Integer targetReplicas;
 
+        @JsonProperty("ip")
+        private String ip;
+
         // Getters & Setters
         public String getAction() { return action; }
         public void setAction(String action) { this.action = action; }
@@ -272,6 +299,10 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
         public void setEnvironment(String environment) { this.environment = environment; }
         public Integer getTargetReplicas() { return targetReplicas; }
         public void setTargetReplicas(Integer targetReplicas) { this.targetReplicas = targetReplicas; }
+
+        public String getIp() { return ip; }
+
+        public void setIp(String ip) { this.ip = ip; }
     }
 
     // Lazy initialization of ServiceApi
@@ -291,13 +322,14 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
     @Override
     public String getDescription() {
         return "Service Management Tool for DevOps Platform - Provides lifecycle and observability operations for services registered in the CMDB service tree. "
-            + "All operations require specifying a valid environment: dev (development), test (testing), pre (pre-production), or prod (production). "
+            + "All operations require user specifying a valid environment: dev (development), test (testing), pre (pre-production), or prod (production). "
             + "For scaling operations (scale_out / scale_in), you MUST ask user provide 'target_replicas' indicating the desired number of service instances (e.g., 3, 5). "
+            + "For pod ip search,you must ask user provide ip. "
             + "Workflow: "
             + "1. Confirm the target service exists in the CMDB service tree. "
             + "2. Ensure you are the service owner (as defined in CMDB). "
             + "3. Specify action, service_name, environment, and (for scaling) target_replicas. "
-            + "Supported actions: deploy, build, delete, modify, scale_out, scale_in, pause, resume, query_events, query_monitoring. "
+            + "Supported actions: deploy, search_ip,build, delete, modify, scale_out, scale_in, pause, resume, query_events, query_monitoring. "
             + "Note: "
             + " - Always double-check environment and replica count before operating,NO defaults are assumed or applied"
             + " - If any required parameter is missing or ambiguous, ask the user to clarify.";
@@ -308,8 +340,9 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
         return "{"
             + "\"type\":\"object\","
             + "\"properties\":{"
-            + "\"action\":{\"type\":\"string\",\"description\":\"Operation to perform\",\"enum\":[\"deploy\",\"build\",\"delete\",\"modify\",\"scale_out\",\"scale_in\",\"pause\",\"resume\",\"query_events\",\"query_monitoring\"]},"
+            + "\"action\":{\"type\":\"string\",\"description\":\"Operation to perform\",\"enum\":[\"deploy\",\"search_ip\",\"build\",\"delete\",\"modify\",\"scale_out\",\"scale_in\",\"pause\",\"resume\",\"query_events\",\"query_monitoring\"]},"
             + "\"service_name\":{\"type\":\"string\",\"description\":\"Exact service name as registered in CMDB (required)\"},"
+            + "\"ip\":{\"type\":\"string\",\"description\":\"use ip to search which pod\"},"
             + "\"environment\":{\"type\":\"string\",\"description\":\"Target environment\",\"enum\":[\"dev\",\"test\",\"pre\",\"prod\"]},"
             + "\"target_replicas\":{\"type\":\"integer\",\"description\":\"Target number of service instances (required for scale_out/scale_in)\",\"minimum\":0,\"maximum\":100}"
             + "},"

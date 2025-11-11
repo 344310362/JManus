@@ -1,6 +1,7 @@
-FROM registry.cn-beijing.aliyuncs.com/exe/sm-ai-manus:dev-rj-1
+#cFROM registry.cn-beijing.aliyuncs.com/exe/sm-ai-manus:dev-rj-1
+FROM registry.cn-beijing.aliyuncs.com/exe/sm-ai-manus:base-rj-1
 
-COPY target/jmanus-4.0.4.jar /app/app.jar
+COPY target/jmanus.jar /app/app.jar
 
 # Extract JAR file for faster startup
 RUN mkdir -p /app/extracted && \

@@ -19,6 +19,7 @@
 import type { CronConfig } from '@/types/cron-task'
 import { LlmCheckService } from '@/utils/llm-check'
 import { DirectApiService } from '@/api/direct-api-service'
+import { apiFetch } from '@/utils/api-fetch'
 
 export class PlanActApiService {
   private static readonly PLAN_TEMPLATE_URL = '/api/plan-template'
@@ -46,7 +47,7 @@ export class PlanActApiService {
 
   // Save plan to server
   public static async savePlanTemplate(planId: string, planJson: string): Promise<any> {
-    const response = await fetch(`${this.PLAN_TEMPLATE_URL}/save`, {
+    const response = await apiFetch(`${this.PLAN_TEMPLATE_URL}/save`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ planId, planJson })
@@ -57,7 +58,7 @@ export class PlanActApiService {
 
   // Get all versions of plan
   public static async getPlanVersions(planId: string): Promise<any> {
-    const response = await fetch(`${this.PLAN_TEMPLATE_URL}/versions`, {
+    const response = await apiFetch(`${this.PLAN_TEMPLATE_URL}/versions`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ planId })
@@ -68,7 +69,7 @@ export class PlanActApiService {
 
   // Get specific version of plan
   public static async getVersionPlan(planId: string, versionIndex: number): Promise<any> {
-    const response = await fetch(`${this.PLAN_TEMPLATE_URL}/get-version`, {
+    const response = await apiFetch(`${this.PLAN_TEMPLATE_URL}/get-version`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ planId, versionIndex: versionIndex.toString() })
@@ -79,7 +80,7 @@ export class PlanActApiService {
 
   // Get all plan template list
   public static async getAllPlanTemplates(): Promise<any> {
-    const response = await fetch(`${this.PLAN_TEMPLATE_URL}/list`)
+    const response = await apiFetch(`${this.PLAN_TEMPLATE_URL}/list`)
     if (!response.ok) throw new Error(`Failed to get plan template list: ${response.status}`)
     return await response.json()
   }
@@ -87,7 +88,7 @@ export class PlanActApiService {
 
   // Delete plan template
   public static async deletePlanTemplate(planId: string): Promise<any> {
-    const response = await fetch(`${this.PLAN_TEMPLATE_URL}/delete`, {
+    const response = await apiFetch(`${this.PLAN_TEMPLATE_URL}/delete`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ planId })
@@ -98,7 +99,7 @@ export class PlanActApiService {
 
   // Create cron task
   public static async createCronTask(cronConfig: CronConfig): Promise<CronConfig> {
-    const response = await fetch(this.CRON_TASK_URL, {
+    const response = await apiFetch(this.CRON_TASK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(cronConfig)

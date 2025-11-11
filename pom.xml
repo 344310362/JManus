@@ -38,8 +38,8 @@
         <webdrivermanager.version>6.1.0</webdrivermanager.version>
 
         <!-- Playwright Configuration -->
-        <playwright.version>1.53.0</playwright.version>
         <playwright.version>1.55.0</playwright.version>
+        <sm-cloud-version>2025.10-SNAPSHOT</sm-cloud-version>
 
 
     </properties>
@@ -157,20 +157,20 @@
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty-http</artifactId>
         </dependency>
-        
+
         <!-- Reactor Netty core for additional netty functionality -->
         <dependency>
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty</artifactId>
         </dependency>
-        
+
         <!-- MacOS DNS resolver for better DNS resolution on MacOS -->
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-resolver-dns-native-macos</artifactId>
             <classifier>osx-x86_64</classifier>
         </dependency>
-        
+
         <!-- Spring WebFlux -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

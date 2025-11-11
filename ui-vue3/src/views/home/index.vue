@@ -25,18 +25,12 @@
       </div>
 
       <!-- Header -->
-      <header class="header">
+<!--      <header class="header">
         <div class="header-top">
           <LanguageSwitcher />
+          <ThemeSwitcher />
         </div>
-        <div class="logo-container">
-          <div class="logo">
-            <img src="/Java-AI.svg" alt="JManus" class="java-logo" />
-            <h1>JManus</h1>
-          </div>
-          <span class="tagline">{{ $t('home.tagline') }}</span>
-        </div>
-      </header>
+      </header>-->
 
       <!-- Main content -->
       <main class="main-content">
@@ -65,7 +59,7 @@
             </div>
           </div>
           <!-- All examples and plans -->
-          <div class="examples-section">
+<!--          <div class="examples-section">
             <div class="examples-grid">
               <div v-for="item in allCards" :key="item.title" class="card-with-type">
                 <BlurCard
@@ -75,9 +69,12 @@
                 <span class="card-type">{{ item.type === 'github' ? 'GitHub' : item.type }}</span>
               </div>
             </div>
-          </div>
+          </div>-->
+          <role-section />
         </div>
+
       </main>
+
     </div>
   </div>
 </template>
@@ -87,8 +84,10 @@ import { ref, nextTick, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
-import BlurCard from '@/components/blurCard/BlurCard.vue'
-import LanguageSwitcher from '@/components/language-switcher/LanguageSwitcher.vue'
+//import BlurCard from '@/components/blurCard/BlurCard.vue'
+//import LanguageSwitcher from '@/components/language-switcher/LanguageSwitcher.vue'
+//import ThemeSwitcher from '@/components/theme-switcher/ThemeSwitcher.vue'
+import RoleSection from '@/components/role-section/RoleSection.vue'
 import { useTaskStore } from '@/stores/task'
 
 const router = useRouter()
@@ -312,7 +311,7 @@ const selectPlan = async (plan: any) => {
 .welcome-container {
   flex: 1;
   height: 100vh;
-  background: #0a0a0a;
+  background: var(--bg-primary, #0a0a0a);
   position: relative;
   display: flex;
   flex-direction: column;
@@ -340,7 +339,7 @@ const selectPlan = async (plan: any) => {
   &.orb-1 {
     width: 400px;
     height: 400px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     top: -200px;
     right: -200px;
     animation-delay: 0s;
@@ -411,7 +410,7 @@ const selectPlan = async (plan: any) => {
     font-size: 48px;
     font-weight: 700;
     margin: 0 0 8px 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -447,13 +446,13 @@ const selectPlan = async (plan: any) => {
 .welcome-title {
   font-size: 32px;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-primary, #ffffff);
   margin: 0 0 16px 0;
 }
 
 .welcome-subtitle {
   font-size: 18px;
-  color: #888888;
+  color: var(--text-secondary, #ffffff);
   margin: 0;
   line-height: 1.5;
 }
@@ -464,7 +463,7 @@ const selectPlan = async (plan: any) => {
 
 .input-container {
   position: relative;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 20px;
@@ -473,7 +472,7 @@ const selectPlan = async (plan: any) => {
   transition: all 0.3s ease;
 
   &:focus-within {
-    border-color: #667eea;
+    border-color: var(--accent-primary, #667eea);
     box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
   }
 }
@@ -483,7 +482,7 @@ const selectPlan = async (plan: any) => {
   background: transparent;
   border: none;
   outline: none;
-  color: #ffffff;
+  color: var(--text-primary, #ffffff);
   font-size: 16px;
   line-height: 1.5;
   resize: none;
@@ -558,7 +557,7 @@ const selectPlan = async (plan: any) => {
   position: absolute;
   top: 12px;
   right: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: white;
   padding: 4px 8px;
   border-radius: 4px;
@@ -567,54 +566,12 @@ const selectPlan = async (plan: any) => {
   z-index: 1;
 }
 
-// .example-card {
-//   background: rgba(255, 255, 255, 0.03);
-//   border: 1px solid rgba(255, 255, 255, 0.08);
-//   border-radius: 12px;
-//   padding: 20px;
-//   cursor: pointer;
-//   transition: all 0.3s ease;
-//   text-align: left;
-//   display: flex;
-//   align-items: flex-start;
-//   gap: 16px;
-
-//   &:hover {
-//     background: rgba(255, 255, 255, 0.05);
-//     border-color: rgba(102, 126, 234, 0.3);
-//     transform: translateY(-2px);
-//     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-//   }
-// }
-
-// .example-icon {
-//   font-size: 24px;
-//   color: #667eea;
-//   margin-top: 4px;
-//   flex-shrink: 0;
-// }
-
-// .example-content {
-//   h3 {
-//     font-size: 16px;
-//     font-weight: 600;
-//     color: #ffffff;
-//     margin: 0 0 8px 0;
-//   }
-
-//   p {
-//     font-size: 14px;
-//     color: #888888;
-//     margin: 0;
-//     line-height: 1.4;
-//   }
-// }
 
 /* Config View Styles */
 .config-view {
   flex: 1;
   height: 100vh;
-  background: #0a0a0a;
+  background: var(--bg-primary, #0a0a0a);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -624,7 +581,7 @@ const selectPlan = async (plan: any) => {
   display: flex;
   align-items: center;
   padding: 16px 24px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   gap: 16px;
 
@@ -634,16 +591,16 @@ const selectPlan = async (plan: any) => {
     gap: 8px;
     padding: 8px 16px;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
     border-radius: 8px;
-    color: #ffffff;
+    color: var(--text-primary, #ffffff);
     font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(--bg-primary-rgb, 0.15);
+      border-color: var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
       transform: translateY(-1px);
     }
   }
@@ -651,8 +608,8 @@ const selectPlan = async (plan: any) => {
   .config-title {
     font-size: 20px;
     font-weight: 600;
-    color: #ffffff;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--text-primary, #ffffff);
+    background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -664,8 +621,8 @@ const selectPlan = async (plan: any) => {
   padding: 12px 24px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+  color: var(--text-primary, #ffffff);
   font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;

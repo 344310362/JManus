@@ -337,7 +337,7 @@ const autoResizeTextarea = (event: Event) => {
 
 .form-textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   line-height: 1.4;
 }

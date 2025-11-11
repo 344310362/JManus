@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>元气精灵 - 任务快捷入口</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .header {
+      text-align: center;
+      padding: 40px 20px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #09df75 100%);
+      color: white;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .input-section {
+      padding: 20px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .input-container {
+      display: flex;
+      align-items: center;
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .input-container input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 16px;
+      padding: 8px;
+      background: transparent;
+    }
+
+    .send-button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .send-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .roles-section {
+      padding: 30px 20px;
+      background: #fff;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #333;
+      font-weight: 600;
+    }
+
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      padding: 10px;
+    }
+
+    .role-card {
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+      border: 1px solid #e9ecef;
+      cursor: pointer;
+    }
+
+    .role-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      border-color: #667eea;
+    }
+
+    .role-icon {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #667eea 0%, #09df75 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .role-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .role-description {
+      color: #666;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+
+    .tasks-list {
+      list-style: none;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.7);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+      transition: all 0.2s ease;
+    }
+
+    .task-item:hover {
+      background: rgba(102, 126, 234, 0.1);
+      transform: translateX(5px);
+    }
+
+    .task-icon {
+      width: 20px;
+      height: 20px;
+      background: #667eea;
+      border-radius: 4px;
+      margin-right: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+    }
+
+    .direct-button {
+      display: block;
+      width: 200px;
+      margin: 30px auto;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #667eea 0%, #09df75 100%);
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .direct-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    @media (max-width: 768px) {
+      .header h1 {
+        font-size: 2rem;
+      }
+
+      .input-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .roles-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>元气精灵</h1>
+    <p>你好，有什么任务需要我为你服务</p>
+  </div>
+
+  <div class="input-section">
+    <div class="input-container">
+      <input type="text" placeholder="描述您想构建或完成的内容...">
+      <button class="send-button">➤</button>
+    </div>
+  </div>
+
+  <div class="roles-section">
+    <h2 class="section-title">角色任务快捷入口</h2>
+
+    <div class="roles-grid">
+      <!-- 运维角色 -->
+      <div class="role-card">
+        <div class="role-icon">运维</div>
+        <h3 class="role-title">运维工程师</h3>
+        <p class="role-description">快速处理服务器相关任务，提升系统稳定性</p>
+        <ul class="tasks-list">
+          <li class="task-item"><span class="task-icon">+1</span>添加新服务到集群</li>
+          <li class="task-item"><span class="task-icon">-1</span>删除不再需要的服务</li>
+          <li class="task-item"><span class="task-icon">↻</span>重启故障服务节点</li>
+          <li class="task-item"><span class="task-icon">📊</span>查看服务监控指标</li>
+          <li class="task-item"><span class="task-icon">⚙️</span>修改服务配置参数</li>
+        </ul>
+      </div>
+
+      <!-- 产品角色 -->
+      <div class="role-card">
+        <div class="role-icon">产品</div>
+        <h3 class="role-title">产品经理</h3>
+        <p class="role-description">高效管理产品需求，推动项目进度</p>
+        <ul class="tasks-list">
+          <li class="task-item"><span class="task-icon">📝</span>创建新产品需求文档</li>
+          <li class="task-item"><span class="task-icon">🔄</span>更新现有需求规格</li>
+          <li class="task-item"><span class="task-icon">✅</span>确认需求验收标准</li>
+          <li class="task-item"><span class="task-icon">📅</span>安排需求排期计划</li>
+          <li class="task-item"><span class="task-icon">💬</span>收集用户反馈意见</li>
+        </ul>
+      </div>
+
+      <!-- 美工角色 -->
+      <div class="role-card">
+        <div class="role-icon">美工</div>
+        <h3 class="role-title">设计师</h3>
+        <p class="role-description">智能生成设计素材，提高创作效率</p>
+        <ul class="tasks-list">
+          <li class="task-item"><span class="task-icon">🎨</span>生成品牌LOGO设计</li>
+          <li class="task-item"><span class="task-icon">🖼️</span>创建社交媒体配图</li>
+          <li class="task-item"><span class="task-icon">📱</span>设计移动端界面原型</li>
+          <li class="task-item"><span class="task-icon">🌈</span>调整色彩搭配方案</li>
+          <li class="task-item"><span class="task-icon">📐</span>优化版式布局结构</li>
+        </ul>
+      </div>
+
+      <!-- 开发角色 -->
+      <div class="role-card">
+        <div class="role-icon">开发</div>
+        <h3 class="role-title">开发工程师</h3>
+        <p class="role-description">快速实现功能代码，提高开发效率</p>
+        <ul class="tasks-list">
+          <li class="task-item"><span class="task-icon">💻</span>生成基础代码框架</li>
+          <li class="task-item"><span class="task-icon">🔧</span>修复已知BUG问题</li>
+          <li class="task-item"><span class="task-icon">📈</span>添加新功能模块</li>
+          <li class="task-item"><span class="task-icon">🧪</span>编写单元测试用例</li>
+          <li class="task-item"><span class="task-icon">🚀</span>优化性能瓶颈</li>
+        </ul>
+      </div>
+    </div>
+
+    <button class="direct-button">直接进入工作台</button>
+  </div>
+</div>
+</body>
+</html>
+

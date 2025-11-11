@@ -858,12 +858,12 @@ defineExpose({
 
       &:hover:not(:disabled) {
         background: rgba(255, 255, 255, 0.1);
-        color: rgba(255, 255, 255, 0.9);
+        color: rgba(var(--selection-bg), 0.9);
       }
 
       &.active {
         background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-        color: white;
+        color: var(--text-primary, #000);
         box-shadow: 0 2px 4px var(--selection-bg, rgba(102, 126, 234, 0.3));
       }
 
@@ -1074,7 +1074,7 @@ defineExpose({
 
     .task-icon {
       margin-right: 12px;
-      color: #667eea;
+      color: var(--accent-primary, #667eea);
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -1083,46 +1083,34 @@ defineExpose({
       flex: 1;
       min-width: 0;
 
-      .task-icon {
-        margin-right: 12px;
-        color: var(--accent-primary, #667eea);
-        flex-shrink: 0;
-        margin-top: 2px;
+      .task-title {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      .task-details {
-        flex: 1;
-        min-width: 0;
-
-        .task-title {
-          font-size: 14px;
-          font-weight: 600;
-          color: var(--text-primary);
-          margin-bottom: 4px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
-
-        .task-preview {
-          font-size: 12px;
-          color: var(--text-secondary);
-          line-height: 1.4;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        }
+      .task-preview {
+        font-size: 12px;
+        color: var(--text-secondary);
+        line-height: 1.4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
-
-      .task-time {
-        font-size: 11px;
-        color: rgba(255, 255, 255, 0.5);
-        margin-left: 8px;
-        flex-shrink: 0;
-        position: absolute;
-        top: 12px;
-        right: 40px;
-      }
+    }
+    .task-time {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-left: 8px;
+      flex-shrink: 0;
+      position: absolute;
+      top: 12px;
+      right: 40px;
+    }
 
     .task-actions {
       display: flex;

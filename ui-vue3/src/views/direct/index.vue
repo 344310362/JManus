@@ -899,20 +899,20 @@ const newChat = () => {
     background: var(--bg-tertiary, #2a2a2a);
 
     .resizer-line {
-      background: #4a90e2;
+      background: var(--bg-tertiary, #2a2a2a);
       width: 2px;
     }
   }
 
   &:active {
-    background: #3a3a3a;
+    background: var(--bg-tertiary, #2a2a2a);
   }
 }
 
 .resizer-line {
   width: 1px;
   height: 40px;
-  background: #3a3a3a;
+  background: var(--bg-tertiary, #2a2a2a);
   border-radius: 1px;
   transition: all 0.2s ease;
 }
