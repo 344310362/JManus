@@ -45,8 +45,8 @@
           {{ $t('chat.progress') }}: {{ getSubPlanCompletedCount() }} / {{ subPlan.agentExecutionSequence.length }}
         </span>
         <div class="progress-bar">
-          <div 
-            class="progress-fill" 
+          <div
+            class="progress-fill"
             :style="{ width: getSubPlanProgress() + '%' }"
           ></div>
         </div>
@@ -73,7 +73,7 @@
               {{ getAgentStatusText(agent.status) }}
             </div>
           </div>
-          
+
           <!-- Agent execution info for sub-plan agents -->
           <div class="sub-agent-execution-info">
             <!-- Agent result -->
@@ -207,17 +207,17 @@ const getSubPlanStatusClass = (): string => {
   if (props.subPlan.completed) {
     return 'completed'
   }
-  
+
   const hasRunningAgent = props.subPlan.agentExecutionSequence?.some(agent => agent.status === 'RUNNING')
   if (hasRunningAgent) {
     return 'running'
   }
-  
+
   const hasFinishedAgent = props.subPlan.agentExecutionSequence?.some(agent => agent.status === 'FINISHED')
   if (hasFinishedAgent) {
     return 'in-progress'
   }
-  
+
   return 'pending'
 }
 
@@ -255,7 +255,7 @@ const getSubPlanStatusIcon = (): string => {
 const getSubPlanProgress = (): number => {
   if (!props.subPlan.agentExecutionSequence?.length) return 0
   if (props.subPlan.completed) return 100
-  
+
   const completedCount = getSubPlanCompletedCount()
   return Math.min(100, (completedCount / props.subPlan.agentExecutionSequence.length) * 100)
 }

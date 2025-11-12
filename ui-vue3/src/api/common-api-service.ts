@@ -44,7 +44,7 @@ export class CommonApiService {
       }
 
       return data
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Log error but don't throw exception
       console.error('[CommonApiService] Failed to get plan details:', error)
       // Don't return failed status for network errors - let polling continue
@@ -54,7 +54,10 @@ export class CommonApiService {
   }
 
   // Submit user form input
-  public static async submitFormInput(planId: string, formData: any): Promise<any> {
+  public static async submitFormInput(
+    planId: string,
+    formData: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
     const response = await apiFetch(`${this.BASE_URL}/submit-input/${planId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -76,10 +79,10 @@ export class CommonApiService {
     return { success: true }
   }
 
-  /** 
+  /**
    * Get all Prompt list
    */
-  static async getAllPrompts(): Promise<any[]> {
+  static async getAllPrompts(): Promise<unknown[]> {
     try {
       const response = await apiFetch(this.BASE_URL)
       const result = await this.handleResponse(response)

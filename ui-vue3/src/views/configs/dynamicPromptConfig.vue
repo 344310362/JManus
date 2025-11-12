@@ -49,7 +49,7 @@
         <div class="list-header">
           <h3>{{ t('config.promptConfig.configuredprompts') }}</h3>
           <span class="prompt-count"
-            >({{ prompts.length }}{{ t('config.promptConfig.promptCount') }})</span
+          >({{ prompts.length }}{{ t('config.promptConfig.promptCount') }})</span
           >
         </div>
 

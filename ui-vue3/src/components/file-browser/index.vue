@@ -21,7 +21,7 @@
     <div class="file-browser-header">
       <h3>{{ $t('fileBrowser.title') }}</h3>
       <div class="header-actions">
-                <button
+        <button
           class="refresh-btn"
           @click="refreshFileTree"
           :disabled="loading"
@@ -212,7 +212,7 @@ const refreshFileTree = async () => {
     // Start auto refresh if it's a "directory not found" error
     const errorMessage = err instanceof Error ? err.message : ''
     if (errorMessage.includes('Plan directory not found') ||
-        errorMessage.includes('not found')) {
+      errorMessage.includes('not found')) {
       startAutoRefresh()
     }
   } finally {

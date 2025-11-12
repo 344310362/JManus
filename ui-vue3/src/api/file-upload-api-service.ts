@@ -73,7 +73,6 @@ export interface UploadConfig {
 }
 
 export class FileUploadApiService {
-  
   /**
    * Upload files
    * @param files Files to upload
@@ -82,12 +81,12 @@ export class FileUploadApiService {
   public static async uploadFiles(files: File[]): Promise<FileUploadResult> {
     try {
       console.log('[FileUploadApiService] Uploading files:', files.length)
-      
+
       const formData = new FormData()
       files.forEach(file => {
         formData.append('files', file)
       })
-      
+
       const response = await apiFetch('/api/file-upload/upload', {
         method: 'POST',
         body: formData,
@@ -98,9 +97,13 @@ export class FileUploadApiService {
       }
 
       const result: FileUploadResult = await response.json()
-      console.log('[FileUploadApiService] Files uploaded successfully:', result.successfulFiles, 'uploadKey:', result.uploadKey)
+      console.log(
+        '[FileUploadApiService] Files uploaded successfully:',
+        result.successfulFiles,
+        'uploadKey:',
+        result.uploadKey
+      )
       return result
-      
     } catch (error) {
       console.error('[FileUploadApiService] Error uploading files:', error)
       throw error
@@ -115,17 +118,21 @@ export class FileUploadApiService {
   public static async getUploadedFiles(uploadKey: string): Promise<GetUploadedFilesResponse> {
     try {
       console.log('[FileUploadApiService] Getting uploaded files for uploadKey:', uploadKey)
-      
+
       const response = await apiFetch(`/api/file-upload/files/${encodeURIComponent(uploadKey)}`)
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
 
       const result: GetUploadedFilesResponse = await response.json()
-      console.log('[FileUploadApiService] Got uploaded files:', result.totalCount, 'for uploadKey:', uploadKey)
+      console.log(
+        '[FileUploadApiService] Got uploaded files:',
+        result.totalCount,
+        'for uploadKey:',
+        uploadKey
+      )
       return result
-      
     } catch (error) {
       console.error('[FileUploadApiService] Error getting uploaded files:', error)
       throw error
@@ -141,13 +148,16 @@ export class FileUploadApiService {
   public static async deleteFile(uploadKey: string, fileName: string): Promise<DeleteFileResponse> {
     try {
       console.log('[FileUploadApiService] Deleting file:', fileName, 'from uploadKey:', uploadKey)
-      
-      const response = await apiFetch(`/api/file-upload/files/${encodeURIComponent(uploadKey)}/${encodeURIComponent(fileName)}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+
+      const response = await apiFetch(
+        `/api/file-upload/files/${encodeURIComponent(uploadKey)}/${encodeURIComponent(fileName)}`,
+        {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
@@ -156,7 +166,6 @@ export class FileUploadApiService {
       const result: DeleteFileResponse = await response.json()
       console.log('[FileUploadApiService] File deleted successfully:', result.success)
       return result
-      
     } catch (error) {
       console.error('[FileUploadApiService] Error deleting file:', error)
       throw error
@@ -170,9 +179,9 @@ export class FileUploadApiService {
   public static async getUploadConfig(): Promise<UploadConfig> {
     try {
       console.log('[FileUploadApiService] Getting upload configuration')
-      
+
       const response = await apiFetch('/api/file-upload/config')
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`)
       }
@@ -180,7 +189,6 @@ export class FileUploadApiService {
       const result: UploadConfig = await response.json()
       console.log('[FileUploadApiService] Got upload configuration:', result)
       return result
-      
     } catch (error) {
       console.error('[FileUploadApiService] Error getting upload configuration:', error)
       throw error

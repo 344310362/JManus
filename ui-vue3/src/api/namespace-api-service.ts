@@ -20,8 +20,8 @@ export interface Namespace {
   id: string
   code: string
   name: string
-  description?:string;
-  host?: string;
+  description?: string
+  host?: string
 }
 
 export class NamespaceApiService {
@@ -128,4 +128,3 @@ export class NamespaceApiService {
     }
   }
 }
-

@@ -15,25 +15,25 @@
  */
 
 import { LlmCheckService } from '@/utils/llm-check'
-import type { InputMessage } from "@/stores/memory"
+import type { InputMessage } from '@/stores/memory'
 import { apiFetch } from '@/utils/api-fetch'
 
 export class DirectApiService {
   private static readonly BASE_URL = '/api/executor'
 
   // Send task directly (direct execution mode)
-  public static async sendMessage(query: InputMessage): Promise<any> {
+  public static async sendMessage(query: InputMessage): Promise<unknown> {
     return LlmCheckService.withLlmCheck(async () => {
       // Add Vue identification flag to distinguish from HTTP requests
       const requestBody = {
         ...query,
-        isVueRequest: true
+        isVueRequest: true,
       }
 
       const response = await apiFetch(`${this.BASE_URL}/execute`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       })
       if (!response.ok) throw new Error(`API request failed: ${response.status}`)
       return await response.json()
@@ -41,13 +41,13 @@ export class DirectApiService {
   }
 
   // Send task using executeByToolNameAsync with default plan template
-  public static async sendMessageWithDefaultPlan(query: InputMessage): Promise<any> {
+  public static async sendMessageWithDefaultPlan(query: InputMessage): Promise<unknown> {
     // Use default plan template ID as toolName
     const toolName = 'default-plan-id-001000222'
 
     // Create replacement parameters with user input
     const replacementParams = {
-      'userRequirement': query.input
+      userRequirement: query.input,
     }
 
     return this.executeByToolName(toolName, replacementParams, query.uploadedFiles, query.uploadKey)
@@ -59,13 +59,18 @@ export class DirectApiService {
     replacementParams?: Record<string, string>,
     uploadedFiles?: string[],
     uploadKey?: string
-  ): Promise<any> {
+  ): Promise<unknown> {
     return LlmCheckService.withLlmCheck(async () => {
-      console.log('[DirectApiService] executeByToolName called with:', { toolName, replacementParams, uploadedFiles, uploadKey })
+      console.log('[DirectApiService] executeByToolName called with:', {
+        toolName,
+        replacementParams,
+        uploadedFiles,
+        uploadKey,
+      })
 
-      const requestBody: Record<string, any> = {
+      const requestBody: Record<string, unknown> = {
         toolName: toolName,
-        isVueRequest: true
+        isVueRequest: true,
       }
 
       // Include replacement parameters if present
@@ -86,13 +91,16 @@ export class DirectApiService {
         console.log('[DirectApiService] Including uploadKey:', uploadKey)
       }
 
-      console.log('[DirectApiService] Making request to:', `${this.BASE_URL}/executeByToolNameAsync`)
+      console.log(
+        '[DirectApiService] Making request to:',
+        `${this.BASE_URL}/executeByToolNameAsync`
+      )
       console.log('[DirectApiService] Request body:', requestBody)
 
-      const response = await apiFetch(`${this.BASE_URL}/executeByToolNameAsync`, {
+      const response = await fetch(`${this.BASE_URL}/executeByToolNameAsync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       })
 
       console.log('[DirectApiService] Response status:', response.status, response.ok)
@@ -110,13 +118,13 @@ export class DirectApiService {
   }
 
   // Stop a running task by plan ID
-  public static async stopTask(planId: string): Promise<any> {
+  public static async stopTask(planId: string): Promise<unknown> {
     return LlmCheckService.withLlmCheck(async () => {
       console.log('[DirectApiService] Stopping task for planId:', planId)
 
       const response = await apiFetch(`${this.BASE_URL}/stopTask/${planId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
       })
 
       if (!response.ok) {

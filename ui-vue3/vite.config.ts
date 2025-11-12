@@ -29,6 +29,9 @@ export default defineConfig(({ mode }) => {
     outDir: './ui',
     sourcemap: true, // Enable source maps for production builds
   },
+  css: {
+    devSourcemap: true, // Enable CSS source maps in development
+  },
   server: {
     open: true, // Automatically open browser on startup
     host: true, // Allow external access
@@ -44,7 +47,7 @@ export default defineConfig(({ mode }) => {
     },
   },
   plugins: [
-    vue(), 
+    vue(),
     vueJsx(),
     qiankun('sc-ai-manuas', { useDevMode: true }),
     checker({
@@ -52,11 +55,12 @@ export default defineConfig(({ mode }) => {
       typescript: true,
       // Temporarily disable Vue template type checking due to @volar/typescript compatibility issue
       // vueTsc: true,
-      // Temporarily disable ESLint checking during debugging to avoid conflicts
-      eslint: {
-        lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"'
-      }
-    })
+      // Temporarily disable ESLint checking - vite-plugin-checker 0.9.3 has compatibility issues with ESLint 9.x
+      // ESLint can still be run manually via: pnpm lint
+      // eslint: {
+      //   lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"',
+      // },
+    }),
   ],
   resolve: {
     alias: {

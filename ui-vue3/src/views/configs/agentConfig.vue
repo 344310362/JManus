@@ -40,7 +40,7 @@
         <div class="list-header">
           <h3>{{ t('config.agentConfig.configuredAgents') }}</h3>
           <span class="agent-count"
-            >({{ agents.length }}{{ t('config.agentConfig.agentCount') }})</span
+          >({{ agents.length }}{{ t('config.agentConfig.agentCount') }})</span
           >
         </div>
 

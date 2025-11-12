@@ -22,7 +22,9 @@
           <h1><Icon icon="carbon:bot" class="logo-icon" /> JManus</h1>
         </div>
         <h2>{{ currentStep === 1 ? $t('init.welcomeStep') : $t('init.welcome') }}</h2>
-        <p class="description">{{ currentStep === 1 ? $t('init.languageStepDescription') : $t('init.description') }}</p>
+        <p class="description">
+          {{ currentStep === 1 ? $t('init.languageStepDescription') : $t('init.description') }}
+        </p>
       </div>
 
       <!-- Step Indicator -->
@@ -44,11 +46,7 @@
           <label class="form-label">{{ $t('init.selectLanguageLabel') }}</label>
           <div class="language-options">
             <label class="language-option" :class="{ active: selectedLanguage === 'zh' }">
-              <input
-                type="radio"
-                v-model="selectedLanguage"
-                value="zh"
-              />
+              <input type="radio" v-model="selectedLanguage" value="zh" />
               <span class="language-content">
                 <span class="language-flag">
                   <Icon icon="circle-flags:cn" />
@@ -60,11 +58,7 @@
               </span>
             </label>
             <label class="language-option" :class="{ active: selectedLanguage === 'en' }">
-              <input
-                type="radio"
-                v-model="selectedLanguage"
-                value="en"
-              />
+              <input type="radio" v-model="selectedLanguage" value="en" />
               <span class="language-content">
                 <span class="language-flag">
                   <Icon icon="circle-flags:us" />
@@ -226,7 +220,9 @@
             </div>
 
             <div class="form-group">
-              <label for="modelDisplayName" class="form-label">{{ $t('init.modelDisplayNameLabel') }}</label>
+              <label for="modelDisplayName" class="form-label">{{
+                $t('init.modelDisplayNameLabel')
+                }}</label>
               <input
                 id="modelDisplayName"
                 v-model="form.modelDisplayName"
@@ -238,32 +234,25 @@
             </div>
 
             <div class="form-group">
-              <label for="completionsPath" class="form-label">{{ $t('init.completionsPath') }}</label>
+              <label for="completionsPath" class="form-label">{{
+                $t('init.completionsPath')
+                }}</label>
               <input
-                  id="modelDisplayName"
-                  v-model="form.completionsPath"
-                  type="text"
-                  class="form-input"
-                  :placeholder="$t('init.completionsPathPlaceholder')"
-                  :disabled="loading"
+                id="modelDisplayName"
+                v-model="form.completionsPath"
+                type="text"
+                class="form-input"
+                :placeholder="$t('init.completionsPathPlaceholder')"
+                :disabled="loading"
               />
             </div>
           </div>
 
           <div class="form-actions">
-            <button
-              type="button"
-              class="back-btn"
-              @click="goToPreviousStep"
-              :disabled="loading"
-            >
+            <button type="button" class="back-btn" @click="goToPreviousStep" :disabled="loading">
               {{ $t('init.back') }}
             </button>
-            <button
-              type="submit"
-              class="submit-btn"
-              :disabled="loading || !isFormValid"
-            >
+            <button type="submit" class="submit-btn" :disabled="loading || !isFormValid">
               <span v-if="loading" class="loading-spinner"></span>
               {{ loading ? $t('init.saving') : $t('init.saveAndContinue') }}
             </button>
@@ -301,13 +290,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { Icon } from '@iconify/vue'
+import {
+  LOCAL_STORAGE_LOCALE,
+  changeLanguageWithAgentReset,
+  initializePlanTemplates,
+} from '@/base/i18n'
 import { LlmCheckService } from '@/utils/llm-check'
-import { changeLanguageWithAgentReset, initializePlanTemplates, LOCAL_STORAGE_LOCALE } from '@/base/i18n'
+import { Icon } from '@iconify/vue'
+import { computed, onMounted, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import { apiFetch } from '@/utils/api-fetch';
+// Define component name for Vue linting rules
+defineOptions({
+  name: 'InitIndex',
+})
 
 const { t, locale } = useI18n()
 const router = useRouter()
@@ -323,7 +320,7 @@ const form = ref({
   baseUrl: '',
   modelName: '',
   modelDisplayName: '',
-  completionsPath: ''
+  completionsPath: '',
 })
 
 const loading = ref(false)
@@ -360,15 +357,18 @@ const goToNextStep = async () => {
       try {
         await initializePlanTemplates(selectedLanguage.value)
         console.log('Plan templates initialized successfully')
-      } catch (planTemplateErr: any) {
-        console.warn('Failed to initialize plan templates:', planTemplateErr)
+      } catch (planTemplateErr: unknown) {
+        const errorMessage =
+          planTemplateErr instanceof Error ? planTemplateErr.message : String(planTemplateErr)
+        console.warn('Failed to initialize plan templates:', errorMessage)
         // Continue even if plan template initialization fails
       }
 
       // Move to next step
       currentStep.value = 2
-    } catch (err: any) {
-      console.warn('Failed to switch language:', err)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : String(err)
+      console.warn('Failed to switch language:', errorMessage)
       // Continue to next step even if language switch fails, don't block user flow
       currentStep.value = 2
     } finally {
@@ -423,24 +423,25 @@ const handleSubmit = async () => {
     loading.value = true
     error.value = ''
 
-    const requestBody: any = {
+    const requestBody: Record<string, string> = {
       configMode: form.value.configMode,
-      apiKey: form.value.apiKey.trim()
+      apiKey: form.value.apiKey.trim(),
     }
 
     if (form.value.configMode === 'custom') {
       requestBody.baseUrl = form.value.baseUrl.trim()
       requestBody.modelName = form.value.modelName.trim()
-      requestBody.modelDisplayName = form.value.modelDisplayName.trim() || form.value.modelName.trim()
+      requestBody.modelDisplayName =
+        form.value.modelDisplayName.trim() || form.value.modelName.trim()
       requestBody.completionsPath = form.value.completionsPath.trim()
     }
 
     const response = await apiFetch('/api/init/save', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestBody)
+      body: JSON.stringify(requestBody),
     })
 
     const result = await response.json()
@@ -517,13 +518,13 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-primary, #0a0a0a);
+  background: #0a0a0a;
   position: relative;
   padding: 40px 20px;
 }
 
 .init-card {
-  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
@@ -545,7 +546,7 @@ onMounted(() => {
 .logo h1 {
   font-size: 48px;
   margin: 0 0 16px 0;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -557,14 +558,14 @@ onMounted(() => {
 
 .logo-icon {
   font-size: 48px !important;
-  color: var(--accent-primary, #667eea) !important;
+  color: #667eea !important;
   background: none !important;
-  -webkit-text-fill-color: var(--accent-primary, #667eea) !important;
+  -webkit-text-fill-color: #667eea !important;
 }
 
 .init-header h2 {
   font-size: 28px;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   margin: 0 0 12px 0;
   font-weight: 600;
 }
@@ -611,25 +612,25 @@ onMounted(() => {
   height: 40px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
-  border: 2px solid var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
+  border: 2px solid rgba(255, 255, 255, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   transition: all 0.3s ease;
 }
 
 .step.active .step-number {
-  background: var(--accent-primary, #667eea);
-  border-color: var(--accent-primary, #667eea);
-  color: var(--text-primary, #ffffff);
+  background: #667eea;
+  border-color: #667eea;
+  color: #ffffff;
 }
 
 .step.completed .step-number {
   background: #4ade80;
   border-color: #4ade80;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
 }
 
 .step-label {
@@ -640,7 +641,7 @@ onMounted(() => {
 }
 
 .step.active .step-label {
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   font-weight: 500;
 }
 
@@ -651,7 +652,7 @@ onMounted(() => {
 .step-divider {
   width: 60px;
   height: 2px;
-  background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
+  background: rgba(255, 255, 255, 0.2);
   margin: 0 20px;
 }
 
@@ -670,7 +671,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   padding: 20px;
-  border: 2px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -679,12 +680,12 @@ onMounted(() => {
 
 .language-option:hover {
   border-color: rgba(102, 126, 234, 0.4);
-  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  background: rgba(255, 255, 255, 0.05);
   transform: translateY(-2px);
 }
 
 .language-option.active {
-  border-color: var(--accent-primary, #667eea);
+  border-color: #667eea;
   background: rgba(102, 126, 234, 0.1);
   transform: translateY(-2px);
 }
@@ -693,7 +694,7 @@ onMounted(() => {
   margin: 0 16px 0 0;
   width: 20px;
   height: 20px;
-  accent-color: var(--accent-primary, #667eea);
+  accent-color: #667eea;
 }
 
 .language-content {
@@ -723,7 +724,7 @@ onMounted(() => {
 }
 
 .language-text strong {
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   font-size: 18px;
   font-weight: 600;
 }
@@ -740,7 +741,7 @@ onMounted(() => {
 .form-label {
   display: block;
   font-weight: 500;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   margin-bottom: 8px;
   font-size: 14px;
 }
@@ -753,18 +754,18 @@ onMounted(() => {
 .form-input {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   font-size: 16px;
   transition: all 0.3s ease;
-  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  color: var(--text-primary, #ffffff);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
   box-sizing: border-box;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--accent-primary, #667eea);
+  border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
   background: rgba(255, 255, 255, 0.08);
 }
@@ -819,7 +820,7 @@ onMounted(() => {
   font-size: 16px !important;
   width: 16px !important;
   height: 16px !important;
-  color: var(--text-primary, #ffffff) !important;
+  color: #ffffff !important;
 }
 
 .config-mode-selection {
@@ -832,7 +833,7 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   padding: 16px;
-  border: 2px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
+  border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -841,11 +842,11 @@ onMounted(() => {
 
 .radio-option:hover {
   border-color: rgba(102, 126, 234, 0.4);
-  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .radio-option.active {
-  border-color: var(--accent-primary, #667eea);
+  border-color: #667eea;
   background: rgba(102, 126, 234, 0.1);
 }
 
@@ -853,7 +854,7 @@ onMounted(() => {
   margin: 4px 12px 0 0;
   width: 16px;
   height: 16px;
-  accent-color: var(--accent-primary, #667eea);
+  accent-color: #667eea;
 }
 
 .radio-text {
@@ -863,7 +864,7 @@ onMounted(() => {
 }
 
 .radio-text strong {
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   font-size: 16px;
   font-weight: 600;
 }
@@ -890,7 +891,7 @@ onMounted(() => {
 }
 
 .help-link {
-  color: var(--accent-primary, #667eea);
+  color: #667eea;
   text-decoration: none;
   font-weight: 500;
 }
@@ -913,10 +914,10 @@ onMounted(() => {
 
 .back-btn {
   padding: 12px 32px;
-  border: 2px solid var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 8px;
   background: transparent;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
@@ -925,7 +926,7 @@ onMounted(() => {
 }
 
 .back-btn:hover:not(:disabled) {
-  border-color: var(--accent-primary, #667eea);
+  border-color: #667eea;
   background: rgba(102, 126, 234, 0.1);
   transform: translateY(-2px);
 }
@@ -936,7 +937,7 @@ onMounted(() => {
 }
 
 .submit-btn {
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   padding: 14px 32px;
@@ -955,7 +956,7 @@ onMounted(() => {
 
 .submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px var(--selection-bg, rgba(102, 126, 234, 0.3));
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
 }
 
 .submit-btn:disabled {
@@ -967,7 +968,7 @@ onMounted(() => {
 .loading-spinner {
   width: 16px;
   height: 16px;
-  border: 2px solid var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
+  border: 2px solid rgba(255, 255, 255, 0.3);
   border-top: 2px solid white;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -1110,7 +1111,7 @@ onMounted(() => {
 .gradient-orb {
   position: absolute;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   opacity: 0.1;
   animation: orbit 20s infinite linear;
 }

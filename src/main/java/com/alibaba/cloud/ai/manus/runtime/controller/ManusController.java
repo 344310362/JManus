@@ -15,6 +15,7 @@
  */
 package com.alibaba.cloud.ai.manus.runtime.controller;
 
+import com.alibaba.cloud.ai.manus.recorder.entity.vo.ActToolInfo;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +51,7 @@ import com.alibaba.cloud.ai.manus.planning.service.PlanTemplateService;
 import com.alibaba.cloud.ai.manus.recorder.entity.vo.AgentExecutionRecord;
 import com.alibaba.cloud.ai.manus.recorder.entity.vo.PlanExecutionRecord;
 import com.alibaba.cloud.ai.manus.recorder.service.NewRepoPlanExecutionRecorder;
+import com.alibaba.cloud.ai.manus.recorder.entity.vo.ThinkActRecord;
 import com.alibaba.cloud.ai.manus.recorder.service.PlanHierarchyReaderService;
 import com.alibaba.cloud.ai.manus.runtime.entity.po.RootTaskManagerEntity;
 import com.alibaba.cloud.ai.manus.runtime.entity.vo.ExecutionStep;
@@ -114,7 +116,6 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 	@Autowired
 	private TaskInterruptionManager taskInterruptionManager;
 
-	@Autowired
 	public ManusController(ObjectMapper objectMapper) {
 		this.objectMapper = objectMapper;
 		// Register JavaTimeModule to handle LocalDateTime serialization/deserialization
@@ -145,7 +146,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 		// be the Vue front-end
 		if (toolName != null && toolName.startsWith("planTemplate-") && uploadedFiles != null) {
 			logger.info("🔍 [AUTO-DETECT] Detected Vue request pattern: toolName={}, hasFiles={}", toolName,
-				uploadedFiles != null ? uploadedFiles.size() : 0);
+					uploadedFiles != null ? uploadedFiles.size() : 0);
 			return true;
 		}
 
@@ -161,7 +162,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 	 */
 	@GetMapping("/executeByToolNameSync/{toolName}")
 	public ResponseEntity<Map<String, Object>> executeByToolNameGetSync(@PathVariable("toolName") String toolName,
-		@RequestParam(required = false, name = "allParams") Map<String, String> allParams) {
+			@RequestParam(required = false, name = "allParams") Map<String, String> allParams) {
 		if (toolName == null || toolName.trim().isEmpty()) {
 			return ResponseEntity.badRequest().body(Map.of("error", "Tool name cannot be empty"));
 		}
@@ -177,7 +178,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 		}
 
 		logger.info("Execute tool '{}' synchronously with plan template ID '{}', parameters: {}", toolName,
-			planTemplateId, allParams);
+				planTemplateId, allParams);
 		// Execute synchronously and return result directly
 		return executePlanSync(planTemplateId, null, null, false, null);
 	}
@@ -256,12 +257,12 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 
 			// Execute the plan template using the new unified method
 			PlanExecutionWrapper wrapper = executePlanTemplate(planTemplateId, uploadedFiles, conversationId,
-				replacementParams, isVueRequest, uploadKey);
+					replacementParams, isVueRequest, uploadKey);
 
 			// Create or update task manager entity for database-driven interruption
 			if (wrapper.getRootPlanId() != null) {
 				rootTaskManagerService.createOrUpdateTask(wrapper.getRootPlanId(),
-					RootTaskManagerEntity.DesiredTaskState.START);
+						RootTaskManagerEntity.DesiredTaskState.START);
 			}
 
 			// Start the async execution (fire and forget)
@@ -270,13 +271,13 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 					logger.error("Async plan execution failed for planId: {}", wrapper.getRootPlanId(), throwable);
 					// Update task state to indicate failure
 					rootTaskManagerService.updateTaskResult(wrapper.getRootPlanId(),
-						"Execution failed: " + throwable.getMessage());
+							"Execution failed: " + throwable.getMessage());
 				}
 				else {
 					logger.info("Async plan execution completed for planId: {}", wrapper.getRootPlanId());
 					// Update task state to indicate completion
 					rootTaskManagerService.updateTaskResult(wrapper.getRootPlanId(),
-						result != null ? result.getFinalResult() : "Execution completed");
+							result != null ? result.getFinalResult() : "Execution completed");
 				}
 			});
 
@@ -294,7 +295,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 		}
 		catch (Exception e) {
 			logger.error("Failed to start plan execution for tool: {} with planTemplateId: {}", toolName,
-				planTemplateId, e);
+					planTemplateId, e);
 			Map<String, Object> errorResponse = new HashMap<>();
 			errorResponse.put("error", "Failed to start plan execution: " + e.getMessage());
 			errorResponse.put("toolName", toolName);
@@ -346,9 +347,9 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 		Map<String, Object> replacementParams = (Map<String, Object>) request.get("replacementParams");
 
 		logger.info(
-			"Executing tool '{}' synchronously with plan template ID '{}', uploadedFiles: {}, replacementParams: {}, uploadKey: {}",
-			toolName, planTemplateId, uploadedFiles != null ? uploadedFiles.size() : "null",
-			replacementParams != null ? replacementParams.size() : "null", uploadKey);
+				"Executing tool '{}' synchronously with plan template ID '{}', uploadedFiles: {}, replacementParams: {}, uploadKey: {}",
+				toolName, planTemplateId, uploadedFiles != null ? uploadedFiles.size() : "null",
+				replacementParams != null ? replacementParams.size() : "null", uploadKey);
 
 		return executePlanSync(planTemplateId, uploadedFiles, replacementParams, isVueRequest, uploadKey);
 	}
@@ -387,8 +388,8 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 			waitState.setPlanId(rootPlanId);
 			planRecord.setUserInputWaitState(waitState);
 			logger.info(
-				"Root plan {} is waiting for user input. Set waitState planId to rootPlanId for proper submission.",
-				rootPlanId);
+					"Root plan {} is waiting for user input. Set waitState planId to rootPlanId for proper submission.",
+					rootPlanId);
 		}
 		else {
 			planRecord.setUserInputWaitState(null); // Clear if not waiting
@@ -398,6 +399,16 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 		if (planRecord.getRootPlanId() == null) {
 			planRecord.setRootPlanId(planRecord.getCurrentPlanId());
 			logger.info("Set rootPlanId to currentPlanId for plan: {}", planId);
+		}
+
+		// Extract the last tool call result when planRecord is not null and completed is
+		// true
+		if (planRecord != null && planRecord.isCompleted()) {
+			String lastToolCallResult = extractLastToolCallResult(planRecord);
+			if (lastToolCallResult != null) {
+				planRecord.setStructureResult(lastToolCallResult);
+				logger.info("Extracted last tool call result and set structureResult for completed plan: {}", planId);
+			}
 		}
 
 		try {
@@ -438,7 +449,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 	 */
 	@PostMapping("/submit-input/{planId}")
 	public ResponseEntity<Map<String, Object>> submitUserInput(@PathVariable("planId") String planId,
-		@RequestBody Map<String, String> formData) { // Changed formData to
+			@RequestBody Map<String, String> formData) { // Changed formData to
 		// Map<String, String>
 		try {
 			logger.info("Received user input for plan {}: {}", planId, formData);
@@ -479,17 +490,17 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 	 * @return ResponseEntity with execution result
 	 */
 	private ResponseEntity<Map<String, Object>> executePlanSync(String planTemplateId, List<String> uploadedFiles,
-		Map<String, Object> replacementParams, boolean isVueRequest, String uploadKey) {
+			Map<String, Object> replacementParams, boolean isVueRequest, String uploadKey) {
 		PlanExecutionWrapper wrapper = null;
 		try {
 			// Execute the plan template using the new unified method
 			wrapper = executePlanTemplate(planTemplateId, uploadedFiles, null, replacementParams, isVueRequest,
-				uploadKey);
+					uploadKey);
 
 			// Create or update task manager entity for database-driven interruption
 			if (wrapper.getRootPlanId() != null) {
 				rootTaskManagerService.createOrUpdateTask(wrapper.getRootPlanId(),
-					RootTaskManagerEntity.DesiredTaskState.START);
+						RootTaskManagerEntity.DesiredTaskState.START);
 			}
 
 			PlanExecutionResult planExecutionResult = wrapper.getResult().get();
@@ -535,7 +546,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 	 * @return PlanExecutionWrapper containing both PlanExecutionResult and rootPlanId
 	 */
 	private PlanExecutionWrapper executePlanTemplate(String planTemplateId, List<String> uploadedFiles,
-		String conversationId, Map<String, Object> replacementParams, boolean isVueRequest, String uploadKey) {
+			String conversationId, Map<String, Object> replacementParams, boolean isVueRequest, String uploadKey) {
 		if (planTemplateId == null || planTemplateId.trim().isEmpty()) {
 			logger.error("Plan template ID is null or empty");
 			throw new IllegalArgumentException("Plan template ID cannot be null or empty");
@@ -572,7 +583,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 			if (!parametersForReplacement.isEmpty()) {
 				try {
 					logger.info("Replacing parameter placeholders in plan template with input parameters: {}",
-						parametersForReplacement.keySet());
+							parametersForReplacement.keySet());
 					planJson = parameterMappingService.replaceParametersInJson(planJson, parametersForReplacement);
 					logger.debug("Parameter replacement completed successfully");
 				}
@@ -586,7 +597,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 			}
 			else {
 				logger.debug("No parameter replacement needed - replacementParams: {}",
-					replacementParams != null ? replacementParams.size() : 0);
+						replacementParams != null ? replacementParams.size() : 0);
 			}
 
 			// Parse the plan JSON to create PlanInterface
@@ -595,7 +606,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 			// Handle uploaded files if present
 			if (uploadedFiles != null && !uploadedFiles.isEmpty()) {
 				logger.info("Uploaded files will be handled by the execution context for plan template: {}",
-					uploadedFiles.size());
+						uploadedFiles.size());
 
 				// Attach uploaded files to each step's stepRequirement
 				if (plan.getAllSteps() != null) {
@@ -621,8 +632,8 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 			}
 
 			// Execute using the PlanningCoordinator
-			CompletableFuture<PlanExecutionResult> future = planningCoordinator.executeByPlan(plan, rootPlanId, null,
-				currentPlanId, null, isVueRequest, uploadKey);
+      CompletableFuture<PlanExecutionResult> future = planningCoordinator.executeByPlan(plan, rootPlanId, null,
+        currentPlanId, null, isVueRequest, uploadKey, 0);
 
 			// Return the wrapper containing both the future and rootPlanId
 			return new PlanExecutionWrapper(future, rootPlanId);
@@ -663,6 +674,92 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 	}
 
 	/**
+	 * Extract the last tool call result from the plan execution record. This method
+	 * traverses through the execution hierarchy: PlanExecutionRecord ->
+	 * AgentExecutionRecord -> ThinkActRecord -> ActToolInfo to get the result from the
+	 * last tool call.
+	 * @param planRecord The plan execution record
+	 * @return The last tool call result, or null if not found
+	 */
+	private String extractLastToolCallResult(PlanExecutionRecord planRecord) {
+		if (planRecord == null || !planRecord.isCompleted()) {
+			return null;
+		}
+
+		// Get the agent execution sequence
+		List<AgentExecutionRecord> agentExecutionSequence = planRecord.getAgentExecutionSequence();
+		if (agentExecutionSequence == null || agentExecutionSequence.isEmpty()) {
+			return null;
+		}
+
+		// Get the last agent execution record
+		AgentExecutionRecord lastAgentRecord = agentExecutionSequence.get(agentExecutionSequence.size() - 1);
+		if (lastAgentRecord == null) {
+			return null;
+		}
+
+		// Get stepId from the last agent execution record
+		String stepId = lastAgentRecord.getStepId();
+		if (stepId == null || stepId.trim().isEmpty()) {
+			logger.warn("StepId is null or empty in the last agent execution record");
+			return null;
+		}
+
+		// Use stepId to get the real AgentExecutionRecord with actual thinkActSteps
+		// The thinkActSteps in agentExecutionSequence is dummy data
+		AgentExecutionRecord realAgentRecord = planExecutionRecorder.getAgentExecutionDetail(stepId);
+		if (realAgentRecord == null) {
+			logger.warn("Failed to get real agent execution detail for stepId: {}", stepId);
+			return null;
+		}
+
+		// Get the think-act steps from the real agent execution record
+		List<ThinkActRecord> thinkActSteps = realAgentRecord.getThinkActSteps();
+		if (thinkActSteps == null || thinkActSteps.isEmpty()) {
+			return null;
+		}
+
+		// Get the last think-act record
+		ThinkActRecord lastThinkActRecord = thinkActSteps.get(thinkActSteps.size() - 1);
+		if (lastThinkActRecord == null) {
+			return null;
+		}
+
+		// Get the act tool info list from the last think-act record
+		List<ActToolInfo> actToolInfoList = lastThinkActRecord.getActToolInfoList();
+		if (actToolInfoList == null || actToolInfoList.isEmpty()) {
+			return null;
+		}
+
+		// Get the last act tool info
+		ActToolInfo lastActToolInfo = actToolInfoList.get(actToolInfoList.size() - 1);
+		if (lastActToolInfo == null) {
+			return null;
+		}
+
+		// Get the result from the last tool call
+		String result = lastActToolInfo.getResult();
+		if (result == null) {
+			return null;
+		}
+
+		// If the result is a JSON string, parse and re-serialize it to avoid double
+		// escaping
+		// This happens when TerminateTool returns a JSON string that gets stored as a
+		// string field
+		try {
+			// Try to parse as JSON
+			Object jsonObject = objectMapper.readValue(result, Object.class);
+			// Re-serialize without escaping
+			return objectMapper.writeValueAsString(jsonObject);
+		}
+		catch (Exception e) {
+			// If it's not valid JSON, return as-is
+			return result;
+		}
+	}
+
+	/**
 	 * Get plan template ID from coordinator tool by tool name
 	 * @param toolName The tool name to look up
 	 * @return Plan template ID if found, null if tool not found
@@ -681,13 +778,20 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 
 	@Override
 	public void onEvent(PlanExceptionEvent event) {
-		this.exceptionCache.put(event.getPlanId(), event.getThrowable());
+		String planId = event.getPlanId();
+		Throwable throwable = event.getThrowable();
+		if (planId != null && throwable != null) {
+			this.exceptionCache.put(planId, throwable);
+		}
 	}
 
 	@EventListener
 	public void onPlanExceptionCleared(PlanExceptionClearedEvent event) {
-		logger.info("Clearing exception cache for planId: {}", event.getPlanId());
-		this.exceptionCache.invalidate(event.getPlanId());
+		String planId = event.getPlanId();
+		if (planId != null) {
+			logger.info("Clearing exception cache for planId: {}", planId);
+			this.exceptionCache.invalidate(planId);
+		}
 	}
 
 	/**
@@ -721,7 +825,7 @@ public class ManusController implements JmanusListener<PlanExceptionEvent> {
 			logger.info("Successfully marked task for stop for planId: {}", planId);
 			return ResponseEntity
 				.ok(Map.of("status", "stopped", "planId", planId, "message", "Task stop request processed successfully",
-					"taskMarkedForStop", taskMarkedForStop, "wasRunning", isTaskRunning));
+						"taskMarkedForStop", taskMarkedForStop, "wasRunning", isTaskRunning));
 
 		}
 		catch (Exception e) {

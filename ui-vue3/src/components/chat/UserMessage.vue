@@ -19,7 +19,7 @@
       <div class="message-text">
         {{ message.content }}
       </div>
-      
+
       <!-- Attachments if any -->
       <div v-if="message.attachments?.length" class="attachments">
         <div
@@ -32,13 +32,13 @@
           <span class="attachment-size">{{ formatFileSize(attachment.size) }}</span>
         </div>
       </div>
-      
+
       <!-- Timestamp -->
       <div class="message-timestamp">
         {{ formatTimestamp(message.timestamp) }}
       </div>
     </div>
-    
+
     <!-- Message status indicator -->
     <div v-if="message.error" class="message-status error">
       <Icon icon="carbon:warning" class="status-icon" />
@@ -168,7 +168,7 @@ const { formatTimestamp, formatFileSize } = useMessageFormatting()
       max-width: 85%;
       padding: 10px 14px;
       border-radius: 16px 16px 4px 16px;
-      
+
       .message-text {
         font-size: 13px;
       }

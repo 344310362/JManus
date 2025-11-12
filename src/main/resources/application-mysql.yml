@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://mysqle84f3663d5f5.rds.ivolces.com:3306/sm_ai_manus_1?useSSL=false&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
+    url: jdbc:mysql://mysqle84f3663d5f5.rds.ivolces.com:3306/sm_ai_manus?useSSL=false&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: develop
     password: Xmzxl6706

@@ -23,7 +23,7 @@
           {{ getPlanStatusText() }}
         </div>
       </div>
-      
+
       <!-- Parent tool call information for sub-plans -->
       <div v-if="planExecution.parentActToolCall" class="parent-tool-call">
         <div class="parent-tool-header">
@@ -33,15 +33,20 @@
         </div>
         <div v-if="planExecution.parentActToolCall.parameters" class="tool-parameters">
           <span class="param-label">{{ $t('common.parameters') }}:</span>
-          <pre class="param-content">{{ formatToolParameters(planExecution.parentActToolCall.parameters) }}</pre>
+          <pre class="param-content">{{
+            formatToolParameters(planExecution.parentActToolCall.parameters)
+          }}</pre>
         </div>
       </div>
     </div>
 
     <!-- Agent execution sequence -->
-    <div class="agent-execution-container" v-if="(planExecution?.agentExecutionSequence?.length ?? 0) > 0">
+    <div
+      class="agent-execution-container"
+      v-if="(planExecution?.agentExecutionSequence?.length ?? 0) > 0"
+    >
       <h4 class="section-title">{{ $t('chat.agentExecutionSequence') }}</h4>
-      
+
       <div
         v-for="(agentExecution, agentIndex) in planExecution?.agentExecutionSequence"
         :key="agentExecution.id || agentIndex"
@@ -53,7 +58,9 @@
           <div class="agent-info">
             <Icon :icon="getAgentStatusIcon(agentExecution.status)" class="agent-status-icon" />
             <div class="agent-details">
-              <div class="agent-name">{{ agentExecution.agentName || $t('chat.unknownAgent') }}</div>
+              <div class="agent-name">
+                {{ agentExecution.agentName || $t('chat.unknownAgent') }}
+              </div>
               <pre class="request-content">{{ agentExecution.agentRequest }}</pre>
             </div>
           </div>
@@ -91,10 +98,12 @@
           <div class="sub-plans-header">
             <Icon icon="carbon:tree-view" class="sub-plans-icon" />
             <span class="sub-plans-title">
-              {{ $t('chat.subPlanExecutions') }} ({{ agentExecution.subPlanExecutionRecords.length }})
+              {{ $t('chat.subPlanExecutions') }} ({{
+                agentExecution.subPlanExecutionRecords.length
+              }})
             </span>
           </div>
-          
+
           <div class="sub-plans-list">
             <RecursiveSubPlan
               v-for="(subPlan, subPlanIndex) in agentExecution.subPlanExecutionRecords"
@@ -111,15 +120,18 @@
         </div>
       </div>
     </div>
-
   </div>
 </template>
-  
+
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Icon } from '@iconify/vue'
-import type { PlanExecutionRecord, AgentExecutionRecord, ExecutionStatus } from '@/types/plan-execution-record'
+import type {
+  PlanExecutionRecord,
+  AgentExecutionRecord,
+  ExecutionStatus,
+} from '@/types/plan-execution-record'
 import type { CompatiblePlanExecutionRecord } from './composables/useChatMessages'
 import RecursiveSubPlan from './RecursiveSubPlan.vue'
 
@@ -128,7 +140,12 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'sub-plan-selected', agentIndex: number, subPlanIndex: number, subPlan: PlanExecutionRecord): void
+  (
+    e: 'sub-plan-selected',
+    agentIndex: number,
+    subPlanIndex: number,
+    subPlan: PlanExecutionRecord
+  ): void
   (e: 'step-selected', stepId: string): void
 }
 
@@ -155,17 +172,17 @@ const getPlanStatusClass = (): string => {
   if (props.planExecution.completed) {
     return 'completed'
   }
-  
+
   const hasRunningAgent = agentExecutionSequence.value.some(agent => agent.status === 'RUNNING')
   if (hasRunningAgent) {
     return 'running'
   }
-  
+
   const hasFinishedAgent = agentExecutionSequence.value.some(agent => agent.status === 'FINISHED')
   if (hasFinishedAgent) {
     return 'in-progress'
   }
-  
+
   return 'pending'
 }
 
@@ -227,7 +244,11 @@ const getAgentStatusIcon = (status?: ExecutionStatus): string => {
 // Note: Agent preview status methods are now handled by RecursiveSubPlan component
 
 // Event handlers
-const handleSubPlanClick = (agentIndex: number, subPlanIndex: number, subPlan: PlanExecutionRecord) => {
+const handleSubPlanClick = (
+  agentIndex: number,
+  subPlanIndex: number,
+  subPlan: PlanExecutionRecord
+) => {
   emit('sub-plan-selected', agentIndex, subPlanIndex, subPlan)
 }
 
@@ -237,12 +258,11 @@ const handleStepSelected = (stepId: string) => {
 
 // Note: Sub-plan agent and think-act step handling is now done by RecursiveSubPlan component
 
-
 // Helper methods
 
 const formatToolParameters = (parameters?: string): string => {
   if (!parameters) return ''
-  
+
   try {
     const parsed = JSON.parse(parameters)
     return JSON.stringify(parsed, null, 2)
@@ -250,86 +270,83 @@ const formatToolParameters = (parameters?: string): string => {
     return parameters
   }
 }
-
-
-
 </script>
 
 <style lang="less" scoped>.execution-details {
   // Plan overview
   .plan-overview {
     margin-bottom: 20px;
-    
+
     .plan-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 12px;
-      
+
       .plan-title {
         margin: 0;
         font-size: 16px;
         font-weight: 600;
         color: var(--text-primary, #ffffff);
       }
-      
+
       .plan-status-badge {
         padding: 4px 12px;
         border-radius: 12px;
         font-size: 12px;
         font-weight: 500;
-        
+
         &.completed {
           background: rgba(34, 197, 94, 0.2);
           color: var(--success, #22c55e);
         }
-        
+
         &.running {
           background: rgba(102, 126, 234, 0.2);
           color: var(--accent-primary, #667eea);
         }
-        
+
         &.in-progress {
           background: rgba(251, 191, 36, 0.2);
           color: var(--warning, #fbbf24);
         }
-        
+
         &.pending {
           background: rgba(156, 163, 175, 0.2);
           color: #9ca3af;
         }
       }
     }
-    
+
     .parent-tool-call {
       background: rgba(102, 126, 234, 0.1);
       border: 1px solid rgba(102, 126, 234, 0.2);
       border-radius: 8px;
       padding: 12px;
-      
+
       .parent-tool-header {
         display: flex;
         align-items: center;
         gap: 8px;
         margin-bottom: 8px;
-        
+
         .tool-icon {
           font-size: 16px;
           color: var(--accent-primary, #667eea);
         }
-        
+
         .tool-label {
           color: var(--text-tertiary, #aaaaaa);
           font-size: 13px;
         }
-        
+
         .tool-name {
           color: var(--text-primary, #ffffff);
           font-weight: 600;
           font-size: 14px;
         }
       }
-      
+
       .tool-parameters {
         .param-label {
           color: var(--text-tertiary, #aaaaaa);
@@ -337,7 +354,7 @@ const formatToolParameters = (parameters?: string): string => {
           margin-bottom: 4px;
           display: block;
         }
-        
+
         .param-content {
           margin: 0;
           padding: 8px;
@@ -364,31 +381,31 @@ const formatToolParameters = (parameters?: string): string => {
       padding-bottom: 8px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     }
-    
+
     .agent-execution-item {
       margin-bottom: 16px;
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       overflow: hidden;
       transition: all 0.2s ease;
-      
+
       &:last-child {
         margin-bottom: 0;
       }
-      
+
       &.running {
         border-color: rgba(102, 126, 234, 0.4);
         box-shadow: 0 0 8px rgba(102, 126, 234, 0.2);
       }
-      
+
       &.completed {
         border-color: rgba(34, 197, 94, 0.3);
       }
-      
+
       &.pending {
         opacity: 0.8;
       }
-      
+
       .agent-header {
         display: flex;
         align-items: center;
@@ -397,33 +414,33 @@ const formatToolParameters = (parameters?: string): string => {
         background: rgba(255, 255, 255, 0.02);
         cursor: pointer;
         transition: background 0.2s ease;
-        
+
         &:hover {
           background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
         }
-        
+
         .agent-info {
           display: flex;
           align-items: center;
           gap: 12px;
           flex: 1;
-          
+
           .agent-status-icon {
             font-size: 18px;
-            
+
             &.running {
               color: var(--accent-primary, #667eea);
             }
-            
+
             &.completed {
               color: var(--success, #22c55e);
             }
-            
+
             &.pending {
               color: #9ca3af;
             }
           }
-          
+
           .agent-details {
             .agent-name {
               font-weight: 600;
@@ -431,9 +448,9 @@ const formatToolParameters = (parameters?: string): string => {
               font-size: 14px;
               margin-bottom: 2px;
             }
-            
 
-            
+
+
             .request-content {
               margin: 4px 0 0 0;
               padding: 8px;
@@ -452,34 +469,34 @@ const formatToolParameters = (parameters?: string): string => {
             }
           }
         }
-        
+
         .agent-controls {
           display: flex;
           align-items: center;
           gap: 12px;
-          
+
           .agent-status-badge {
             padding: 3px 8px;
             border-radius: 10px;
             font-size: 11px;
             font-weight: 500;
-            
+
             &.running {
               background: rgba(102, 126, 234, 0.2);
               color: var(--accent-primary, #667eea);
             }
-            
+
             &.completed {
               background: rgba(34, 197, 94, 0.2);
               color: var(--success, #22c55e);
             }
-            
+
             &.pending {
               background: rgba(156, 163, 175, 0.2);
               color: #9ca3af;
             }
           }
-          
+
           .step-select-icon {
             font-size: 16px;
             color: var(--accent-primary, #667eea);
@@ -487,45 +504,45 @@ const formatToolParameters = (parameters?: string): string => {
           }
         }
       }
-      
+
       .agent-execution-info {
         padding: 16px;
         background: rgba(0, 0, 0, 0.1);
         border-top: 1px solid var(--scrollbar-track, rgba(255, 255, 255, 0.05));
         margin-bottom: 16px;
-        
+
         .agent-result, .agent-error {
           margin-bottom: 12px;
-          
+
           &:last-child {
             margin-bottom: 0;
           }
-          
+
           .result-header, .error-header {
             display: flex;
             align-items: center;
             gap: 6px;
             margin-bottom: 6px;
-            
+
             .result-icon, .error-icon {
               font-size: 14px;
             }
-            
+
             .result-icon {
               color: var(--success, #22c55e);
             }
-            
+
             .error-icon {
               color: var(--error, #ef4444);
             }
-            
+
             .result-label, .error-label {
               color: var(--text-primary, #ffffff);
               font-size: 13px;
               font-weight: 500;
             }
           }
-          
+
           .result-content, .error-content {
             margin: 0;
             padding: 8px;
@@ -538,42 +555,42 @@ const formatToolParameters = (parameters?: string): string => {
             overflow-y: auto;
             color: var(--text-secondary, #cccccc);
           }
-          
+
           .error-content {
             color: #ff9999;
             border: 1px solid rgba(239, 68, 68, 0.2);
           }
         }
       }
-      
+
       .sub-plans-container {
         padding: 16px;
         background: rgba(0, 0, 0, 0.1);
         border-top: 1px solid var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-        
+
         .sub-plans-header {
           display: flex;
           align-items: center;
           gap: 8px;
           margin-bottom: 12px;
-          
+
           .sub-plans-icon {
             font-size: 16px;
             color: var(--accent-primary, #667eea);
           }
-          
+
           .sub-plans-title {
             color: var(--text-primary, #ffffff);
             font-weight: 600;
             font-size: 14px;
           }
         }
-        
+
         .sub-plans-list {
           display: flex;
           flex-direction: column;
           gap: 12px;
-          
+
           .sub-plan-item {
             background: rgba(102, 126, 234, 0.05);
             border: 1px solid rgba(102, 126, 234, 0.1);
@@ -581,59 +598,59 @@ const formatToolParameters = (parameters?: string): string => {
             padding: 12px;
             cursor: pointer;
             transition: all 0.2s ease;
-            
+
             &:hover {
               background: rgba(102, 126, 234, 0.1);
               border-color: rgba(102, 126, 234, 0.2);
             }
-            
+
             &.running {
               border-color: var(--selection-bg, rgba(102, 126, 234, 0.3));
               background: rgba(102, 126, 234, 0.08);
               box-shadow: 0 0 8px rgba(102, 126, 234, 0.15);
             }
-            
+
             &.completed {
               border-color: rgba(34, 197, 94, 0.3);
               background: rgba(34, 197, 94, 0.05);
             }
-            
+
             &.pending {
               opacity: 0.7;
             }
-            
+
             .sub-plan-header {
               display: flex;
               align-items: center;
               justify-content: space-between;
               margin-bottom: 8px;
-              
+
               .sub-plan-info {
                 display: flex;
                 align-items: center;
                 gap: 8px;
                 flex: 1;
-                
+
                 .sub-plan-status-icon {
                   font-size: 16px;
-                  
+
                   &.completed {
                     color: var(--success, #22c55e);
                   }
-                  
+
                   &.running {
                     color: var(--accent-primary, #667eea);
                   }
-                  
+
                   &.in-progress {
                     color: var(--warning, #fbbf24);
                   }
-                  
+
                   &.pending {
                     color: #9ca3af;
                   }
                 }
-                
+
                 .sub-plan-details {
                   .sub-plan-title {
                     font-weight: 600;
@@ -641,7 +658,7 @@ const formatToolParameters = (parameters?: string): string => {
                     font-size: 13px;
                     margin-bottom: 2px;
                   }
-                  
+
                   .sub-plan-id {
                     color: var(--text-tertiary, #aaaaaa);
                     font-size: 11px;
@@ -649,12 +666,12 @@ const formatToolParameters = (parameters?: string): string => {
                   }
                 }
               }
-              
+
               .sub-plan-meta {
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                
+
                 .trigger-tool {
                   display: flex;
                   align-items: center;
@@ -663,63 +680,63 @@ const formatToolParameters = (parameters?: string): string => {
                   background: rgba(102, 126, 234, 0.1);
                   border-radius: 4px;
                   font-size: 10px;
-                  
+
                   .trigger-icon {
                     font-size: 10px;
                     color: var(--accent-primary, #667eea);
                   }
-                  
+
                   .trigger-text {
                     color: var(--text-secondary, #cccccc);
                     font-weight: 500;
                   }
                 }
               }
-              
+
               .sub-plan-status-badge {
                 padding: 2px 6px;
                 border-radius: 8px;
                 font-size: 10px;
                 font-weight: 500;
-                
+
                 &.completed {
                   background: rgba(34, 197, 94, 0.2);
                   color: var(--success, #22c55e);
                 }
-                
+
                 &.running {
                   background: rgba(102, 126, 234, 0.2);
                   color: var(--accent-primary, #667eea);
                 }
-                
+
                 &.in-progress {
                   background: rgba(251, 191, 36, 0.2);
                   color: var(--warning, #fbbf24);
                 }
-                
+
                 &.pending {
                   background: rgba(156, 163, 175, 0.2);
                   color: #9ca3af;
                 }
               }
             }
-            
+
             .sub-plan-progress {
               margin-bottom: 8px;
-              
+
               .progress-info {
                 .progress-text {
                   color: var(--text-tertiary, #aaaaaa);
                   font-size: 10px;
                   margin-bottom: 4px;
                 }
-                
+
                 .progress-bar {
                   background: rgba(0, 0, 0, 0.2);
                   border-radius: 4px;
                   height: 4px;
                   overflow: hidden;
-                  
+
                   .progress-fill {
                     height: 100%;
                     background: linear-gradient(90deg, var(--accent-primary, #667eea), #09df75);
@@ -729,7 +746,7 @@ const formatToolParameters = (parameters?: string): string => {
                 }
               }
             }
-            
+
             .sub-plan-agents-steps {
               .agents-steps-header {
                 color: var(--text-tertiary, #aaaaaa);
@@ -737,12 +754,12 @@ const formatToolParameters = (parameters?: string): string => {
                 margin-bottom: 6px;
                 font-weight: 500;
               }
-              
+
               .agents-steps-list {
                 display: flex;
                 flex-direction: column;
                 gap: 8px;
-                
+
                 .agent-step-item {
                   border: 1px solid rgba(255, 255, 255, 0.1);
                   border-radius: 6px;
@@ -750,113 +767,113 @@ const formatToolParameters = (parameters?: string): string => {
                   background: rgba(0, 0, 0, 0.05);
                   cursor: pointer;
                   transition: all 0.2s;
-                  
+
                   &:hover {
                     background: rgba(0, 0, 0, 0.1);
                     border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
                   }
-                  
+
                   &.completed {
                     border-color: rgba(34, 197, 94, 0.3);
                     background: rgba(34, 197, 94, 0.05);
                   }
-                  
+
                   &.running {
                     border-color: var(--selection-bg, rgba(102, 126, 234, 0.3));
                     background: rgba(102, 126, 234, 0.08);
                   }
-                  
+
                   &.pending {
                     opacity: 0.7;
                   }
-                  
+
                   .agent-step-header {
                     display: flex;
                     align-items: center;
                     gap: 8px;
                     margin-bottom: 8px;
-                    
+
                     .agent-icon {
                       font-size: 14px;
-                      
+
                       &.completed {
                         color: var(--success, #22c55e);
                       }
-                      
+
                       &.running {
                         color: var(--accent-primary, #667eea);
                       }
-                      
+
                       &.pending {
                         color: #9ca3af;
                       }
                     }
-                    
+
                     .agent-name {
                       color: var(--text-primary, #ffffff);
                       font-size: 13px;
                       font-weight: 500;
                       flex: 1;
                     }
-                    
+
                     .agent-status-badge {
                       padding: 2px 6px;
                       border-radius: 3px;
                       font-size: 10px;
                       font-weight: 500;
-                      
+
                       &.completed {
                         background: rgba(34, 197, 94, 0.2);
                         color: var(--success, #22c55e);
                       }
-                      
+
                       &.running {
                         background: rgba(102, 126, 234, 0.2);
                         color: var(--accent-primary, #667eea);
                       }
-                      
+
                       &.pending {
                         background: rgba(156, 163, 175, 0.2);
                         color: #9ca3af;
                       }
                     }
                   }
-                  
+
                   .sub-agent-execution-info {
                     margin-left: 22px;
-                    
+
                     .agent-result, .agent-error {
                       margin-bottom: 8px;
-                      
+
                       &:last-child {
                         margin-bottom: 0;
                       }
-                      
+
                       .result-header, .error-header {
                         display: flex;
                         align-items: center;
                         gap: 4px;
                         margin-bottom: 4px;
-                        
+
                         .result-icon, .error-icon {
                           font-size: 12px;
                         }
-                        
+
                         .result-icon {
                           color: var(--success, #22c55e);
                         }
-                        
+
                         .error-icon {
                           color: var(--error, #ef4444);
                         }
-                        
+
                         .result-label, .error-label {
                           color: var(--text-primary, #ffffff);
                           font-size: 11px;
                           font-weight: 500;
                         }
                       }
-                      
+
                       .result-content, .error-content {
                         margin: 0;
                         padding: 6px;
@@ -871,33 +888,33 @@ const formatToolParameters = (parameters?: string): string => {
                         line-height: 1.3;
                       }
                     }
-                    
+
                     .think-act-preview {
                       margin-top: 8px;
-                      
+
                       .think-act-header {
                         display: flex;
                         align-items: center;
                         gap: 4px;
                         margin-bottom: 6px;
-                        
+
                         .think-act-icon {
                           font-size: 12px;
                           color: var(--accent-primary, #667eea);
                         }
-                        
+
                         .think-act-label {
                           color: var(--text-tertiary, #aaaaaa);
                           font-size: 11px;
                           font-weight: 500;
                         }
                       }
-                      
+
                       .think-act-steps-preview {
                         display: flex;
                         flex-direction: column;
                         gap: 3px;
-                        
+
                         .think-act-step-preview {
                           display: flex;
                           align-items: center;
@@ -908,17 +925,17 @@ const formatToolParameters = (parameters?: string): string => {
                           cursor: pointer;
                           transition: all 0.2s;
                           font-size: 10px;
-                          
+
                           &:hover {
                             background: rgba(0, 0, 0, 0.2);
                           }
-                          
+
                           .step-number {
                             color: var(--accent-primary, #667eea);
                             font-weight: 500;
                             min-width: 20px;
                           }
-                          
+
                           .step-description {
                             color: var(--text-secondary, #cccccc);
                             flex: 1;
@@ -926,13 +943,13 @@ const formatToolParameters = (parameters?: string): string => {
                             overflow: hidden;
                             text-overflow: ellipsis;
                           }
-                          
+
                           .step-arrow {
                             font-size: 10px;
                             color: #888888;
                           }
                         }
-                        
+
                         .more-steps {
                           padding: 2px 6px;
                           color: #888888;
