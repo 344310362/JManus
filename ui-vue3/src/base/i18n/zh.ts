@@ -422,7 +422,8 @@ const words: I18nType = {
       selectType: '选择数据库类型',
       enable: '启用',
       url: 'URL',
-      urlPlaceholder: '例如: jdbc:mysql://localhost:3306/dbname',
+      urlPlaceholder: '例如: localhost:3306/dbname',
+      urlHint: '输入连接字符串（例如: localhost:3306/dbname）。JDBC 前缀将自动添加。',
       driverClassName: '驱动类名',
       driverClassNamePlaceholder: '例如: com.mysql.cj.jdbc.Driver',
       driverClassNameHint: '根据数据库类型自动填充',
@@ -444,10 +445,13 @@ const words: I18nType = {
       browserSettings: {
         headless: '是否使用无头浏览器模式',
         requestTimeout: '浏览器请求超时时间(秒)',
+        enableShortUrl: '开启短连接：短连接可以降低40%的浏览器上下文消耗 推荐打开',
       },
       general: {
         debugDetail: 'debug模式 ：会要求模型输出更多内容，方便查找问题，但速度更慢',
-        baseDir: 'manus根目录',
+        externalLinkedFolder:
+          '外部目录映射 : 你可以指定一个外部的目录，系统会把这个目录映射到每个任务的一个子目录下面，这样就可以不需要将内容导入。 你可以用 带/或者不带/的绝对目录',
+        enableConversationMemory: '开启对话记忆',
       },
       interactionSettings: {
         openBrowser: '启动时自动打开浏览器',
@@ -703,6 +707,8 @@ const words: I18nType = {
     triggeredByTool: '由工具触发',
     planExecution: '计划执行',
     userInputRequired: '需要用户输入',
+    funcAgentExecutionDetails: 'Func-Agent 执行详情',
+    clickToViewExecutionDetails: '点击查看执行详情',
   },
 
   // 输入组件
@@ -735,7 +741,7 @@ const words: I18nType = {
   sidebar: {
     title: 'Func-Agent 编辑器',
     templateList: '模板列表',
-    configuration: '配置',
+    configuration: 'Func-Agent配置',
     newPlan: '新建Func-Agent计划',
     loading: '加载中...',
     retry: '重试',
@@ -768,6 +774,7 @@ const words: I18nType = {
     statusApiUrl: '状态查询 API',
     executing: '执行中...',
     executePlan: '执行计划',
+    executionInProgress: '当前有任务正在执行中，请等待完成后再发起新任务',
     publishMcpService: '发布为工具服务',
     updateServiceStatus: '更新服务状态',
 
@@ -819,6 +826,7 @@ const words: I18nType = {
     noPlanToCopy: '没有可复制的计划',
     copyPlanSuccess: '计划复制成功: {title}',
     copyPlanFailed: '计划复制失败: {message}',
+    duplicatePlanTitle: '有重复计划标题',
 
     newTemplate: '新建模板',
     templateName: '模板名称',
@@ -1098,6 +1106,7 @@ const words: I18nType = {
     output: '输出',
     tool: '工具',
     toolParameters: '工具参数',
+    noToolsExecuted: '此操作中未执行任何工具',
     noStepDetails: '暂无详细步骤信息',
     scrollToBottom: '滚动到底部',
     stepInfo: '步骤信息',
@@ -1227,7 +1236,7 @@ const words: I18nType = {
     toolDescriptionPlaceholder: '请输入工具描述',
     toolDescriptionDescription:
       '告知模型，在什么时候需要使用这个工具，写的越详细（什么时候选择，什么时候不选择），模型选工具的准确性越高。',
-    serviceGroup: '服务组 *',
+    serviceGroup: '服务组',
     serviceGroupPlaceholder: '请输入服务组',
     serviceGroupDescription: '用来分组工具，方便你从大量工具里面找到你的那个工具。',
     parameterConfig: '参数配置',
@@ -1295,6 +1304,7 @@ const words: I18nType = {
     selectMemory: '选择记忆',
     clearMemory: '清除记忆',
     newChat: '新建对话',
+    loadHistoryFailed: '加载对话历史失败',
   },
   selectCommon: {
     pleaseSelect: '请选择...',

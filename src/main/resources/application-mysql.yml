@@ -6,8 +6,8 @@ spring:
     password: Xmzxl6706
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
-#    hibernate:
-#      ddl-auto: update
+    hibernate:
+      ddl-auto: update
   ai:
     memory:
       mysql:

@@ -95,20 +95,24 @@ public class ManusProperties implements IManusProperties {
 	// Browser Settings
 	// End---------------------------------------------------------------------------------------------
 
-	// Interaction Settings
+	// General Settings
 	// Begin---------------------------------------------------------------------------------------
-	@ConfigProperty(group = "manus", subGroup = "interaction", key = "openBrowser", path = "manus.openBrowserAuto",
-			description = "manus.interaction.openBrowser.description", defaultValue = "true",
+	@ConfigProperty(group = "manus", subGroup = "general", key = "openBrowser", path = "manus.general.openBrowser",
+			description = "manus.general.openBrowser.description", defaultValue = "true",
 			inputType = ConfigInputType.CHECKBOX,
-			options = { @ConfigOption(value = "true", label = "manus.interaction.openBrowser.option.true"),
-					@ConfigOption(value = "false", label = "manus.interaction.openBrowser.option.false") })
+			options = { @ConfigOption(value = "true", label = "manus.general.openBrowser.option.true"),
+					@ConfigOption(value = "false", label = "manus.general.openBrowser.option.false") })
 	private volatile Boolean openBrowserAuto;
 
 	public Boolean getOpenBrowserAuto() {
-		String configPath = "manus.openBrowserAuto";
+		String configPath = "manus.general.openBrowser";
 		String value = configService.getConfigValue(configPath);
 		if (value != null) {
 			openBrowserAuto = Boolean.valueOf(value);
+		}
+		// Default to true if not configured
+		if (openBrowserAuto == null) {
+			openBrowserAuto = true;
 		}
 		return openBrowserAuto;
 	}
@@ -117,7 +121,31 @@ public class ManusProperties implements IManusProperties {
 		this.openBrowserAuto = openBrowserAuto;
 	}
 
-	// Interaction Settings
+	@ConfigProperty(group = "manus", subGroup = "browser", key = "enableShortUrl",
+			path = "manus.browser.enableShortUrl", description = "manus.browser.enableShortUrl.description",
+			defaultValue = "true", inputType = ConfigInputType.CHECKBOX,
+			options = { @ConfigOption(value = "true", label = "manus.browser.enableShortUrl.option.true"),
+					@ConfigOption(value = "false", label = "manus.browser.enableShortUrl.option.false") })
+	private volatile Boolean enableShortUrl;
+
+	public Boolean getEnableShortUrl() {
+		String configPath = "manus.browser.enableShortUrl";
+		String value = configService.getConfigValue(configPath);
+		if (value != null) {
+			enableShortUrl = Boolean.valueOf(value);
+		}
+		// Default to true if not configured
+		if (enableShortUrl == null) {
+			enableShortUrl = true;
+		}
+		return enableShortUrl;
+	}
+
+	public void setEnableShortUrl(Boolean enableShortUrl) {
+		this.enableShortUrl = enableShortUrl;
+	}
+
+	// General Settings
 	// End-----------------------------------------------------------------------------------------
 
 	// Agent Settings
@@ -184,6 +212,53 @@ public class ManusProperties implements IManusProperties {
 
 	public void setMaxMemory(Integer maxMemory) {
 		this.maxMemory = maxMemory;
+	}
+
+	@ConfigProperty(group = "manus", subGroup = "general", key = "enableConversationMemory",
+			path = "manus.general.enableConversationMemory",
+			description = "manus.general.enableConversationMemory.description", defaultValue = "true",
+			inputType = ConfigInputType.CHECKBOX,
+			options = { @ConfigOption(value = "true", label = "manus.general.enableConversationMemory.option.true"),
+					@ConfigOption(value = "false", label = "manus.general.enableConversationMemory.option.false") })
+	private volatile Boolean enableConversationMemory;
+
+	public Boolean getEnableConversationMemory() {
+		String configPath = "manus.general.enableConversationMemory";
+		String value = configService.getConfigValue(configPath);
+		if (value != null) {
+			enableConversationMemory = Boolean.valueOf(value);
+		}
+		// Default to true if not configured
+		if (enableConversationMemory == null) {
+			enableConversationMemory = true;
+		}
+		return enableConversationMemory;
+	}
+
+	public void setEnableConversationMemory(Boolean enableConversationMemory) {
+		this.enableConversationMemory = enableConversationMemory;
+	}
+
+	@ConfigProperty(group = "manus", subGroup = "agent", key = "conversationMemoryMaxChars",
+			path = "manus.agent.conversationMemoryMaxChars",
+			description = "manus.agent.conversationMemoryMaxChars.description", defaultValue = "30000",
+			inputType = ConfigInputType.NUMBER)
+	private volatile Integer conversationMemoryMaxChars;
+
+	public Integer getConversationMemoryMaxChars() {
+		String configPath = "manus.agent.conversationMemoryMaxChars";
+		String value = configService.getConfigValue(configPath);
+		if (value != null) {
+			conversationMemoryMaxChars = Integer.valueOf(value);
+		}
+		if (conversationMemoryMaxChars == null) {
+			conversationMemoryMaxChars = 30000;
+		}
+		return conversationMemoryMaxChars;
+	}
+
+	public void setConversationMemoryMaxChars(Integer conversationMemoryMaxChars) {
+		this.conversationMemoryMaxChars = conversationMemoryMaxChars;
 	}
 
 	@ConfigProperty(group = "manus", subGroup = "agent", key = "parallelToolCalls",
@@ -259,127 +334,26 @@ public class ManusProperties implements IManusProperties {
 	// Normal Settings
 	// Begin--------------------------------------------------------------------------------------------
 
-	@ConfigProperty(group = "manus", subGroup = "general", key = "baseDir", path = "manus.baseDir",
-			description = "manus.general.baseDir.description", defaultValue = "", inputType = ConfigInputType.TEXT)
-	private volatile String baseDir = "";
-
-	public String getBaseDir() {
-		String configPath = "manus.baseDir";
-		String value = configService.getConfigValue(configPath);
-		if (value != null) {
-			baseDir = value;
-		}
-		return baseDir;
-	}
-
-	public void setBaseDir(String baseDir) {
-		this.baseDir = baseDir;
-	}
-
 	// Normal Settings
 	// End----------------------------------------------------------------------------------------------
 
-	/*
-	 * @ConfigProperty(group = "manus", subGroup = "infiniteContext", key = "enabled",
-	 * path = "manus.infiniteContext.enabled", description =
-	 * "manus.infiniteContext.enabled.description", defaultValue = "false", inputType =
-	 * ConfigInputType.CHECKBOX, options = { @ConfigOption(value = "true", label =
-	 * "manus.infiniteContext.enabled.option.true"),
-	 *
-	 * @ConfigOption(value = "false", label =
-	 * "manus.infiniteContext.enabled.option.false") })
-	 */
-	private volatile Boolean infiniteContextEnabled;
-
-	public Boolean getInfiniteContextEnabled() {
-		String configPath = "manus.infiniteContext.enabled";
-		String value = configService.getConfigValue(configPath);
-		if (value != null) {
-			infiniteContextEnabled = Boolean.valueOf(value);
-		}
-		else {
-			return false;
-		}
-		return infiniteContextEnabled;
-	}
-
-	public void setInfiniteContextEnabled(Boolean infiniteContextEnabled) {
-		this.infiniteContextEnabled = infiniteContextEnabled;
-	}
-
-	/*
-	 * @ConfigProperty(group = "manus", subGroup = "infiniteContext", key =
-	 * "parallelThreads", path = "manus.infiniteContext.parallelThreads", description =
-	 * "manus.infiniteContext.parallelThreads.description", defaultValue = "6", inputType
-	 * = ConfigInputType.NUMBER)
-	 */
-	private volatile Integer infiniteContextParallelThreads;
-
-	public Integer getInfiniteContextParallelThreads() {
-		String configPath = "manus.infiniteContext.parallelThreads";
-		String value = configService.getConfigValue(configPath);
-		if (value != null) {
-			infiniteContextParallelThreads = Integer.valueOf(value);
-		}
-		// Ensure a default value if not configured and not set
-		if (infiniteContextParallelThreads == null) {
-			infiniteContextParallelThreads = 4;
-		}
-		return infiniteContextParallelThreads;
-	}
-
-	public void setInfiniteContextParallelThreads(Integer infiniteContextParallelThreads) {
-		this.infiniteContextParallelThreads = infiniteContextParallelThreads;
-	}
-
-	/*
-	 * @ConfigProperty(group = "manus", subGroup = "infiniteContext", key =
-	 * "taskContextSize", path = "manus.infiniteContext.taskContextSize", description =
-	 * "manus.infiniteContext.taskContextSize.description", defaultValue = "20000",
-	 * inputType = ConfigInputType.NUMBER)
-	 */
-	private volatile Integer infiniteContextTaskContextSize;
-
-	public Integer getInfiniteContextTaskContextSize() {
-		String configPath = "manus.infiniteContext.taskContextSize";
-		String value = configService.getConfigValue(configPath);
-		if (value != null) {
-			infiniteContextTaskContextSize = Integer.valueOf(value);
-		}
-		// Ensure a default value if not configured and not set
-		if (infiniteContextTaskContextSize == null) {
-			infiniteContextTaskContextSize = 8192;
-		}
-		return infiniteContextTaskContextSize;
-	}
-
-	public void setInfiniteContextTaskContextSize(Integer infiniteContextTaskContextSize) {
-		this.infiniteContextTaskContextSize = infiniteContextTaskContextSize;
-	}
-
 	// File System Security SubGroup
-	@ConfigProperty(group = "manus", subGroup = "filesystem", key = "allowExternalAccess",
-			path = "manus.filesystem.allowExternalAccess",
-			description = "Whether to allow file operations outside the working directory", defaultValue = "false",
-			inputType = ConfigInputType.CHECKBOX,
-			options = { @ConfigOption(value = "true", label = "Yes"), @ConfigOption(value = "false", label = "No") })
-	private volatile Boolean allowExternalAccess;
+	@ConfigProperty(group = "manus", subGroup = "general", key = "externalLinkedFolder",
+			path = "manus.general.externalLinkedFolder", description = "manus.general.externalLinkedFolder.description",
+			defaultValue = "", inputType = ConfigInputType.TEXT)
+	private volatile String externalLinkedFolder = "";
 
-	public Boolean getAllowExternalAccess() {
-		String configPath = "manus.filesystem.allowExternalAccess";
+	public String getExternalLinkedFolder() {
+		String configPath = "manus.general.externalLinkedFolder";
 		String value = configService.getConfigValue(configPath);
 		if (value != null) {
-			allowExternalAccess = Boolean.valueOf(value);
+			externalLinkedFolder = value;
 		}
-		// Default to false for security
-		if (allowExternalAccess == null) {
-			allowExternalAccess = false;
-		}
-		return allowExternalAccess;
+		return externalLinkedFolder;
 	}
 
-	public void setAllowExternalAccess(Boolean allowExternalAccess) {
-		this.allowExternalAccess = allowExternalAccess;
+	public void setExternalLinkedFolder(String externalLinkedFolder) {
+		this.externalLinkedFolder = externalLinkedFolder;
 	}
 
 	// MCP Service Loader Settings

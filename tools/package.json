@@ -1,0 +1,19 @@
+{
+  "name": "jmanus-color-replacer",
+  "version": "1.0.0",
+  "description": "Utility to replace hardcoded colors with theme variables in Vue components",
+  "main": "replace-colors.js",
+  "scripts": {
+    "start": "node replace-colors.js",
+    "replace-colors": "node replace-colors.js"
+  },
+  "keywords": [
+    "vue",
+    "css",
+    "theme",
+    "color",
+    "replacement"
+  ],
+  "author": "JManus Team",
+  "license": "Apache-2.0"
+}

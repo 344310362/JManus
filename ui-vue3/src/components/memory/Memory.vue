@@ -52,14 +52,6 @@
                         </h3>
                       </div>
 
-                      <div
-                        class="toggle-container"
-                        @click.stop="
-                          showNameEditModal(message.conversation_id, message.memory_name)
-                        "
-                      >
-                        <Icon icon="carbon:edit" class="edit-btn"> </Icon>
-                      </div>
                       <div class="action-buttons">
                         <button
                           class="delete-btn"
@@ -80,23 +72,6 @@
                           <Icon icon="carbon:delete"></Icon>
                         </button>
                       </div>
-                    </div>
-
-                    <div class="message-preview">
-                      <p class="preview-line">
-                        {{
-                          message.messages && message.messages.length > 0
-                            ? message.messages[0].text
-                            : 'none message'
-                        }}
-                      </p>
-                      <p
-                        class="preview-line"
-                        style="opacity: 0.8"
-                        v-if="message.messages && message.messages.length > 1"
-                      >
-                        {{ message.messages[1].text }}
-                      </p>
                     </div>
 
                     <div class="message-meta">
@@ -292,7 +267,7 @@ const selectMemory = (conversationId: string) => {
 const formatTimestamp = (timestamp: number | string): string => {
   const timestampNum = typeof timestamp === 'string' ? parseInt(timestamp, 10) : timestamp
   if (isNaN(timestampNum) || timestampNum <= 0) {
-    return 'unknow time'
+    return '--'
   }
   const date = new Date(timestampNum.toString().length === 13 ? timestampNum : timestampNum * 1000)
 
@@ -325,13 +300,6 @@ const handleSearch = () => {
     return matchesName || matchesId || matchesContent
   })
 }
-
-const showNameEditModal = (messageId: string, currentName: string) => {
-  currentEditMessageId.value = messageId
-  nameInput.value = currentName
-  showNameModal.value = true
-}
-
 const closeNameModal = () => {
   showNameModal.value = false
   currentEditMessageId.value = null
@@ -434,7 +402,7 @@ const confirmDelete = async () => {
   border-radius: 16px;
   width: 90%;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
-  border: 1px solid var(--border-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   max-width: 800px;
   max-height: 80vh;
@@ -457,7 +425,7 @@ const confirmDelete = async () => {
 .main-title {
   font-size: 1.25rem;
   font-weight: bold;
-  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -473,7 +441,7 @@ const confirmDelete = async () => {
 .close-btn {
   background: none;
   border: none;
-  color: var(--text-secondary, #ffffff);
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
   padding: 4px;
   display: flex;
@@ -483,7 +451,7 @@ const confirmDelete = async () => {
 }
 
 .close-btn:hover {
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .search-bar {
@@ -502,17 +470,17 @@ const confirmDelete = async () => {
 
 .search-input {
   width: 100%;
-  background-color: var(--bg-input, #2d2d2d);
+  background-color: #2d2d2d;
   border: 1px solid #333333;
   border-radius: 0.5rem;
   padding: 0.5rem 0.5rem 0.5rem 2.5rem;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   font-size: 0.875rem;
 }
 
 .search-input:focus {
   outline: none;
-  border-color: var(--accent-primary, #667eea);
+  border-color: #667eea;
 }
 
 .search-icon {
@@ -530,7 +498,7 @@ const confirmDelete = async () => {
 }
 
 .message-item {
-  background-color: var(--bg-input, #2d2d2d);
+  background-color: #2d2d2d;
   border: 1px solid #333333;
   border-radius: 0.5rem;
   overflow: hidden;
@@ -574,12 +542,12 @@ const confirmDelete = async () => {
 }
 
 .sender-div:hover:not(:has(.edit-btn:hover, .down-btn:hover, .delete-btn:hover)) .sender-name {
-  color: var(--accent-primary, #667eea);
+  color: #667eea;
 }
 
 .sender-name {
   font-weight: 600;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -589,13 +557,13 @@ const confirmDelete = async () => {
   margin-bottom: 0.25rem;
   padding: 8px;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
 }
 
 .preview-line {
   font-size: 0.875rem;
-  color: var(--text-secondary, #ffffff);
+  color: rgba(255, 255, 255, 0.7);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -618,19 +586,19 @@ const confirmDelete = async () => {
 
 .message-id {
   font-size: 0.75rem;
-  color: var(--accent-primary, #667eea);
+  color: #667eea;
 }
 
 .message-time {
   font-size: 0.75rem;
-  color: rgba(var(--text-primary-rgb), 0.5);
+  color: rgba(255, 255, 255, 0.5);
   white-space: nowrap;
 }
 
 .unread-count {
   font-size: 0.75rem;
   background-color: rgba(102, 126, 234, 0.2);
-  color: var(--accent-primary, #667eea);
+  color: #667eea;
   padding: 0.125rem 0.375rem;
   margin-top: 2px;
   border-radius: 1rem;
@@ -658,7 +626,7 @@ const confirmDelete = async () => {
 }
 
 .edit-btn:hover {
-  color: var(--accent-primary, #667eea);
+  color: #667eea;
 }
 
 .down-btn {
@@ -666,11 +634,11 @@ const confirmDelete = async () => {
 }
 
 .down-btn:hover {
-  color: var(--accent-primary, #667eea);
+  color: #667eea;
 }
 
 .delete-btn {
-  color: var(--text-secondary, #ffffff);
+  color: rgba(255, 255, 255, 0.7);
   background: none;
   border: none;
   cursor: pointer;
@@ -699,7 +667,7 @@ const confirmDelete = async () => {
   flex-shrink: 0;
   margin-bottom: 6px;
   font-size: 16px;
-  color: rgba(var(--text-primary-rgb), 0.8);
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 500;
 }
 
@@ -712,7 +680,7 @@ const confirmDelete = async () => {
 .bubble-content {
   padding: 8px;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid var(--border-primary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
 }
 
@@ -722,7 +690,7 @@ const confirmDelete = async () => {
 }
 
 .state-text {
-  color: rgba(var(--text-primary-rgb), 0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .modal-overlay {
@@ -739,7 +707,7 @@ const confirmDelete = async () => {
 }
 
 .modal-content {
-  background-color: var(--bg-input, #2d2d2d);
+  background-color: #2d2d2d;
   border: 1px solid #444444;
   border-radius: 0.5rem;
   width: 100%;
@@ -778,7 +746,7 @@ const confirmDelete = async () => {
 .cancel-btn {
   background-color: #333333;
   border: 1px solid #444444;
-  color: var(--text-primary);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .cancel-btn:hover {
@@ -786,8 +754,8 @@ const confirmDelete = async () => {
 }
 
 .confirm-btn {
-  background-color: var(--accent-primary, #667eea);
-  color: var(--text-primary, #ffffff);
+  background-color: #667eea;
+  color: #ffffff;
 }
 
 .confirm-btn:hover {
@@ -796,7 +764,7 @@ const confirmDelete = async () => {
 
 .delete-btn-confirm {
   background-color: #ff6b6b;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
 }
 
 .delete-btn-confirm:hover {
@@ -809,19 +777,19 @@ const confirmDelete = async () => {
   border: 1px solid #444444;
   border-radius: 0.5rem;
   padding: 0.5rem 0.75rem;
-  color: var(--text-primary, #ffffff);
+  color: #ffffff;
   font-size: 0.875rem;
 }
 
 .edit-input:focus {
   outline: none;
-  border-color: var(--accent-primary, #667eea);
-  box-shadow: 0 0 0 1px var(--selection-bg, rgba(102, 126, 234, 0.3));
+  border-color: #667eea;
+  box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.3);
 }
 
 .char-count {
   font-size: 0.75rem;
-  color: rgba(var(--text-primary-rgb), 0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 @keyframes fadeIn {

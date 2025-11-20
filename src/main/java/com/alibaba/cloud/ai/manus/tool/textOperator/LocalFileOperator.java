@@ -23,6 +23,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ import org.slf4j.LoggerFactory;
 import com.alibaba.cloud.ai.manus.tool.AbstractBaseTool;
 import com.alibaba.cloud.ai.manus.tool.code.ToolExecuteResult;
 import com.alibaba.cloud.ai.manus.tool.innerStorage.SmartContentSavingService;
+import com.alibaba.cloud.ai.manus.tool.shortUrl.ShortUrlService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -185,11 +188,14 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 
 	private final ObjectMapper objectMapper;
 
+	private final ShortUrlService shortUrlService;
+
 	public LocalFileOperator(TextFileService textFileService, SmartContentSavingService innerStorageService,
-			ObjectMapper objectMapper) {
+			ObjectMapper objectMapper, ShortUrlService shortUrlService) {
 		this.textFileService = textFileService;
 		this.innerStorageService = innerStorageService;
 		this.objectMapper = objectMapper;
+		this.shortUrlService = shortUrlService;
 	}
 
 	public ToolExecuteResult run(String toolInput) {
@@ -211,6 +217,9 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 				return new ToolExecuteResult("Error: file_path parameter is required");
 			}
 
+			// Replace short URLs in filePath
+			filePath = replaceShortUrls(filePath);
+
 			return switch (action) {
 				case "replace" -> {
 					String sourceText = (String) toolInputMap.get("source_text");
@@ -220,6 +229,10 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 						yield new ToolExecuteResult(
 								"Error: replace operation requires source_text and target_text parameters");
 					}
+
+					// Replace short URLs in sourceText and targetText
+					sourceText = replaceShortUrls(sourceText);
+					targetText = replaceShortUrls(targetText);
 
 					yield replaceText(filePath, sourceText, targetText);
 				}
@@ -242,11 +255,10 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 						yield new ToolExecuteResult("Error: append operation requires content parameter");
 					}
 
+					// Replace short URLs in appendContent
+					appendContent = replaceShortUrls(appendContent);
+
 					yield appendToFile(filePath, appendContent);
-				}
-				case "create" -> {
-					String createContent = (String) toolInputMap.get("content");
-					yield createFile(filePath, createContent != null ? createContent : "");
 				}
 				case "delete" -> deleteFile(filePath);
 				case "count_words" -> countWords(filePath);
@@ -260,11 +272,14 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 						yield new ToolExecuteResult("Error: grep operation requires pattern parameter");
 					}
 
+					// Replace short URLs in pattern
+					pattern = replaceShortUrls(pattern);
+
 					yield grepText(filePath, pattern, caseSensitive != null ? caseSensitive : false,
 							wholeWord != null ? wholeWord : false);
 				}
 				default -> new ToolExecuteResult("Unknown operation: " + action
-						+ ". Supported operations: replace, get_text, get_all_text, append, create, delete, count_words, list_files, grep");
+						+ ". Supported operations: replace, get_text, get_all_text, append, delete, count_words, list_files, grep");
 			};
 		}
 		catch (Exception e) {
@@ -299,6 +314,10 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 								"Error: replace operation requires source_text and target_text parameters");
 					}
 
+					// Replace short URLs in sourceText and targetText
+					sourceText = replaceShortUrls(sourceText);
+					targetText = replaceShortUrls(targetText);
+
 					yield replaceText(filePath, sourceText, targetText);
 				}
 				case "get_text" -> {
@@ -320,11 +339,10 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 						yield new ToolExecuteResult("Error: append operation requires content parameter");
 					}
 
+					// Replace short URLs in appendContent
+					appendContent = replaceShortUrls(appendContent);
+
 					yield appendToFile(filePath, appendContent);
-				}
-				case "create" -> {
-					String createContent = input.getContent();
-					yield createFile(filePath, createContent != null ? createContent : "");
 				}
 				case "delete" -> deleteFile(filePath);
 				case "count_words" -> countWords(filePath);
@@ -338,17 +356,60 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 						yield new ToolExecuteResult("Error: grep operation requires pattern parameter");
 					}
 
+					// Replace short URLs in pattern
+					pattern = replaceShortUrls(pattern);
+
 					yield grepText(filePath, pattern, caseSensitive != null ? caseSensitive : false,
 							wholeWord != null ? wholeWord : false);
 				}
 				default -> new ToolExecuteResult("Unknown operation: " + action
-						+ ". Supported operations: replace, get_text, get_all_text, append, create, delete, count_words, list_files, grep");
+						+ ". Supported operations: replace, get_text, get_all_text, append, delete, count_words, list_files, grep");
 			};
 		}
 		catch (Exception e) {
 			log.error("LocalFileOperator execution failed", e);
 			return new ToolExecuteResult("Tool execution failed: " + e.getMessage());
 		}
+	}
+
+	/**
+	 * Replace short URLs in a string with real URLs
+	 * @param text The text that may contain short URLs
+	 * @return The text with short URLs replaced by real URLs
+	 */
+	private String replaceShortUrls(String text) {
+		if (text == null || text.isEmpty() || this.currentPlanId == null || this.currentPlanId.isEmpty()
+				|| this.shortUrlService == null) {
+			return text;
+		}
+
+		// Check if short URL feature is enabled
+		Boolean enableShortUrl = textFileService.getManusProperties().getEnableShortUrl();
+		if (enableShortUrl == null || !enableShortUrl) {
+			return text; // Skip replacement if disabled
+		}
+
+		// Pattern to match short URLs: http://s@Url.a/ followed by digits
+		Pattern shortUrlPattern = Pattern.compile(Pattern.quote(ShortUrlService.SHORT_URL_PREFIX) + "\\d+");
+		Matcher matcher = shortUrlPattern.matcher(text);
+		StringBuffer result = new StringBuffer();
+
+		while (matcher.find()) {
+			String shortUrl = matcher.group();
+			String realUrl = shortUrlService.getRealUrl(this.currentPlanId, shortUrl);
+			if (realUrl != null) {
+				matcher.appendReplacement(result, Matcher.quoteReplacement(realUrl));
+				log.debug("Replaced short URL {} with real URL {}", shortUrl, realUrl);
+			}
+			else {
+				log.warn("Short URL not found in mapping: {}", shortUrl);
+				// Keep the short URL if mapping not found
+				matcher.appendReplacement(result, Matcher.quoteReplacement(shortUrl));
+			}
+		}
+		matcher.appendTail(result);
+
+		return result.toString();
 	}
 
 	/**
@@ -405,33 +466,6 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 	}
 
 	/**
-	 * Create a new file with optional content
-	 */
-	private ToolExecuteResult createFile(String filePath, String content) {
-		try {
-			Path absolutePath = validateLocalPath(filePath);
-
-			// Check if file already exists
-			if (Files.exists(absolutePath)) {
-				return new ToolExecuteResult("Error: File already exists: " + filePath);
-			}
-
-			// Create parent directories if needed
-			Files.createDirectories(absolutePath.getParent());
-
-			// Create the file with content
-			Files.writeString(absolutePath, content != null ? content : "");
-
-			log.info("Created new file: {}", absolutePath);
-			return new ToolExecuteResult("File created successfully: " + filePath);
-		}
-		catch (IOException e) {
-			log.error("Error creating file: {}", filePath, e);
-			return new ToolExecuteResult("Error creating file: " + e.getMessage());
-		}
-	}
-
-	/**
 	 * Delete a file
 	 */
 	private ToolExecuteResult deleteFile(String filePath) {
@@ -460,8 +494,11 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 		try {
 			Path absolutePath = validateLocalPath(filePath);
 
+			// Create file if it doesn't exist
 			if (!Files.exists(absolutePath)) {
-				return new ToolExecuteResult("Error: File does not exist: " + filePath);
+				Files.createDirectories(absolutePath.getParent());
+				Files.createFile(absolutePath);
+				log.info("Created new file automatically: {}", absolutePath);
 			}
 
 			String content = Files.readString(absolutePath);
@@ -505,8 +542,11 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 
 			Path absolutePath = validateLocalPath(filePath);
 
+			// Create file if it doesn't exist
 			if (!Files.exists(absolutePath)) {
-				return new ToolExecuteResult("Error: File does not exist: " + filePath);
+				Files.createDirectories(absolutePath.getParent());
+				Files.createFile(absolutePath);
+				log.info("Created new file automatically: {}", absolutePath);
 			}
 
 			java.util.List<String> lines = Files.readAllLines(absolutePath);
@@ -557,8 +597,11 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 		try {
 			Path absolutePath = validateLocalPath(filePath);
 
+			// Create file if it doesn't exist
 			if (!Files.exists(absolutePath)) {
-				return new ToolExecuteResult("Error: File does not exist: " + filePath);
+				Files.createDirectories(absolutePath.getParent());
+				Files.createFile(absolutePath);
+				log.info("Created new file automatically: {}", absolutePath);
 			}
 
 			String content = Files.readString(absolutePath);
@@ -620,8 +663,11 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 		try {
 			Path absolutePath = validateLocalPath(filePath);
 
+			// Create file if it doesn't exist
 			if (!Files.exists(absolutePath)) {
-				return new ToolExecuteResult("Error: File does not exist: " + filePath);
+				Files.createDirectories(absolutePath.getParent());
+				Files.createFile(absolutePath);
+				log.info("Created new file automatically: {}", absolutePath);
 			}
 
 			String content = Files.readString(absolutePath);
@@ -642,8 +688,11 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 		try {
 			Path absolutePath = validateLocalPath(filePath);
 
+			// Create file if it doesn't exist
 			if (!Files.exists(absolutePath)) {
-				return new ToolExecuteResult("Error: File does not exist: " + filePath);
+				Files.createDirectories(absolutePath.getParent());
+				Files.createFile(absolutePath);
+				log.info("Created new file automatically: {}", absolutePath);
 			}
 
 			java.util.List<String> lines = Files.readAllLines(absolutePath);
@@ -734,9 +783,10 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 				}
 			}
 
-			// Ensure directory exists, create if it doesn't
+			// Check if directory exists - don't create it for list operation
 			if (!Files.exists(targetDirectory)) {
-				Files.createDirectories(targetDirectory);
+				String displayPath = directoryPath == null || directoryPath.isEmpty() ? "root" : directoryPath;
+				return new ToolExecuteResult("Error: Directory does not exist: " + displayPath);
 			}
 
 			if (!Files.isDirectory(targetDirectory)) {
@@ -805,7 +855,7 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 						Current Local File Operation State:
 						- Scope: Current plan directory only (no hierarchical access)
 						- Operations are automatically handled (no manual file opening/closing required)
-						- Available operations: replace, get_text, get_all_text, append, create, delete, count_words, list_files, grep
+						- Available operations: replace, get_text, get_all_text, append, delete, count_words, list_files, grep
 						""");
 		}
 		catch (Exception e) {
@@ -813,7 +863,7 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 					"""
 							Current Local File Operation State:
 							- Error getting working directory: %s
-							- Available operations: replace, get_text, get_all_text, append, create, delete, count_words, list_files, grep
+							- Available operations: replace, get_text, get_all_text, append, delete, count_words, list_files, grep
 							""",
 					e.getMessage());
 		}
@@ -831,8 +881,8 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 				This operator provides enhanced security by restricting all operations to the current plan's folder.
 
 				Supported operations:
-				- create: Create a new file with optional content, requires file_path and optional content parameter
 				- delete: Delete an existing file, requires file_path parameter
+				- list_files: List files and directories in the current plan directory, optional file_path parameter (defaults to current plan root)
 				- replace: Replace specific text in file, requires source_text and target_text parameters
 				- get_text: Get content from specified line range in file, requires start_line and end_line parameters
 				  Limitation: Maximum 500 lines per call, use multiple calls for more content
@@ -865,25 +915,6 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 				{
 				    "type": "object",
 				    "oneOf": [
-				        {
-				            "type": "object",
-				            "properties": {
-				                "action": {
-				                    "type": "string",
-				                    "const": "create"
-				                },
-				                "file_path": {
-				                    "type": "string",
-				                    "description": "File path to create (relative to current plan directory)"
-				                },
-				                "content": {
-				                    "type": "string",
-				                    "description": "Initial content for the new file (optional)"
-				                }
-				            },
-				            "required": ["action", "file_path"],
-				            "additionalProperties": false
-				        },
 				        {
 				            "type": "object",
 				            "properties": {
