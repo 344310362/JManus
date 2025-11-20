@@ -91,6 +91,26 @@ public interface IManusProperties {
 	void setMaxMemory(Integer maxMemory);
 
 	/**
+	 * Get enable conversation memory setting
+	 */
+	Boolean getEnableConversationMemory();
+
+	/**
+	 * Set enable conversation memory setting
+	 */
+	void setEnableConversationMemory(Boolean enableConversationMemory);
+
+	/**
+	 * Get conversation memory max characters
+	 */
+	Integer getConversationMemoryMaxChars();
+
+	/**
+	 * Set conversation memory max characters
+	 */
+	void setConversationMemoryMaxChars(Integer conversationMemoryMaxChars);
+
+	/**
 	 * Get parallel tool calls setting
 	 */
 	Boolean getParallelToolCalls();
@@ -101,13 +121,13 @@ public interface IManusProperties {
 	void setParallelToolCalls(Boolean parallelToolCalls);
 
 	/**
-	 * Get base directory
+	 * Get enable short URL setting
 	 */
-	String getBaseDir();
+	Boolean getEnableShortUrl();
 
 	/**
-	 * Set base directory
+	 * Set enable short URL setting
 	 */
-	void setBaseDir(String baseDir);
+	void setEnableShortUrl(Boolean enableShortUrl);
 
 }

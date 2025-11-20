@@ -15,19 +15,20 @@
  */
 package com.alibaba.cloud.ai.manus.tool.textOperator;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import com.alibaba.cloud.ai.manus.config.ManusProperties;
 import com.alibaba.cloud.ai.manus.tool.filesystem.UnifiedDirectoryManager;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Simple test class for enhanced hierarchical file access functionality Tests the new
@@ -49,8 +50,6 @@ public class SimpleHierarchicalFileAccessTest {
 	void setUp() throws IOException {
 		// Create a simple test properties object that doesn't require config service
 		manusProperties = new TestManusProperties();
-		((TestManusProperties) manusProperties).setBaseDir(tempDir.toString());
-		((TestManusProperties) manusProperties).setAllowExternalAccess(false);
 
 		// Initialize services
 		directoryManager = new UnifiedDirectoryManager(manusProperties);
@@ -205,38 +204,6 @@ public class SimpleHierarchicalFileAccessTest {
 	 * Test implementation of ManusProperties that doesn't require IConfigService
 	 */
 	private static class TestManusProperties extends ManusProperties {
-
-		private String baseDir = "";
-
-		private boolean allowExternalAccess = false;
-
-		@Override
-		public String getBaseDir() {
-			return baseDir;
-		}
-
-		public void setBaseDir(String baseDir) {
-			this.baseDir = baseDir;
-		}
-
-		@Override
-		public Boolean getAllowExternalAccess() {
-			return allowExternalAccess;
-		}
-
-		public void setAllowExternalAccess(boolean allowExternalAccess) {
-			this.allowExternalAccess = allowExternalAccess;
-		}
-
-		@Override
-		public Boolean getInfiniteContextEnabled() {
-			return false;
-		}
-
-		@Override
-		public Integer getInfiniteContextTaskContextSize() {
-			return 10000;
-		}
 
 	}
 
