@@ -949,7 +949,7 @@ defineExpose({
     .no-tools {
       padding: 12px;
       text-align: center;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--text-tertiary);
       font-size: 13px;
     }
 

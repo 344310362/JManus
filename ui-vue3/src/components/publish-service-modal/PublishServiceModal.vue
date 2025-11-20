@@ -693,7 +693,7 @@ defineExpose({
   right: 0;
   z-index: 99999;
   margin-top: 4px;
-  background: rgba(15, 15, 20, 0.98);
+  background: var(--bg-primary);
   backdrop-filter: blur(20px);
   border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
   border-radius: 8px;

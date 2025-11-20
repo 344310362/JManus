@@ -397,7 +397,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 
 .organization-label {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   white-space: nowrap;
   margin: 0;
   padding: 0;
@@ -408,10 +408,10 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
   width: 20ch;
   max-width: 20ch;
   padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.05);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
-  color: white;
+  color: var(--text-primary);
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -421,8 +421,8 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 }
 
 .organization-select:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  border-color: var(--text-tertiary);
 }
 
 .organization-select:focus {
@@ -433,7 +433,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 
 .organization-select option {
   background: #1a1a1a;
-  color: white;
+  color: var(--text-primary);
   white-space: normal;
 }
 
@@ -447,7 +447,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 
 .search-label {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   white-space: nowrap;
   margin: 0;
   padding: 0;
@@ -465,7 +465,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 .search-icon {
   position: absolute;
   left: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   pointer-events: none;
   z-index: 1;
 }
@@ -473,21 +473,21 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 .search-input {
   width: 100%;
   padding: 6px 10px 6px 32px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.05);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
-  color: white;
+  color: var(--text-primary);
   font-size: 12px;
   transition: all 0.2s ease;
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-tertiary);
 }
 
 .search-input:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  border-color: var(--text-tertiary);
 }
 
 .search-input:focus {
@@ -504,7 +504,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
   background: transparent;
   border: none;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -514,17 +514,17 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 }
 
 .search-clear-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: var(--text-primary);
 }
 
 .new-task-btn {
   width: 100%;
   padding: 10px 16px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #667eea 0%, var(--primer-color) 100%);
   border: none;
   border-radius: 6px;
-  color: white;
+  color: var(--text-primary);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -557,7 +557,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
   align-items: center;
   justify-content: center;
   padding: 32px 16px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 14px;
   text-align: center;
   gap: 12px;
@@ -569,17 +569,17 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 
 .retry-btn {
   padding: 8px 16px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
-  color: white;
+  color: var(--text-primary);
   cursor: pointer;
   font-size: 12px;
   transition: background-color 0.2s ease;
 }
 
 .retry-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(var(--bg-primary-rgb), 0.2);
 }
 
 .group-header {
@@ -589,7 +589,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
   padding: 8px 12px;
   margin-top: 12px;
   margin-bottom: 6px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -601,7 +601,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 }
 
 .group-header:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--bg-primary-rgb), 0.05);
 }
 
 .group-header:first-child {
@@ -614,7 +614,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
   background: transparent;
   border: none;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -627,8 +627,8 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 }
 
 .group-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: var(--text-primary);
 }
 
 .group-toggle-btn:active {
@@ -644,7 +644,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 
 .group-count {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   flex-shrink: 0;
 }
 
@@ -653,8 +653,8 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
   align-items: flex-start;
   padding: 8px;
   margin-bottom: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.05);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -667,8 +667,8 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 }
 
 .sidebar-content-list-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  border-color: var(--text-tertiary);
   transform: translateY(-1px);
 }
 
@@ -692,7 +692,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 .task-title {
   font-size: 14px;
   font-weight: 600;
-  color: white;
+  color: var(--text-primary);
   margin-bottom: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -701,7 +701,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
 
 .task-time {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   margin-left: 8px;
   flex-shrink: 0;
   position: absolute;
@@ -722,7 +722,7 @@ const handleSelectTemplate = async (template: PlanTemplateConfigVO) => {
   background: transparent;
   border: none;
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   cursor: pointer;
   display: flex;
   align-items: center;

@@ -43,213 +43,213 @@ import io.modelcontextprotocol.spec.McpClientTransport;
 @Component
 public class McpTransportBuilder {
 
-	private static final Logger logger = LoggerFactory.getLogger(McpTransportBuilder.class);
+  private static final Logger logger = LoggerFactory.getLogger(McpTransportBuilder.class);
 
-	private final McpConfigValidator configValidator;
+  private final McpConfigValidator configValidator;
 
-	private final McpProperties mcpProperties;
+  private final McpProperties mcpProperties;
 
-	private final ObjectMapper objectMapper;
+  private final ObjectMapper objectMapper;
 
-	public McpTransportBuilder(McpConfigValidator configValidator, McpProperties mcpProperties,
-			ObjectMapper objectMapper) {
-		this.configValidator = configValidator;
-		this.mcpProperties = mcpProperties;
-		this.objectMapper = objectMapper;
-	}
+  public McpTransportBuilder(McpConfigValidator configValidator, McpProperties mcpProperties,
+    ObjectMapper objectMapper) {
+    this.configValidator = configValidator;
+    this.mcpProperties = mcpProperties;
+    this.objectMapper = objectMapper;
+  }
 
-	/**
-	 * Build MCP transport
-	 * @param configType Configuration type
-	 * @param serverConfig Server configuration
-	 * @param serverName Server name
-	 * @return MCP client transport
-	 * @throws IOException Thrown when build fails
-	 */
-	public McpClientTransport buildTransport(McpConfigType configType, McpServerConfig serverConfig, String serverName)
-			throws IOException {
-		// Validate server configuration
-		configValidator.validateServerConfig(serverConfig, serverName);
+  /**
+   * Build MCP transport
+   * @param configType Configuration type
+   * @param serverConfig Server configuration
+   * @param serverName Server name
+   * @return MCP client transport
+   * @throws IOException Thrown when build fails
+   */
+  public McpClientTransport buildTransport(McpConfigType configType, McpServerConfig serverConfig, String serverName)
+    throws IOException {
+    // Validate server configuration
+    configValidator.validateServerConfig(serverConfig, serverName);
 
-		switch (configType) {
-			case SSE -> {
-				return buildSseTransport(serverConfig, serverName);
-			}
-			case STUDIO -> {
-				return buildStudioTransport(serverConfig, serverName);
-			}
-			case STREAMING -> {
-				return buildStreamingTransport(serverConfig, serverName);
-			}
-			default -> {
-				throw new IOException("Unsupported connection type: " + configType + " for server: " + serverName);
-			}
-		}
-	}
+    switch (configType) {
+      case SSE -> {
+        return buildSseTransport(serverConfig, serverName);
+      }
+      case STUDIO -> {
+        return buildStudioTransport(serverConfig, serverName);
+      }
+      case STREAMING -> {
+        return buildStreamingTransport(serverConfig, serverName);
+      }
+      default -> {
+        throw new IOException("Unsupported connection type: " + configType + " for server: " + serverName);
+      }
+    }
+  }
 
-	/**
-	 * Build SSE transport
-	 * @param serverConfig Server configuration
-	 * @param serverName Server name
-	 * @return SSE transport
-	 * @throws IOException Thrown when build fails
-	 */
-	private McpClientTransport buildSseTransport(McpServerConfig serverConfig, String serverName) throws IOException {
-		String url = serverConfig.getUrl().trim();
-		configValidator.validateSseUrl(url, serverName);
+  /**
+   * Build SSE transport
+   * @param serverConfig Server configuration
+   * @param serverName Server name
+   * @return SSE transport
+   * @throws IOException Thrown when build fails
+   */
+  private McpClientTransport buildSseTransport(McpServerConfig serverConfig, String serverName) throws IOException {
+    String url = serverConfig.getUrl().trim();
+    configValidator.validateSseUrl(url, serverName);
 
-		URL parsedUrl = new URL(url);
-		String baseUrl = parsedUrl.getProtocol() + "://" + parsedUrl.getHost()
-				+ (parsedUrl.getPort() == -1 ? "" : ":" + parsedUrl.getPort());
+    URL parsedUrl = new URL(url);
+    String baseUrl = parsedUrl.getProtocol() + "://" + parsedUrl.getHost()
+      + (parsedUrl.getPort() == -1 ? "" : ":" + parsedUrl.getPort());
 
-		String path = parsedUrl.getPath();
-		String sseEndpoint = path;
+    String path = parsedUrl.getPath();
+    String sseEndpoint = path;
 
-		// Remove leading slash
-		if (sseEndpoint.startsWith("/")) {
-			sseEndpoint = sseEndpoint.substring(1);
-		}
+    // Remove leading slash
+    if (sseEndpoint.startsWith("/")) {
+      sseEndpoint = sseEndpoint.substring(1);
+    }
 
-		// Set to null if empty
-		if (sseEndpoint.isEmpty()) {
-			sseEndpoint = null;
-		}
+    // Set to null if empty
+    if (sseEndpoint.isEmpty()) {
+      sseEndpoint = null;
+    }
 
-		logger.info("Building SSE transport for server: {} with baseUrl: {}, endpoint: {}", serverName, baseUrl,
-				sseEndpoint);
+    logger.info("Building SSE transport for server: {} with baseUrl: {}, endpoint: {}", serverName, baseUrl,
+      sseEndpoint);
 
-		WebClient.Builder webClientBuilder = createWebClientBuilder(baseUrl);
+    WebClient.Builder webClientBuilder = createWebClientBuilder(baseUrl);
 
-		JacksonMcpJsonMapper jsonMapper = new JacksonMcpJsonMapper(objectMapper);
+    JacksonMcpJsonMapper jsonMapper = new JacksonMcpJsonMapper(objectMapper);
 
-		if (sseEndpoint != null && !sseEndpoint.isEmpty()) {
-			return new WebFluxSseClientTransport(webClientBuilder, jsonMapper, sseEndpoint);
-		}
-		else {
-			return new WebFluxSseClientTransport(webClientBuilder, jsonMapper);
-		}
-	}
+    if (sseEndpoint != null && !sseEndpoint.isEmpty()) {
+      return new WebFluxSseClientTransport(webClientBuilder, jsonMapper, sseEndpoint);
+    }
+    else {
+      return new WebFluxSseClientTransport(webClientBuilder, jsonMapper);
+    }
+  }
 
-	/**
-	 * Build STUDIO transport (STDIO). Sets up error handler for server stderr output to
-	 * improve debugging and monitoring.
-	 * @param serverConfig Server configuration
-	 * @param serverName Server name
-	 * @return STUDIO transport
-	 * @throws IOException Thrown when build fails
-	 */
-	private McpClientTransport buildStudioTransport(McpServerConfig serverConfig, String serverName)
-			throws IOException {
-		String command = serverConfig.getCommand().trim();
-		List<String> args = serverConfig.getArgs();
-		Map<String, String> env = serverConfig.getEnv();
+  /**
+   * Build STUDIO transport (STDIO). Sets up error handler for server stderr output to
+   * improve debugging and monitoring.
+   * @param serverConfig Server configuration
+   * @param serverName Server name
+   * @return STUDIO transport
+   * @throws IOException Thrown when build fails
+   */
+  private McpClientTransport buildStudioTransport(McpServerConfig serverConfig, String serverName)
+    throws IOException {
+    String command = serverConfig.getCommand().trim();
+    List<String> args = serverConfig.getArgs();
+    Map<String, String> env = serverConfig.getEnv();
 
-		logger.debug("Building STUDIO transport for server: {} with command: {}", serverName, command);
+    logger.debug("Building STUDIO transport for server: {} with command: {}", serverName, command);
 
-		ServerParameters.Builder builder = ServerParameters.builder(command);
+    ServerParameters.Builder builder = ServerParameters.builder(command);
 
-		// Add parameters
-		if (args != null && !args.isEmpty()) {
-			builder.args(args);
-			logger.debug("Added {} arguments for server: {}", args.size(), serverName);
-		}
+    // Add parameters
+    if (args != null && !args.isEmpty()) {
+      builder.args(args);
+      logger.debug("Added {} arguments for server: {}", args.size(), serverName);
+    }
 
-		// Add environment variables
-		if (env != null && !env.isEmpty()) {
-			builder.env(env);
-			logger.debug("Added {} environment variables for server: {}", env.size(), serverName);
-		}
+    // Add environment variables
+    if (env != null && !env.isEmpty()) {
+      builder.env(env);
+      logger.debug("Added {} environment variables for server: {}", env.size(), serverName);
+    }
 
-		ServerParameters serverParameters = builder.build();
-		JacksonMcpJsonMapper jsonMapper = new JacksonMcpJsonMapper(objectMapper);
-		StdioClientTransport transport = new StdioClientTransport(serverParameters, jsonMapper);
+    ServerParameters serverParameters = builder.build();
+    JacksonMcpJsonMapper jsonMapper = new JacksonMcpJsonMapper(objectMapper);
+    StdioClientTransport transport = new StdioClientTransport(serverParameters, jsonMapper);
 
-		// Set up error handler for server stderr output
-		// This helps with debugging and monitoring server errors
-		transport.setStdErrorHandler(error -> {
-			if (error != null && !error.trim().isEmpty()) {
-				// Log server stderr output for debugging
-				// Filter out common non-error messages if needed
-				if (error.contains("ERROR") || error.contains("FATAL") || error.contains("Exception")) {
-					logger.error("MCP server stderr [{}]: {}", serverName, error);
-				}
-				else if (error.contains("WARN") || error.contains("WARNING")) {
-					logger.warn("MCP server stderr [{}]: {}", serverName, error);
-				}
-				else {
-					logger.debug("MCP server stderr [{}]: {}", serverName, error);
-				}
-			}
-		});
+    // Set up error handler for server stderr output
+    // This helps with debugging and monitoring server errors
+    transport.setStdErrorHandler(error -> {
+      if (error != null && !error.trim().isEmpty()) {
+        // Log server stderr output for debugging
+        // Filter out common non-error messages if needed
+        if (error.contains("ERROR") || error.contains("FATAL") || error.contains("Exception")) {
+          logger.error("MCP server stderr [{}]: {}", serverName, error);
+        }
+        else if (error.contains("WARN") || error.contains("WARNING")) {
+          logger.warn("MCP server stderr [{}]: {}", serverName, error);
+        }
+        else {
+          logger.debug("MCP server stderr [{}]: {}", serverName, error);
+        }
+      }
+    });
 
-		return transport;
-	}
+    return transport;
+  }
 
-	/**
-	 * Build STREAMING transport
-	 * @param serverConfig Server configuration
-	 * @param serverName Server name
-	 * @return STREAMING transport
-	 * @throws IOException Thrown when build fails
-	 */
-	private McpClientTransport buildStreamingTransport(McpServerConfig serverConfig, String serverName)
-			throws IOException {
-		String url = serverConfig.getUrl().trim();
-		configValidator.validateUrl(url, serverName);
+  /**
+   * Build STREAMING transport
+   * @param serverConfig Server configuration
+   * @param serverName Server name
+   * @return STREAMING transport
+   * @throws IOException Thrown when build fails
+   */
+  private McpClientTransport buildStreamingTransport(McpServerConfig serverConfig, String serverName)
+    throws IOException {
+    String url = serverConfig.getUrl().trim();
+    configValidator.validateUrl(url, serverName);
 
-		URL parsedUrl = new URL(url);
-		String baseUrl = parsedUrl.getProtocol() + "://" + parsedUrl.getHost()
-				+ (parsedUrl.getPort() == -1 ? "" : ":" + parsedUrl.getPort());
+    URL parsedUrl = new URL(url);
+    String baseUrl = parsedUrl.getProtocol() + "://" + parsedUrl.getHost()
+      + (parsedUrl.getPort() == -1 ? "" : ":" + parsedUrl.getPort());
 
-		String streamEndpoint = parsedUrl.getPath();
+    String streamEndpoint = parsedUrl.getPath();
 
-		// Remove leading slash
-		if (streamEndpoint.startsWith("/")) {
-			streamEndpoint = streamEndpoint.substring(1);
-		}
+    // Remove leading slash
+    if (streamEndpoint.startsWith("/")) {
+      streamEndpoint = streamEndpoint.substring(1);
+    }
 
-		// Set to null if empty
-		if (streamEndpoint.isEmpty()) {
-			streamEndpoint = null;
-		}
+    // Set to null if empty
+    if (streamEndpoint.isEmpty()) {
+      streamEndpoint = null;
+    }
 
-		logger.info("Building Streamable HTTP transport for server: {} with Url: {} and Endpoint: {}", serverName,
-				baseUrl, streamEndpoint);
+    logger.info("Building Streamable HTTP transport for server: {} with Url: {} and Endpoint: {}", serverName,
+      baseUrl, streamEndpoint);
 
-		WebClient.Builder webClientBuilder = createWebClientBuilder(baseUrl);
+    WebClient.Builder webClientBuilder = createWebClientBuilder(baseUrl);
 
-		logger.debug("Using WebClientStreamableHttpTransport with endpoint: {} for STREAMING mode", streamEndpoint);
-		JacksonMcpJsonMapper jsonMapper = new JacksonMcpJsonMapper(objectMapper);
-		return WebClientStreamableHttpTransport.builder(webClientBuilder)
-			.jsonMapper(jsonMapper)
-			.endpoint(streamEndpoint)
-			.resumableStreams(true)
-			.openConnectionOnStartup(false)
-			.build();
+    logger.debug("Using WebClientStreamableHttpTransport with endpoint: {} for STREAMING mode", streamEndpoint);
+    JacksonMcpJsonMapper jsonMapper = new JacksonMcpJsonMapper(objectMapper);
+    return WebClientStreamableHttpTransport.builder(webClientBuilder)
+      .jsonMapper(jsonMapper)
+      .endpoint(streamEndpoint)
+      .resumableStreams(true)
+      .openConnectionOnStartup(false)
+      .build();
 
-	}
+  }
 
-	/**
-	 * Create WebClient builder (with baseUrl)
-	 * @param baseUrl Base URL
-	 * @return WebClient builder
-	 */
-	private WebClient.Builder createWebClientBuilder(String baseUrl) {
-		return WebClient.builder()
-			.baseUrl(baseUrl)
-			.defaultHeader("Accept", "text/event-stream")
-			.defaultHeader("Content-Type", "application/json")
-			.defaultHeader("User-Agent", mcpProperties.getUserAgent())
-			.codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(1024 * 1024 * 10))
-			// Add timeout to prevent hanging connections
-			.filter((request,
-					next) -> next.exchange(request).timeout(java.time.Duration.ofSeconds(30)).onErrorMap(ex -> {
-						if (ex.getMessage() != null && ex.getMessage().contains("Failed to resolve")) {
-							return new IOException("DNS resolution failed for URL: " + baseUrl + ". "
-									+ "Please verify the hostname is correct and accessible.", ex);
-						}
-						return ex;
-					}));
-	}
+  /**
+   * Create WebClient builder (with baseUrl)
+   * @param baseUrl Base URL
+   * @return WebClient builder
+   */
+  private WebClient.Builder createWebClientBuilder(String baseUrl) {
+    return WebClient.builder()
+      .baseUrl(baseUrl)
+      .defaultHeader("Accept", "text/event-stream")
+      .defaultHeader("Content-Type", "application/json")
+      .defaultHeader("User-Agent", mcpProperties.getUserAgent())
+      .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(1024 * 1024 * 10))
+      // Add timeout to prevent hanging connections
+      .filter((request,
+        next) -> next.exchange(request).timeout(java.time.Duration.ofSeconds(30)).onErrorMap(ex -> {
+        if (ex.getMessage() != null && ex.getMessage().contains("Failed to resolve")) {
+          return new IOException("DNS resolution failed for URL: " + baseUrl + ". "
+            + "Please verify the hostname is correct and accessible.", ex);
+        }
+        return ex;
+      }));
+  }
 
 }

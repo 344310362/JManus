@@ -51,6 +51,7 @@ const roles = [
     iconText: '探索',
     tasks: [
       { id: 'aliyun-gujia', icon: '💬', text: '查看阿里巴巴今日股价',describe: '打开百度搜索阿里巴巴今日股价' },
+      { id: 'article-ai', icon: '💬', text: '生成小说-AI统治地球',describe: '生成小说-AI统治地球',planId: "plan-1763633806506","planTemplateId": "new-1763632772594" },
     ]
   },
   {
@@ -106,6 +107,10 @@ const getActiveRole = computed(() => {
 // 方法
 const handleTaskClick = (task: any) => {
   taskStore.setTask(task.describe? task.describe :task.text)
+  // debugger
+  // if(task.planTemplateId){
+  //   taskStore.setTaskRunning(task.planId)
+  // }
   const chatId = Date.now().toString()
   router.push({ name: 'direct', params: { id: chatId } })
 }

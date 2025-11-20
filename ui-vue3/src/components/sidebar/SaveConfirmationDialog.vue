@@ -95,7 +95,7 @@ const handleContinueWithoutSave = () => {
 }
 
 .modal-content {
-  background: var(--text-primary, #1a1a1a);
+  background: var(--bg-primary, #1a1a1a);
   border-radius: 8px;
   padding: 0;
   min-width: 400px;

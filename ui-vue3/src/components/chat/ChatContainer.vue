@@ -351,8 +351,8 @@ onUnmounted(() => {
 
     .user-content {
       max-width: 70%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: #ffffff;
+      background: linear-gradient(135deg, #667eea 0%, var(--primer-color) 100%);
+      color: var(--text-primary);
       padding: 12px 16px;
       border-radius: 18px 18px 4px 18px;
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -373,7 +373,7 @@ onUnmounted(() => {
           align-items: center;
           gap: 6px;
           padding: 6px 8px;
-          background: rgba(255, 255, 255, 0.1);
+          background: rgba(var(--bg-primary-rgb), 0.1);
           border-radius: 8px;
           margin-bottom: 4px;
           font-size: 12px;
@@ -384,16 +384,16 @@ onUnmounted(() => {
 
           .attachment-icon {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--text-secondary);
           }
 
           .attachment-name {
             flex: 1;
-            color: #ffffff;
+            color: var(--text-primary);
           }
 
           .attachment-size {
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--text-secondary);
             font-size: 11px;
           }
         }
@@ -402,7 +402,7 @@ onUnmounted(() => {
       .message-timestamp {
         margin-top: 6px;
         font-size: 11px;
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
         text-align: right;
       }
     }

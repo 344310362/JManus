@@ -396,7 +396,7 @@ defineExpose({
 .sidebar-resizer {
   width: 6px;
   height: 100vh;
-  background: var(--text-primary, #1a1a1a);
+  background: var(--bg-secondary, #1a1a1a);
   cursor: col-resize;
   position: relative;
   display: flex;
@@ -442,7 +442,7 @@ defineExpose({
 }
 
 .modal-content {
-  background: var(--text-primary, #1a1a1a);
+  background: var(--bg-primary, #1a1a1a);
   border-radius: 8px;
   padding: 0;
   min-width: 400px;

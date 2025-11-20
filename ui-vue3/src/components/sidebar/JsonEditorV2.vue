@@ -1136,7 +1136,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 <style scoped>
 .config-section {
   margin-bottom: 16px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--bg-primary-rgb), 0.05);
   border-radius: 8px;
   padding: 12px;
 }
@@ -1194,7 +1194,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
 }
 
 .plan-basic-info {
@@ -1213,12 +1213,12 @@ const formatTableHeader = (terminateColumns: string): string => {
 .form-label {
   font-size: 10px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .field-description {
   font-size: 9px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   line-height: 1.4;
   margin-top: 2px;
 }
@@ -1229,7 +1229,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
-  color: white;
+  color: var(--text-primary);
   font-size: 11px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -1264,16 +1264,16 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .readonly-input {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
   border: 1px solid rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   cursor: not-allowed;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 12px;
 }
 
 .readonly-input:focus {
-  border-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--text-tertiary);
   box-shadow: none;
 }
 
@@ -1317,7 +1317,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 .dropdown-arrow {
   position: absolute;
   right: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   pointer-events: none;
   transition: transform 0.2s ease;
 }
@@ -1332,7 +1332,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   left: 0;
   right: 0;
   margin-top: 4px;
-  background: rgba(0, 0, 0, 0.95);
+  background: var(--bg-primary, #1a1a1a);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   max-height: 200px;
@@ -1344,7 +1344,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 .dropdown-item {
   padding: 8px 12px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1360,7 +1360,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 .dropdown-item:hover,
 .dropdown-item.is-highlighted {
   background: rgba(102, 126, 234, 0.2);
-  color: white;
+  color: var(--text-primary);
 }
 
 .dropdown-item.is-selected {
@@ -1370,7 +1370,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .dropdown-item.disabled {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   cursor: not-allowed;
   font-style: italic;
 }
@@ -1415,7 +1415,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 
 .step-item {
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -1437,12 +1437,12 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .empty-steps .empty-icon {
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-tertiary);
   margin-bottom: 8px;
 }
 
 .empty-steps .empty-text {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   font-size: 14px;
   margin: 0;
 }
@@ -1479,7 +1479,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   align-items: center;
   justify-content: space-between;
   padding: 8px 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(var(--bg-primary-rgb), 0.05);
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1488,7 +1488,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   margin: 0;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   background: transparent;
   overflow-x: auto;
   white-space: pre-wrap;
@@ -1516,13 +1516,13 @@ const formatTableHeader = (terminateColumns: string): string => {
   justify-content: center;
   gap: 6px;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: var(--text-secondary);
 }
 
 .btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
-  color: white;
+  background: rgba(var(--bg-primary-rgb), 0.2);
+  color: var(--text-primary);
   transform: translateY(-1px);
 }
 
@@ -1545,8 +1545,8 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #667eea 0%, var(--primer-color) 100%);
+  color: var(--text-primary);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -1555,13 +1555,13 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.7);
+  background: rgba(var(--bg-primary-rgb), 0.05);
+  color: var(--text-secondary);
 }
 
 .btn-danger {
   background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
+  color: var(--text-primary);
 }
 
 .btn-danger:hover:not(:disabled) {
@@ -1587,12 +1587,12 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .preview-content {
-  color: white;
+  color: var(--text-primary);
 }
 
 .preview-text {
   line-height: 1.4;
-  color: white;
+  color: var(--text-primary);
 }
 
 .preview-table-header {
@@ -1625,7 +1625,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   padding: 0;
   min-width: 400px;
   max-width: 500px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -1639,7 +1639,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 
 .modal-header h3 {
   margin: 0;
-  color: white;
+  color: var(--text-primary);
   font-size: 16px;
   font-weight: 600;
 }
@@ -1647,7 +1647,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 .close-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -1655,8 +1655,8 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: var(--text-primary);
 }
 
 .modal-body {
@@ -1680,7 +1680,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 .modal-footer .form-label {
   font-size: 14px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .modal-footer .form-input {
@@ -1688,7 +1688,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
-  color: white;
+  color: var(--text-primary);
   font-size: 13px;
   transition: all 0.2s ease;
 }
@@ -1700,17 +1700,17 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .modal-footer .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: var(--text-primary);
 }
 
 .modal-footer .btn-secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(var(--bg-primary-rgb), 0.2);
 }
 
 .modal-footer .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, #667eea 0%, var(--primer-color) 100%);
+  color: var(--text-primary);
 }
 
 .modal-footer .btn-primary:hover:not(:disabled) {
@@ -1748,7 +1748,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
-  color: white;
+  color: var(--text-primary);
   font-size: 11px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -1767,7 +1767,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   left: 0;
   right: 0;
   margin-top: 4px;
-  background: rgba(0, 0, 0, 0.95);
+  background: var(--bg-primary);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
@@ -1780,7 +1780,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 .service-group-option {
   padding: 8px 12px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.2s ease;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -1792,7 +1792,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 
 .service-group-option:hover {
   background: rgba(102, 126, 234, 0.2);
-  color: white;
+  color: var(--text-primary);
 }
 
 .service-group-option:active {

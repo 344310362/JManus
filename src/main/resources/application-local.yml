@@ -20,12 +20,12 @@ spring:
       discovery:
         enabled: true
         register-enabled: true
-        namespace: local
+        namespace: dev
         group: DEFAULT_GROUP
         metadata:
           version: 1.0.0
       config:
-        namespace: local
+        namespace: dev
         group: DEFAULT_GROUP
         file-extension: yaml
   config:

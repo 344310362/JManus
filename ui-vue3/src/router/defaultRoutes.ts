@@ -65,6 +65,15 @@ export const routes: Readonly<RouteRecordType[]> = [
       {
         path: '/direct/:id?',
         name: 'direct',
+        component: () => import('../views/direct/index-sm.vue'),
+        meta: {
+          icon: 'carbon:chat',
+          fullscreen: true,
+        },
+      },
+      {
+        path: '/direct-admin/:id?',
+        name: 'directAdmin',
         component: () => import('../views/direct/index.vue'),
         meta: {
           icon: 'carbon:chat',

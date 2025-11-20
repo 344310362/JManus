@@ -9,6 +9,7 @@ import com.alibaba.cloud.ai.manus.tool.code.ToolExecuteResult;
 import com.alibaba.cloud.ai.manus.utils.ServiceHelper;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,24 +45,25 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
         }
 
         // 2. Validate service name
-        if (serviceName == null || serviceName.trim().isEmpty()) {
-            return new ToolExecuteResult("❌ 'service_name' is required for all operations.");
+        if ((serviceName == null || serviceName.trim().isEmpty()) && !"search_ip".equalsIgnoreCase( action)) {
+            return new ToolExecuteResult("❌ 'service_name' is required.");
         }
 
         // 3. Validate and normalize environment
-        if (environment == null || environment.trim().isEmpty()) {
+        if ((environment == null || environment.trim().isEmpty()) && !"search_ip".equalsIgnoreCase( action)) {
             return new ToolExecuteResult("❌ 'environment' is required. Must be one of: dev, test, pre, prod.");
         }
-        environment = environment.trim().toLowerCase();
-
-        if (!isValidEnvironment(environment)) {
+        if (!StringUtils.isEmpty( environment)){
+          environment = environment.trim().toLowerCase();
+          if (!isValidEnvironment(environment)) {
             return new ToolExecuteResult(
-                "❌ Invalid environment: '" + environment + "'. Supported environments: dev, test, pre, prod."
+              "❌ Invalid environment: '" + environment + "'. Supported environments: dev, test, pre, prod."
             );
+          }
         }
 
         // 4. CMDB check
-        if (!isServiceInCmdb(serviceName)) {
+        if (!"search_ip".equalsIgnoreCase( action) && !isServiceInCmdb(serviceName)) {
             return new ToolExecuteResult(
                 "❌ Service '" + serviceName + "' is not registered in CMDB service tree. " +
                     "Only CMDB-managed services can be operated on."
@@ -124,6 +126,11 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
                     "Supported actions: deploy, build, delete, modify, scale_out, scale_in, pause, resume."
             );
         };
+    }
+
+    private void parameterCheck(String action,String serviceName,String environment,String ip) {
+
+
     }
 
     // ✅ Helper: validate environment
@@ -346,7 +353,7 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
             + "\"environment\":{\"type\":\"string\",\"description\":\"Target environment\",\"enum\":[\"dev\",\"test\",\"pre\",\"prod\"]},"
             + "\"target_replicas\":{\"type\":\"integer\",\"description\":\"Target number of service instances (required for scale_out/scale_in)\",\"minimum\":0,\"maximum\":100}"
             + "},"
-            + "\"required\":[\"action\",\"service_name\",\"environment\"]"
+            + "\"required\":[]"
             + "}";
     }
 

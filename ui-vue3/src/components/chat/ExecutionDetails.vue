@@ -244,8 +244,8 @@ const formatToolParameters = (parameters?: string): string => {
     margin-bottom: 20px;
 
     .parent-tool-call {
-      background: rgba(102, 126, 234, 0.1);
-      border: 1px solid rgba(102, 126, 234, 0.2);
+      background: rgba(var(--bg-primary-rgb), 0.1);
+      border: 1px solid var(--border-primary);
       border-radius: 8px;
       padding: 12px;
 

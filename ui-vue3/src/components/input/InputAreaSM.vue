@@ -54,10 +54,10 @@
             {{ option.label }}
           </option>
         </select>
-        <button class="plan-mode-btn" :title="$t('input.planMode')" @click="handlePlanModeClick">
+<!--        <button class="plan-mode-btn" :title="$t('input.planMode')" @click="handlePlanModeClick">
           <Icon icon="carbon:document" />
           {{ $t('input.planMode') }}
-        </button>
+        </button>-->
         <button
           v-if="!isTaskRunning"
           class="send-button"
