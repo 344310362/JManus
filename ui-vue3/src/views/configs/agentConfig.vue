@@ -998,7 +998,7 @@ watch(
     &:focus {
       border-color: var(--accent-primary, var(--accent-primary));
       outline: none;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(var(--bg-primary-rgb), 0.08);
     }
 
     &::placeholder {
@@ -1229,7 +1229,7 @@ watch(
   left: 0;
   z-index: 9999;
   margin-top: 4px;
-  background: linear-gradient(135deg, rgba(40, 40, 50, 0.95), rgba(30, 30, 40, 0.95));
+  background: linear-gradient(135deg, rgba(var(--bg-secondary),0.95), rgba(var(--bg-tertiary), 0.95));
   backdrop-filter: blur(16px);
   border: 1px solid var(--selection-bg, var(--selection-bg));
   border-radius: 8px;
@@ -1403,7 +1403,7 @@ watch(
 
 .language-select:focus {
   border-color: #007acc;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(var(--bg-primary-rgb), 0.15);
 }
 
 .language-select option {
@@ -1426,7 +1426,7 @@ watch(
 }
 
 .warning-icon {
-  color: #ffc107;
+  color: var(--warning, #ffc107);
   font-size: 20px;
   flex-shrink: 0;
   margin-top: 2px;
@@ -1478,7 +1478,7 @@ watch(
 /* Dark theme adjustments */
 @media (prefers-color-scheme: light) {
   .model-dropdown {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(var(--bg-primary-rgb), 0.95);
     border-color: rgba(0, 0, 0, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }
@@ -1509,7 +1509,7 @@ watch(
 
 .built-in-badge {
   background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
+  color: var(--text-primary);
   font-size: 10px;
   font-weight: 600;
   padding: 2px 6px;

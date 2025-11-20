@@ -95,12 +95,12 @@ const handleContinueWithoutSave = () => {
 }
 
 .modal-content {
-  background: #1a1a1a;
+  background: var(--text-primary, #1a1a1a);
   border-radius: 8px;
   padding: 0;
   min-width: 400px;
   max-width: 500px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
@@ -114,7 +114,7 @@ const handleContinueWithoutSave = () => {
 
 .modal-header h3 {
   margin: 0;
-  color: white;
+  color: var(--text-primary);
   font-size: 16px;
   font-weight: 600;
 }
@@ -122,7 +122,7 @@ const handleContinueWithoutSave = () => {
 .close-btn {
   background: transparent;
   border: none;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--text-primary-rgb), 0.7);
   cursor: pointer;
   padding: 4px;
   border-radius: 4px;
@@ -130,8 +130,8 @@ const handleContinueWithoutSave = () => {
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: var(--text-primary);
 }
 
 .modal-body {
@@ -140,7 +140,7 @@ const handleContinueWithoutSave = () => {
 
 .modal-body p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   font-size: 14px;
   line-height: 1.5;
 }
@@ -173,27 +173,27 @@ const handleContinueWithoutSave = () => {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: var(--text-primary);
 }
 
 .btn-secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, var(--primer-color) 100%);
+  color: var(--text-primary);
 }
 
 .btn-primary:hover:not(:disabled) {
   background: linear-gradient(135deg, #5566dd 0%, #653b91 100%);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px var(--selection-bg, rgba(102, 126, 234, 0.3));
 }
 
 .btn-danger {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--error, #ef4444) 0%, #dc2626 100%);
+  color: var(--text-primary);
 }
 
 .btn-danger:hover:not(:disabled) {

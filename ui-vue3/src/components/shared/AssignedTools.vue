@@ -137,7 +137,7 @@ const getToolDescription = (toolId: string): string => {
   gap: 6px;
   padding: 10px 16px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   color: var(--text-primary);
   cursor: pointer;
@@ -146,7 +146,7 @@ const getToolDescription = (toolId: string): string => {
 }
 
 .action-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
 }
 
@@ -180,7 +180,7 @@ const getToolDescription = (toolId: string): string => {
   justify-content: space-between;
   padding: 12px 16px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   transition: all 0.3s ease;
 }
@@ -191,7 +191,7 @@ const getToolDescription = (toolId: string): string => {
 }
 
 .tool-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
 }
 
@@ -227,7 +227,7 @@ const getToolDescription = (toolId: string): string => {
   justify-content: center;
   gap: 8px;
   padding: 40px;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
   font-style: italic;
 }
 

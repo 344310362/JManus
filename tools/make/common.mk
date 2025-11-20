@@ -20,12 +20,18 @@ DATETIME = $(shell date +"%Y%m%d%H%M%S")
 LOG_TARGET = echo -e "\033[0;32m==================> Running $@ ============> ... \033[0m"
 # Log debugging info
 define log
-echo -e "\033[36m==================>$1\033[0m"
+	echo -e "\033[36m===================>$1\033[0m"
 endef
 # Log error info
 define errorLog
-echo -e "\033[0;31m==================>$1\033[0m"
+	echo -e "\033[0;31m===================>$1\033[0m"
 endef
+
+##@ Utility
+
+replace-colors: ## Replace hardcoded colors with theme variables in Vue components
+	@$(LOG_TARGET)
+	@cd tools && npm run replace-colors
 
 .PHONY: help
 help:

@@ -670,11 +670,11 @@ defineExpose({
 .preview-header {
   padding: 20px 24px;
   border-bottom: 1px solid var(--bg-secondary, #1a1a1a);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
 
   .tab-button {
     padding: 8px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-primary);
     border-radius: 6px;
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
     border-color: var(--accent-primary, #667eea);
@@ -731,7 +731,7 @@ defineExpose({
   overflow-x: hidden;
   padding: 0 20px 20px;
   margin: 0 20px 20px;
-  background: rgba(255, 255, 255, 0.01);
+  background: rgba(var(--bg-primary-rgb), 0.01);
   border-radius: 8px;
   min-height: 200px; /* Ensure minimum height */
 
@@ -741,7 +741,7 @@ defineExpose({
   }
 
   &::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--bg-primary-rgb), 0.1);
     border-radius: 3px;
   }
 
@@ -750,7 +750,7 @@ defineExpose({
     border-radius: 3px;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(var(--bg-primary-rgb), 0.5);
     }
   }
 }
@@ -866,12 +866,12 @@ defineExpose({
         flex: 1;
 
         &.status-completed {
-          color: #28a745;
+          color: var(--success, #28a745);
           font-weight: 500;
         }
 
         &.status-current {
-          color: #007bff;
+          color: var(--accent-primary, #007bff);
           font-weight: 500;
         }
 
@@ -998,7 +998,7 @@ defineExpose({
 
 .think-act-step {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 16px;
 
@@ -1083,7 +1083,7 @@ defineExpose({
 
       pre {
         background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-primary);
         border-radius: 4px;
         padding: 12px;
         color: var(--text-secondary, #cccccc);
@@ -1198,7 +1198,7 @@ defineExpose({
   border-radius: 50%;
   background: rgba(74, 144, 226, 0.9);
   border: none;
-  color: white;
+  color: var(--text-primary);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -1321,7 +1321,7 @@ defineExpose({
 }
 
 .tab-item:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   color: var(--text-secondary);
 }
 

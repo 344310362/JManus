@@ -1046,7 +1046,7 @@ const getConnectionTypeIcon = (type: string) => {
 .search-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   width: 100%;
 }
 
@@ -1138,7 +1138,7 @@ const getConnectionTypeIcon = (type: string) => {
 .search-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   width: 100%;
 }
 
@@ -1649,7 +1649,7 @@ const getConnectionTypeIcon = (type: string) => {
 .config-textarea:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .config-textarea::placeholder {
@@ -1670,7 +1670,7 @@ const getConnectionTypeIcon = (type: string) => {
 .config-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .config-input::placeholder {
@@ -1700,7 +1700,7 @@ const getConnectionTypeIcon = (type: string) => {
   right: 20px;
   padding: 12px 20px;
   border-radius: 8px;
-  color: white;
+  color: var(--text-primary);
   font-weight: 500;
   z-index: 9999; /* Increase z-index to ensure top layer */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -1820,7 +1820,7 @@ const getConnectionTypeIcon = (type: string) => {
 }
 
 .toggle-label {
-  color: white;
+  color: var(--text-primary);
   font-size: 12px;
   font-weight: 500;
   user-select: none;

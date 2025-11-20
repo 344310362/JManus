@@ -47,14 +47,17 @@ const taskStore = useTaskStore()
 // 角色数据（保持不变）
 const roles = [
   {
+    id: 'explore',
+    iconText: '探索',
+    tasks: [
+      { id: 'aliyun-gujia', icon: '💬', text: '查看阿里巴巴今日股价',describe: '打开百度搜索阿里巴巴今日股价' },
+    ]
+  },
+  {
     id: 'ops',
     iconText: t('home.roles.ops.icon', '运维'),
     tasks: [
-      { id: 'add-service', icon: '+1', text: t('home.roles.ops.tasks.addService', '添加新服务到集群') },
-      { id: 'remove-service', icon: '-1', text: t('home.roles.ops.tasks.removeService', '删除不再需要的服务') },
-      { id: 'restart-service', icon: '↻', text: t('home.roles.ops.tasks.restartService', '重启故障服务节点') },
-      { id: 'monitor-service', icon: '📊', text: t('home.roles.ops.tasks.monitorService', '查看服务监控指标') },
-      { id: 'modify-config', icon: '⚙️', text: t('home.roles.ops.tasks.modifyConfig', '修改服务配置参数') }
+      { id: 'ip-search', icon: '💬', text: '服务ip查询',describe: '先提示用户输入查询的 ip，然后调用 service_manager 的 search_ip 方法，查看 ip 对应的服务' },
     ]
   },
   {
@@ -102,7 +105,7 @@ const getActiveRole = computed(() => {
 
 // 方法
 const handleTaskClick = (task: any) => {
-  taskStore.setTask(task.text)
+  taskStore.setTask(task.describe? task.describe :task.text)
   const chatId = Date.now().toString()
   router.push({ name: 'direct', params: { id: chatId } })
 }
@@ -137,10 +140,10 @@ const handleTaskClick = (task: any) => {
 
 .tab-button {
   padding: 8px 16px;
-  border: 1px solid #e0e0e0;
+  border: 1px solid var(--border-primary, #e0e0e0);
   background: var(--bg-secondary);
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 600;
   color: #555;
   cursor: pointer;
@@ -155,9 +158,9 @@ const handleTaskClick = (task: any) => {
 
 .tab-button.active {
   background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-  color: white;
+  color: var(--text-primary);
   border-color: transparent;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px var(--selection-bg, rgba(102, 126, 234, 0.3));
 }
 
 .tasks-list {
@@ -195,7 +198,7 @@ const handleTaskClick = (task: any) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--text-primary);
   font-size: 12px;
   flex-shrink: 0;
 }

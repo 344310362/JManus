@@ -38,7 +38,7 @@
           <!-- Welcome section -->
           <div class="welcome-section">
             <h2 class="welcome-title">{{ $t('home.welcomeTitle') }}</h2>
-            <p class="welcome-subtitle">{{ $t('home.welcomeSubtitle') }}</p>
+<!--            <p class="welcome-subtitle">{{ $t('home.welcomeSubtitle',{nickname: userStore.user.nickname}) }}</p>-->
             <button class="direct-button" @click="goToDirectPage">
               {{ $t('home.directButton') }}
             </button>
@@ -88,6 +88,7 @@ import { Icon } from '@iconify/vue'
 //import ThemeSwitcher from '@/components/theme-switcher/ThemeSwitcher.vue'
 import RoleSection from '@/components/role-section/RoleSection.vue'
 import { useTaskStore } from '@/stores/task'
+import { userStore } from "@/stores/user"
 
 // Define component name for Vue linting rules
 defineOptions({
@@ -583,7 +584,6 @@ const selectPlan = async (plan: PlanItem) => {
   border: none;
   outline: none;
   color: var(--text-primary, #ffffff);
-  font-size: 16px;
   line-height: 1.5;
   resize: none;
   min-height: 24px;
@@ -603,8 +603,8 @@ const selectPlan = async (plan: PlanItem) => {
   height: 40px;
   border: none;
   border-radius: 8px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: #ffffff;
+  background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, var(--primer-color) 100%);
+  color: var(--text-primary, #ffffff);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -657,7 +657,7 @@ const selectPlan = async (plan: PlanItem) => {
   top: 12px;
   right: 12px;
   background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-  color: white;
+  color: var(--text-primary);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 12px;
@@ -689,7 +689,7 @@ const selectPlan = async (plan: PlanItem) => {
     align-items: center;
     gap: 8px;
     padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--bg-primary-rgb), 0.1);
     border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
     border-radius: 8px;
     color: var(--text-primary, #ffffff);
@@ -722,7 +722,6 @@ const selectPlan = async (plan: PlanItem) => {
   border-radius: 8px;
   background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: var(--text-primary, #ffffff);
-  font-size: 16px;
   cursor: pointer;
   transition: all 0.2s ease;
 }

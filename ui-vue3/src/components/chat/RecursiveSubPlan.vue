@@ -535,7 +535,7 @@ const handleNestedStepSelected = (stepId: string) => {
       gap: 8px;
 
       .agent-step-item {
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-primary);
         border-radius: 6px;
         padding: 8px;
         background: rgba(0, 0, 0, 0.05);

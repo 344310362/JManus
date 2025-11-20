@@ -417,7 +417,7 @@ watch(visible, newVisible => {
   padding: 12px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
 }
 
 .search-container {
@@ -438,11 +438,11 @@ watch(visible, newVisible => {
 .search-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
 }
 
 .sort-container {
@@ -472,7 +472,7 @@ watch(visible, newVisible => {
 }
 
 .tool-group {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 8px;
@@ -490,7 +490,7 @@ watch(visible, newVisible => {
 }
 
 .tool-group-header:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .tool-group-header.collapsed {
@@ -510,7 +510,7 @@ watch(visible, newVisible => {
 }
 
 .group-icon {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .group-name {
@@ -562,7 +562,7 @@ watch(visible, newVisible => {
 }
 
 .tool-selection-item:hover {
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--bg-primary-rgb), 0.03);
 }
 
 .tool-selection-item:last-child {
@@ -640,7 +640,7 @@ watch(visible, newVisible => {
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
 }
 
 .empty-icon {

@@ -221,8 +221,8 @@ onUnmounted(() => {
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .language-options {
@@ -343,7 +343,7 @@ onUnmounted(() => {
 /* Dark theme adjustments */
 @media (prefers-color-scheme: light) {
   .language-dropdown {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(var(--bg-primary-rgb), 0.95);
     border-color: rgba(0, 0, 0, 0.1);
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   }

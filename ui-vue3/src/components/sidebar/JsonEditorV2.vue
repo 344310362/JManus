@@ -878,7 +878,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
 }
 
 .plan-basic-info {
@@ -907,7 +907,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
-  color: white;
+  color: var(--text-primary);
   font-size: 11px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -944,7 +944,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .readonly-input {
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
   border: 1px solid var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   color: var(--text-secondary, #ffffff);
   cursor: not-allowed;
@@ -997,7 +997,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 .dropdown-arrow {
   position: absolute;
   right: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   pointer-events: none;
   transition: transform 0.2s ease;
 }
@@ -1012,8 +1012,8 @@ const formatTableHeader = (terminateColumns: string): string => {
   left: 0;
   right: 0;
   margin-top: 4px;
-  background: rgba(0, 0, 0, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+  border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
   max-height: 200px;
   overflow-y: auto;
@@ -1024,13 +1024,13 @@ const formatTableHeader = (terminateColumns: string): string => {
 .dropdown-item {
   padding: 8px 12px;
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary), 0.9);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
   transition: all 0.2s ease;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--scrollbar-track, rgba(255, 255, 255, 0.05));
 }
 
 .dropdown-item:last-child {
@@ -1040,27 +1040,27 @@ const formatTableHeader = (terminateColumns: string): string => {
 .dropdown-item:hover,
 .dropdown-item.is-highlighted {
   background: rgba(102, 126, 234, 0.2);
-  color: white;
+  color: var(--text-primary);
 }
 
 .dropdown-item.is-selected {
   background: rgba(102, 126, 234, 0.15);
-  color: #667eea;
+  color: var(--accent-primary, #667eea);
   font-weight: 500;
 }
 
 .dropdown-item.disabled {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   cursor: not-allowed;
   font-style: italic;
 }
 
 .dropdown-item.disabled.error {
-  color: #ef4444;
+  color: var(--error, #ef4444);
 }
 
 .check-icon {
-  color: #667eea;
+  color: var(--accent-primary, #667eea);
   margin-left: 8px;
 }
 
@@ -1111,7 +1111,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 }
 
 .no-tool-keys {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   font-size: 10px;
   font-style: italic;
   text-align: center;
@@ -1120,7 +1120,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 
 .btn-add-tool-key {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
+  color: var(--text-primary);
   align-self: flex-start;
 }
 
@@ -1150,7 +1150,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 .agent-count-badge {
   font-size: 10px;
   color: var(--text-secondary, #ffffff);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -1188,7 +1188,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 
 .step-item {
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -1267,7 +1267,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   margin: 0;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   background: transparent;
   overflow-x: auto;
   white-space: pre-wrap;
@@ -1295,13 +1295,13 @@ const formatTableHeader = (terminateColumns: string): string => {
   justify-content: center;
   gap: 6px;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .btn:hover:not(:disabled) {
   background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
-  color: white;
+  color: var(--text-primary);
   transform: translateY(-1px);
 }
 
@@ -1325,7 +1325,7 @@ const formatTableHeader = (terminateColumns: string): string => {
 
 .btn-primary {
   background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-  color: white;
+  color: var(--text-primary);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -1360,18 +1360,18 @@ const formatTableHeader = (terminateColumns: string): string => {
 
 .preview-label {
   font-weight: 600;
-  color: #667eea;
+  color: var(--accent-primary, #667eea);
   margin-bottom: 4px;
   font-size: 9px;
 }
 
 .preview-content {
-  color: white;
+  color: var(--text-primary);
 }
 
 .preview-text {
   line-height: 1.4;
-  color: white;
+  color: var(--text-primary);
 }
 
 .preview-table-header {
@@ -1379,7 +1379,7 @@ const formatTableHeader = (terminateColumns: string): string => {
   background: rgba(0, 0, 0, 0.3);
   padding: 2px 6px;
   border-radius: 3px;
-  color: #ef4444;
+  color: var(--error, #ef4444);
   font-weight: 600;
   border: 1px solid rgba(239, 68, 68, 0.3);
 }

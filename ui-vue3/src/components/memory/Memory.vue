@@ -434,7 +434,7 @@ const confirmDelete = async () => {
   border-radius: 16px;
   width: 90%;
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   max-width: 800px;
   max-height: 80vh;
@@ -589,7 +589,7 @@ const confirmDelete = async () => {
   margin-bottom: 0.25rem;
   padding: 8px;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
 }
 
@@ -623,7 +623,7 @@ const confirmDelete = async () => {
 
 .message-time {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   white-space: nowrap;
 }
 
@@ -699,7 +699,7 @@ const confirmDelete = async () => {
   flex-shrink: 0;
   margin-bottom: 6px;
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   font-weight: 500;
 }
 
@@ -712,7 +712,7 @@ const confirmDelete = async () => {
 .bubble-content {
   padding: 8px;
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
 }
 
@@ -722,7 +722,7 @@ const confirmDelete = async () => {
 }
 
 .state-text {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
 }
 
 .modal-overlay {
@@ -821,7 +821,7 @@ const confirmDelete = async () => {
 
 .char-count {
   font-size: 0.75rem;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
 }
 
 @keyframes fadeIn {

@@ -172,7 +172,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
 
       .bot-icon {
         font-size: 16px;
-        color: #f0f8ff;
+        color: var(--bg-primary, #f0f8ff);
       }
     }
 
@@ -195,7 +195,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
 
       .response-text {
         background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-primary);
         border-radius: 12px;
         padding: 16px;
         color: var(--text-primary, #ffffff);

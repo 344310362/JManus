@@ -97,7 +97,7 @@ export class DirectApiService {
       )
       console.log('[DirectApiService] Request body:', requestBody)
 
-      const response = await fetch(`${this.BASE_URL}/executeByToolNameAsync`, {
+      const response = await apiFetch(`${this.BASE_URL}/executeByToolNameAsync`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),

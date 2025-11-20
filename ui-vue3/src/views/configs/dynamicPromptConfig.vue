@@ -623,7 +623,7 @@ watch(
 
 .action-btn.warning {
   background: #f59e0b;
-  color: white;
+  color: var(--text-primary);
 }
 
 .action-btn.warning:hover {
@@ -632,7 +632,7 @@ watch(
 
 .action-btn.info {
   background: var(--info, var(--info));
-  color: white;
+  color: var(--text-primary);
 }
 
 .action-btn.info:hover {
@@ -649,7 +649,7 @@ watch(
   border: 1px solid var(--scrollbar-thumb, var(--scrollbar-thumb));
   border-radius: 4px;
   background: var(--scrollbar-track, var(--bg-secondary));
-  color: white;
+  color: var(--text-primary);
   font-size: 14px;
   outline: none;
 }
@@ -921,7 +921,7 @@ watch(
     &:focus {
       border-color: var(--accent-primary, var(--accent-primary));
       outline: none;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(var(--bg-primary-rgb), 0.08);
     }
 
     &::placeholder {

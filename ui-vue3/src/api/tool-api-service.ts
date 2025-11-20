@@ -15,7 +15,7 @@
  */
 
 import type { Tool } from '@/types/tool'
-
+import { apiFetch } from '@/utils/api-fetch'
 /**
  * Tool API service class
  * Provides basic tool-related functionality without agent dependencies
@@ -41,7 +41,7 @@ export class ToolApiService {
    */
   static async getAvailableTools(): Promise<Tool[]> {
     try {
-      const response = await fetch('/api/tools')
+      const response = await apiFetch('/api/tools')
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {

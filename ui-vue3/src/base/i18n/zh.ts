@@ -1042,7 +1042,7 @@ const words: I18nType = {
   // 首页
   home: {
     welcomeTitle: '元气精灵',
-    welcomeSubtitle: '你好，{nickname} 有什么任务需要我为你服务',
+    welcomeSubtitle: 'HI {nickname} 有什么任务尽管砸过来',
     tagline: 'Java AI 智能体',
     inputPlaceholder: '描述您想构建或完成的内容...',
     directButton: '直接进入工作台',

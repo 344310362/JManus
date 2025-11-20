@@ -384,7 +384,7 @@ const formatToolParameters = (parameters?: string): string => {
 
     .agent-execution-item {
       margin-bottom: 16px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-primary);
       border-radius: 8px;
       overflow: hidden;
       transition: all 0.2s ease;
@@ -411,7 +411,7 @@ const formatToolParameters = (parameters?: string): string => {
         align-items: center;
         justify-content: space-between;
         padding: 12px 16px;
-        background: rgba(255, 255, 255, 0.02);
+        background: rgba(var(--bg-primary-rgb), 0.02);
         cursor: pointer;
         transition: background 0.2s ease;
 
@@ -761,7 +761,7 @@ const formatToolParameters = (parameters?: string): string => {
                 gap: 8px;
 
                 .agent-step-item {
-                  border: 1px solid rgba(255, 255, 255, 0.1);
+                  border: 1px solid var(--border-primary);
                   border-radius: 6px;
                   padding: 8px;
                   background: rgba(0, 0, 0, 0.05);

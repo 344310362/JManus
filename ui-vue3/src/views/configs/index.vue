@@ -153,7 +153,7 @@ const handleNavClick = (categoryKey: string) => {
 <style scoped>
 .config-container {
   height: 100vh;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
   color: var(--text-primary);
 }
 
@@ -209,7 +209,7 @@ const handleNavClick = (categoryKey: string) => {
 }
 
 .nav-item :deep(svg) {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   flex-shrink: 0;
   display: inline-block;
   vertical-align: middle;

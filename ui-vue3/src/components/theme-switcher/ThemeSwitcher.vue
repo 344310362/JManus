@@ -224,7 +224,7 @@ onUnmounted(() => {
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   color: var(--text-secondary, rgba(255, 255, 255, 0.8));
 }
 
@@ -336,7 +336,7 @@ onUnmounted(() => {
 
 /* Light theme adjustments */
 :root[data-theme="light"] .theme-dropdown {
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(var(--bg-primary-rgb), 0.95);
   border-color: rgba(0, 0, 0, 0.1);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
 }

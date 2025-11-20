@@ -1151,7 +1151,7 @@ onMounted(() => {
     &:focus {
       border-color: var(--accent-primary, var(--accent-primary));
       outline: none;
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(var(--bg-primary-rgb), 0.08);
     }
 
     &::placeholder {
@@ -1305,7 +1305,7 @@ onMounted(() => {
   border: 1px solid rgba(255, 193, 7, 0.3);
   border-radius: 12px;
   font-size: 11px;
-  color: #ffc107;
+  color: var(--warning, #ffc107);
   font-weight: 500;
 }
 
@@ -1318,14 +1318,14 @@ onMounted(() => {
   border: 1px solid rgba(255, 193, 7, 0.3);
   border-radius: 8px;
   font-size: 12px;
-  color: #ffc107;
+  color: var(--warning, #ffc107);
   font-weight: 500;
 }
 
 .action-btn.default {
   background: rgba(255, 193, 7, 0.1);
   border: 1px solid rgba(255, 193, 7, 0.3);
-  color: #ffc107;
+  color: var(--warning, #ffc107);
 }
 
 .action-btn.default:hover:not(:disabled) {
@@ -1380,8 +1380,8 @@ onMounted(() => {
 
 .api-key-toggle-btn:focus {
   outline: none;
-  background: rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 1);
+  background: rgba(var(--bg-primary-rgb), 0.15);
+  color: rgba(var(--text-primary-rgb), 1);
 }
 
 .check-btn {
@@ -1499,7 +1499,7 @@ onMounted(() => {
 .description-field:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .description-field::placeholder {
@@ -1528,7 +1528,7 @@ onMounted(() => {
 }
 
 .instruction-title {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   font-weight: 500;
   font-size: 14px;
 }
@@ -1540,7 +1540,7 @@ onMounted(() => {
 }
 
 .instruction-step {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--text-primary-rgb), 0.7);
   font-size: 13px;
   padding-left: 12px;
 }

@@ -974,7 +974,7 @@ const newChat = () => {
   display: flex;
   align-items: center;
   gap: 16px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
   flex-shrink: 0; /* Ensure the header will not be compressed */
   position: sticky; /* Fix the header at the top */
   top: 0;
@@ -1017,7 +1017,7 @@ const newChat = () => {
   font-size: 14px;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--bg-primary-rgb), 0.1);
     border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   }
 }
@@ -1036,7 +1036,7 @@ const newChat = () => {
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--bg-primary-rgb), 0.1);
     border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   }
 }
@@ -1055,7 +1055,7 @@ const newChat = () => {
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--bg-primary-rgb), 0.1);
     border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   }
 }

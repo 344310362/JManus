@@ -83,20 +83,20 @@ watch(
 }
 
 .tab-button:hover {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   background-color: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
 }
 
 .tab-button.active {
   color: var(--info, #3b82f6);
   border-bottom-color: var(--info, #3b82f6);
-  background-color: rgba(255, 255, 255, 0.03);
+  background-color: rgba(var(--text-primary-rgb), 0.03);
 }
 
 .tab-content {
   min-height: 200px;
-  background-color: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(var(--text-primary-rgb), 0.03);
+  border: 1px solid var(--border-primary);
   border-radius: 4px;
   padding: 16px;
 }

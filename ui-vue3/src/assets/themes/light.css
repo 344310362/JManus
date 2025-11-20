@@ -1,5 +1,7 @@
 /* Light White Theme Variables */
 :root[data-theme="light"] {
+  --primer-color: #09df75;
+
   /* Background colors */
   --bg-primary: #ffffff;           /* 主背景：纯白 */
   --bg-secondary: #fafafa;         /* 次背景：极浅灰 */

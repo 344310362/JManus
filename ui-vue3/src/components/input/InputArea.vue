@@ -435,7 +435,7 @@ onUnmounted(() => {
   min-height: 112px;
   padding: 10px 12px;
   border-top: 1px solid var(--bg-secondary, #1a1a1a);
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
   /* Ensure the input area is always at the bottom */
   flex-shrink: 0; /* Won't be compressed */
   position: sticky; /* Fixed at the bottom */
@@ -454,7 +454,7 @@ onUnmounted(() => {
   flex-direction: column;
   gap: 8px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 12px;
   padding: 12px 16px;
 
@@ -479,10 +479,10 @@ onUnmounted(() => {
 .selection-input {
   flex-shrink: 0;
   padding: 6px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  color: var(--text-primary, #ffffff);
   font-size: 12px;
   cursor: pointer;
   transition: all 0.2s ease;
@@ -493,18 +493,18 @@ onUnmounted(() => {
   white-space: nowrap;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(var(--bg-primary-rgb), 0.1);
+    border-color: var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
   }
 
   &:focus {
-    border-color: #667eea;
-    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent-primary, #667eea);
+    background: rgba(var(--bg-primary-rgb), 0.08);
   }
 
   option {
-    background: #1a1a1a;
-    color: #ffffff;
+    background: var(--text-primary, #1a1a1a);
+    color: var(--text-primary, #ffffff);
     white-space: normal;
     padding: 4px 8px;
   }
@@ -556,7 +556,7 @@ onUnmounted(() => {
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--bg-primary-rgb), 0.1);
     border-color: var(--accent-primary, #667eea);
     transform: translateY(-1px);
   }

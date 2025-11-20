@@ -561,7 +561,7 @@ watch(
 
 .modal-container {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 16px;
   width: 90%;
   max-width: 800px;
@@ -671,7 +671,7 @@ watch(
 
 .task-item {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 12px;
   padding: 24px;
   display: flex;
@@ -712,7 +712,7 @@ watch(
 .task-name {
   font-size: 20px;
   font-weight: 700;
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(var(--text-primary-rgb), 0.95);
   line-height: 1.3;
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
   -webkit-background-clip: text;
@@ -764,19 +764,19 @@ watch(
   color: var(--text-secondary, #ffffff);
   font-size: 13px;
   padding: 6px 10px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--bg-primary-rgb), 0.03);
   border-radius: 8px;
   border: 1px solid var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   transition: all 0.2s ease;
 }
 
 .task-time:hover {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.06);
+  border-color: rgba(var(--text-primary-rgb), 0.1);
 }
 
 .cron-readable {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(var(--text-primary-rgb), 0.85);
   font-weight: 600;
   font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Roboto Mono', monospace;
 }
@@ -858,7 +858,7 @@ watch(
   top: 100%;
   right: 0;
   background: rgba(30, 30, 30, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(8px);
@@ -875,7 +875,7 @@ watch(
   padding: 10px 12px;
   background: none;
   border: none;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   font-size: 13px;
   cursor: pointer;
   transition: all 0.2s;
@@ -891,8 +891,8 @@ watch(
 }
 
 .dropdown-item:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.95);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: rgba(var(--text-primary-rgb), 0.95);
 }
 
 .dropdown-item.edit-btn:hover:not(:disabled) {
@@ -929,7 +929,7 @@ watch(
 /* Confirmation modal styles */
 .confirm-modal {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 16px;
   width: 90%;
   max-width: 480px;
@@ -963,7 +963,7 @@ watch(
 
 .confirm-content p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   line-height: 1.6;
   font-size: 14px;
 }
@@ -1041,7 +1041,7 @@ watch(
   padding: 16px;
   border-radius: 12px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   cursor: pointer;
   transition: all 0.3s;
   text-align: left;

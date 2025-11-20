@@ -445,7 +445,7 @@ onMounted(() => {
 
 .description-text {
   margin: 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   font-size: 14px;
   line-height: 1.6;
   white-space: pre-line;
@@ -477,13 +477,13 @@ onMounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
 }
 
 .config-count {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(var(--text-primary-rgb), 0.6);
   font-size: 14px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   padding: 2px 8px;
   border-radius: 10px;
 }
@@ -496,22 +496,22 @@ onMounted(() => {
 .search-input {
   width: 100%;
   padding: 10px 36px 10px 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   transition: all 0.3s ease;
 }
 
 .search-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
 }
 
 .search-icon {
@@ -519,7 +519,7 @@ onMounted(() => {
   right: 12px;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(var(--text-primary-rgb), 0.6);
   font-size: 18px;
   pointer-events: none;
 }
@@ -533,7 +533,7 @@ onMounted(() => {
 
 .config-card {
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--bg-primary-rgb), 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
   cursor: pointer;
@@ -541,8 +541,8 @@ onMounted(() => {
 }
 
 .config-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  border-color: rgba(var(--text-primary-rgb), 0.15);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
@@ -563,7 +563,7 @@ onMounted(() => {
 .config-name {
   font-weight: 600;
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
 }
 
 .config-status-toggle {
@@ -579,11 +579,11 @@ onMounted(() => {
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
 }
 
 .status-toggle:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
 }
 
 .status-toggle.enabled {
@@ -596,7 +596,7 @@ onMounted(() => {
 
 .toggle-label {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(var(--text-primary-rgb), 0.6);
   transition: color 0.3s ease;
 }
 
@@ -608,7 +608,7 @@ onMounted(() => {
 }
 
 .type-icon {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(var(--text-primary-rgb), 0.6);
   font-size: 16px;
 }
 
@@ -619,8 +619,8 @@ onMounted(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .type-badge.mysql {
@@ -668,15 +668,15 @@ onMounted(() => {
 
 .summary-label {
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(var(--text-primary-rgb), 0.6);
   min-width: 70px;
 }
 
 .summary-value {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   word-break: break-all;
   font-family: monospace;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   padding: 2px 6px;
   border-radius: 3px;
 }
@@ -726,7 +726,7 @@ onMounted(() => {
   margin: 0;
   font-size: 20px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
 }
 
 .detail-actions {
@@ -772,15 +772,15 @@ onMounted(() => {
 }
 
 .action-btn.secondary {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .action-btn.secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.95);
+  background: rgba(var(--bg-primary-rgb), 0.12);
+  border-color: rgba(var(--text-primary-rgb), 0.25);
+  color: rgba(var(--text-primary-rgb), 0.95);
 }
 
 .action-btn:disabled {
@@ -797,7 +797,7 @@ onMounted(() => {
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(var(--text-primary-rgb), 0.6);
 }
 
 .loading-icon,
@@ -805,7 +805,7 @@ onMounted(() => {
   font-size: 48px;
   margin-bottom: 16px;
   opacity: 0.5;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
 }
 
 .empty-detail {
@@ -817,14 +817,14 @@ onMounted(() => {
 
 .empty-detail-content {
   text-align: center;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
 }
 
 .empty-detail-icon {
   font-size: 64px;
   margin-bottom: 20px;
   opacity: 0.3;
-  color: rgba(255, 255, 255, 0.3);
+  color: var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
 }
 
 .btn-secondary,
@@ -839,15 +839,15 @@ onMounted(() => {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.95);
+  background: rgba(var(--bg-primary-rgb), 0.12);
+  border-color: rgba(var(--text-primary-rgb), 0.25);
+  color: rgba(var(--text-primary-rgb), 0.95);
 }
 
 .btn-danger {

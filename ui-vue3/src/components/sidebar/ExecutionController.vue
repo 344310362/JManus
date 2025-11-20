@@ -772,7 +772,7 @@ defineExpose({
     display: block;
     margin-bottom: 6px;
     font-size: 12px;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--text-primary-rgb), 0.8);
     font-weight: 500;
   }
 
@@ -801,7 +801,7 @@ defineExpose({
 
     .parameter-label {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(var(--text-primary-rgb), 0.8);
       font-weight: 500;
       display: flex;
       align-items: center;
@@ -818,7 +818,7 @@ defineExpose({
       background: rgba(0, 0, 0, 0.3);
       border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
       border-radius: 6px;
-      color: white;
+      color: var(--text-primary);
       font-size: 12px;
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       padding: 8px 12px;
@@ -831,7 +831,7 @@ defineExpose({
       }
 
       &::placeholder {
-        color: rgba(255, 255, 255, 0.4);
+        color: rgba(var(--text-primary-rgb), 0.4);
       }
 
       &.error {
@@ -880,7 +880,7 @@ defineExpose({
 }
 
 .call-example-description {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   font-size: 12px;
   line-height: 1.4;
   margin: 0;
@@ -897,7 +897,7 @@ defineExpose({
 .internal-call-wrapper,
 .mcp-call-wrapper {
   background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 12px;
 }
@@ -909,7 +909,7 @@ defineExpose({
     display: inline-block;
     padding: 2px 6px;
     background: var(--accent-primary, #667eea);
-    color: white;
+    color: var(--text-primary);
     border-radius: 3px;
     font-size: 10px;
     font-weight: 600;
@@ -929,7 +929,7 @@ defineExpose({
   }
 
   .call-description {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--text-primary-rgb), 0.8);
     margin-bottom: 8px;
     line-height: 1.4;
   }
@@ -946,10 +946,10 @@ defineExpose({
 
     .example-code {
       background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-primary);
       border-radius: 4px;
       padding: 8px;
-      color: #e0e0e0;
+      color: var(--border-primary, #e0e0e0);
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       font-size: 10px;
       line-height: 1.3;
@@ -962,7 +962,7 @@ defineExpose({
 
 .tab-container {
   background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -991,7 +991,7 @@ defineExpose({
 
   &:hover {
     background: rgba(102, 126, 234, 0.1);
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--text-primary-rgb), 0.8);
   }
 
   &.active {
@@ -1017,7 +1017,7 @@ defineExpose({
     display: inline-block;
     padding: 2px 6px;
     background: var(--accent-primary, #667eea);
-    color: white;
+    color: var(--text-primary);
     border-radius: 3px;
     font-size: 10px;
     font-weight: 600;
@@ -1037,7 +1037,7 @@ defineExpose({
   }
 
   .api-description {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(var(--text-primary-rgb), 0.8);
     margin-bottom: 8px;
     line-height: 1.4;
   }
@@ -1054,10 +1054,10 @@ defineExpose({
 
     .example-code {
       background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-primary);
       border-radius: 4px;
       padding: 8px;
-      color: #e0e0e0;
+      color: var(--border-primary, #e0e0e0);
       font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
       font-size: 10px;
       line-height: 1.3;
@@ -1083,7 +1083,7 @@ defineExpose({
 
   &.btn-primary {
     background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-    color: white;
+    color: var(--text-primary);
 
     &:hover:not(:disabled) {
       transform: translateY(-1px);

@@ -395,7 +395,7 @@ defineExpose({
 .example-json {
   margin: 0;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--bg-primary-rgb), 0.03);
   overflow-x: auto;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 13px;
@@ -403,7 +403,7 @@ defineExpose({
 }
 
 .example-json code {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   background: none;
   padding: 0;
   border: none;
@@ -414,9 +414,9 @@ defineExpose({
 
 /* JSON syntax highlighting */
 .example-json .string { color: #a78bfa; }
-.example-json .number { color: #fbbf24; }
+.example-json .number { color: var(--warning, #fbbf24); }
 .example-json .boolean { color: #f87171; }
-.example-json .null { color: rgba(255, 255, 255, 0.6); }
+.example-json .null { color: rgba(var(--text-primary-rgb), 0.6); }
 .example-json .key { color: #34d399; }
 
 /* JSON configuration container */
@@ -430,7 +430,7 @@ defineExpose({
 .usage-instructions {
   margin-top: 16px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--bg-primary-rgb), 0.03);
   border: 1px solid rgba(102, 126, 234, 0.5);
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -459,18 +459,18 @@ defineExpose({
 
 .instructions-icon {
   font-size: 16px;
-  color: #667eea;
+  color: var(--accent-primary, #667eea);
 }
 
 .instructions-header h4 {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
 }
 
 .instructions-content {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   line-height: 1.5;
   font-size: 14px;
 }
@@ -487,7 +487,7 @@ defineExpose({
 }
 
 .instructions-list > li::marker {
-  color: #667eea;
+  color: var(--accent-primary, #667eea);
   font-weight: 600;
   font-size: 14px;
 }
@@ -497,7 +497,7 @@ defineExpose({
 }
 
 .instructions-list strong {
-  color: rgba(255, 255, 255, 0.95);
+  color: rgba(var(--text-primary-rgb), 0.95);
   font-weight: 600;
   display: block;
   margin-bottom: 6px;
@@ -512,13 +512,13 @@ defineExpose({
 
 .instructions-list ul li {
   margin-bottom: 3px;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(var(--text-primary-rgb), 0.75);
   font-size: 13px;
   line-height: 1.4;
 }
 
 .instructions-list ul li strong {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   font-weight: 500;
   display: inline;
   margin-bottom: 0;

@@ -108,7 +108,7 @@ defineExpose<ToastInstance>({ show })
 /* Toast modal container */
 .toast-modal {
   background: rgba(20, 20, 25, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 12px;
   padding: 24px;
   min-width: 320px;
@@ -145,7 +145,7 @@ defineExpose<ToastInstance>({ show })
 
 .toast-content span {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 /* Toast actions */

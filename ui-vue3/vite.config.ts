@@ -26,7 +26,7 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_BASE_PATH || '/ui',
     build: {
-    outDir: './ui',
+    outDir: env.VITE_OUT_DIR || './ui',
     sourcemap: true, // Enable source maps for production builds
   },
   css: {

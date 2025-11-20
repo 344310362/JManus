@@ -1,29 +1,46 @@
 spring:
+  datasource:
+    url: jdbc:mysql://rm-2ze148h4p2ywjovb2.mysql.rds.aliyuncs.com:3306/sm_cloud_ai_manus?useSSL=false&serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF-8&connectionCollation=utf8mb4_unicode_ci
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: hotwheel
+    password: cqmyg123!@#
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+#    hibernate:
+#      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false  # Disable SQL formatting in container environment for better performance
+  ai:
+    memory:
+      mysql:
+        enabled: true
   cloud:
     nacos:
-      server-addr: prod-nacos.exexm.com:8848
-      username: prod-user
-      password: prod-password
+      server-addr: intra-nacos.exexm.com:8848
+      username: nacos
+      password: nacos
       discovery:
         enabled: true
         register-enabled: true
         namespace: prod
-        group: PROD_GROUP
+        group: DEFAULT_GROUP
         metadata:
           version: 1.0.0
       config:
         namespace: prod
-        group: PROD_GROUP
+        group: DEFAULT_GROUP
         file-extension: yaml
   config:
     import:
       - optional:nacos:${spring.application.name}.yaml
 
-# Environment variables for bootstrap.yml
-NACOS_SERVER_ADDR: prod-nacos.exexm.com:8848
-NACOS_USERNAME: prod-user
-NACOS_PASSWORD: prod-password
-NACOS_CONFIG_NAMESPACE: prod
-NACOS_CONFIG_GROUP: PROD_GROUP
-NACOS_DISCOVERY_NAMESPACE: prod
-NACOS_DISCOVERY_GROUP: PROD_GROUP
+manus:
+  browser:
+    headless: true
+    requestTimeout: 180
+  openBrowserAuto: false
+
+logging:
+  level:
+    root: INFO

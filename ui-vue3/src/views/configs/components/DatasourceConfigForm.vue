@@ -271,7 +271,7 @@ const testConnection = async () => {
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   font-size: 14px;
 }
 
@@ -283,34 +283,34 @@ const testConnection = async () => {
 .config-input {
   width: 100%;
   padding: 10px 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   transition: all 0.3s ease;
 }
 
 .config-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .config-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
 }
 
 .config-input:disabled {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.5);
+  background: rgba(var(--bg-primary-rgb), 0.03);
+  border-color: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  color: rgba(var(--text-primary-rgb), 0.5);
   cursor: not-allowed;
 }
 
 .config-input select {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.9);
+  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
+  color: rgba(var(--text-primary-rgb), 0.9);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   padding: 10px 12px;
@@ -319,7 +319,7 @@ const testConnection = async () => {
 .config-input select:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .toggle-container {
@@ -348,7 +348,7 @@ const testConnection = async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   transition: all 0.4s ease;
   border-radius: 24px;
 }
@@ -360,7 +360,7 @@ const testConnection = async () => {
   width: 18px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--text-primary);
   transition: all 0.4s ease;
   border-radius: 50%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -376,7 +376,7 @@ const testConnection = async () => {
 }
 
 .toggle-switch:hover .toggle-slider {
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
 }
 
 .toggle-switch:hover input:checked + .toggle-slider {
@@ -385,13 +385,13 @@ const testConnection = async () => {
 
 .toggle-label {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(var(--text-primary-rgb), 0.7);
   transition: color 0.3s ease;
 }
 
 .form-hint {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   margin-top: 4px;
 }
 
@@ -431,7 +431,7 @@ const testConnection = async () => {
   border-radius: 6px;
   font-size: 14px;
   font-weight: 500;
-  color: #667eea;
+  color: var(--accent-primary, #667eea);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -441,7 +441,7 @@ const testConnection = async () => {
 }
 
 .test-connection-btn:hover:not(:disabled) {
-  background: rgba(102, 126, 234, 0.3);
+  background: var(--selection-bg, rgba(102, 126, 234, 0.3));
   border-color: rgba(102, 126, 234, 0.6);
   transform: translateY(-1px);
 }

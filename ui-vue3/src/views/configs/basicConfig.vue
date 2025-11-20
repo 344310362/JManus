@@ -963,7 +963,7 @@ onMounted(() => {
 
 .config-group:hover {
   background: var(--scrollbar-track, var(--bg-secondary));
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: rgba(var(--text-primary-rgb), 0.15);
 }
 
 .group-header {
@@ -1003,8 +1003,8 @@ onMounted(() => {
 }
 
 .config-item:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(var(--text-primary-rgb), 0.15);
+  background: rgba(var(--bg-primary-rgb), 0.02);
 }
 
 .config-item.modified {
@@ -1164,7 +1164,7 @@ onMounted(() => {
 .config-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .config-input::placeholder {
@@ -1191,7 +1191,7 @@ onMounted(() => {
   right: 20px;
   padding: 12px 20px;
   border-radius: 8px;
-  color: white;
+  color: var(--text-primary);
   font-weight: 500;
   z-index: 1000;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
@@ -1237,7 +1237,7 @@ onMounted(() => {
   border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
 }
 
 .sub-group-header {
@@ -1252,7 +1252,7 @@ onMounted(() => {
 }
 
 .sub-group-header:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .sub-group-info {
@@ -1350,7 +1350,7 @@ onMounted(() => {
 .search-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   width: 260px;
 }
 
@@ -1380,7 +1380,7 @@ onMounted(() => {
 }
 
 .toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(var(--bg-primary-rgb), 0.15);
   color: var(--text-primary);
 }
 
@@ -1404,7 +1404,7 @@ onMounted(() => {
 }
 
 .action-btn {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 4px;
   color: var(--text-secondary);
@@ -1419,9 +1419,9 @@ onMounted(() => {
 }
 
 .action-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(var(--bg-primary-rgb), 0.12);
   color: var(--text-secondary);
-  border-color: rgba(255, 255, 255, 0.25);
+  border-color: rgba(var(--text-primary-rgb), 0.25);
 }
 
 .action-btn.restore-btn {

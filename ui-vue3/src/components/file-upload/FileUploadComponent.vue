@@ -267,13 +267,13 @@ defineExpose({
   box-sizing: border-box;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--bg-primary-rgb), 0.08);
     border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   }
 
   &.has-files {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: rgba(var(--bg-primary-rgb), 0.08);
+    border-color: rgba(var(--text-primary-rgb), 0.15);
   }
 }
 
@@ -291,7 +291,7 @@ defineExpose({
   user-select: none;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--bg-primary-rgb), 0.1);
     color: #007acc;
   }
 
@@ -313,11 +313,11 @@ defineExpose({
   padding: 6px 8px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border-radius: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(var(--bg-primary-rgb), 0.08);
     border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   }
 }
@@ -349,7 +349,7 @@ defineExpose({
   border: none;
   padding: 2px;
   cursor: pointer;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   transition: all 0.2s ease;
   border-radius: 3px;
   flex-shrink: 0;

@@ -224,7 +224,7 @@ onUnmounted(() => {
 }
 
 .node-content:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .node-content.is-directory {
@@ -257,7 +257,7 @@ onUnmounted(() => {
   justify-content: center;
   width: 18px;
   height: 18px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .node-icon .iconify {
@@ -274,7 +274,7 @@ onUnmounted(() => {
 }
 
 .file-size {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   font-size: 11px;
   white-space: nowrap;
 }
@@ -296,7 +296,7 @@ onUnmounted(() => {
   justify-content: center;
   width: 20px;
   height: 20px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   border: none;
   border-radius: 4px;
   color: var(--text-secondary, #ffffff);
@@ -340,7 +340,7 @@ onUnmounted(() => {
 }
 
 .context-menu-item:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
 }
 
 .context-menu-item .iconify {
@@ -350,7 +350,7 @@ onUnmounted(() => {
 
 .context-menu-divider {
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   margin: 4px 0;
 }
 

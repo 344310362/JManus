@@ -213,7 +213,7 @@ const handleConnectionTypeUpdate = (value: string | null) => {
 .config-textarea:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .config-textarea {

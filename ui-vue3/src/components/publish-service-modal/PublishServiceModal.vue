@@ -821,7 +821,7 @@ defineExpose({
   width: 100%;
   padding: 12px 16px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   color: var(--text-primary, #ffffff);;
   font-size: 14px;
@@ -839,13 +839,13 @@ defineExpose({
 .form-item textarea:focus {
   border-color: var(--accent-primary, #667eea);
   outline: none;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
 }
 
 .form-item input::placeholder,
 .form-item textarea::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
 }
 
 /* Service Group Autocomplete Styles */
@@ -866,7 +866,7 @@ defineExpose({
   margin-top: 4px;
   background: rgba(15, 15, 20, 0.98);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
   border-radius: 8px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
   max-height: 200px;
@@ -875,11 +875,11 @@ defineExpose({
 
 .service-group-option {
   padding: 12px 16px;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(var(--text-primary-rgb), 0.9);
   cursor: pointer;
   transition: all 0.2s ease;
   font-size: 14px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--scrollbar-track, rgba(255, 255, 255, 0.05));
 }
 
 .service-group-option:last-child {
@@ -888,7 +888,7 @@ defineExpose({
 
 .service-group-option:hover {
   background: rgba(102, 126, 234, 0.1);
-  color: #667eea;
+  color: var(--accent-primary, #667eea);
 }
 
 .description-field {
@@ -927,7 +927,7 @@ defineExpose({
 }
 
 .parameter-table th {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   color: var(--text-primary);
   font-weight: 500;
   padding: 12px;
@@ -945,7 +945,7 @@ defineExpose({
   width: 100%;
   padding: 8px 12px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   color: var(--text-primary, #ffffff);;
   font-size: 14px;
@@ -955,11 +955,11 @@ defineExpose({
 .parameter-input:focus {
   border-color: var(--accent-primary, #667eea);
   outline: none;
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 .readonly-input {
-  background: rgba(255, 255, 255, 0.02) !important;
+  background: rgba(var(--bg-primary-rgb), 0.02) !important;
   color: var(--text-secondary, #ffffff) !important;
   cursor: not-allowed;
   border-color: var(--scrollbar-track, rgba(255, 255, 255, 0.05)) !important;
@@ -977,7 +977,7 @@ defineExpose({
   width: 100%;
   padding: 12px 16px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   color: var(--text-primary, #ffffff);;
   font-size: 14px;
@@ -1003,21 +1003,21 @@ defineExpose({
 }
 
 .dropdown-input input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
   font-style: italic;
 }
 
 .dropdown-input.active {
   border-color: var(--accent-primary, #667eea);
   outline: none;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: rgba(var(--text-primary-rgb), 0.08);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
   transform: translateY(-1px);
 }
 
 .dropdown-input:hover {
   border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
-  background-color: rgba(255, 255, 255, 0.07);
+  background-color: rgba(var(--text-primary-rgb), 0.07);
   transform: translateY(-1px);
 }
 
@@ -1039,7 +1039,7 @@ defineExpose({
   left: 0;
   width: 100%;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
   max-height: 200px;
@@ -1105,7 +1105,7 @@ defineExpose({
   gap: 6px;
   padding: 10px 16px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   color: var(--text-primary, #ffffff);;
   cursor: pointer;
@@ -1114,7 +1114,7 @@ defineExpose({
 }
 
 .action-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
 }
 
@@ -1152,14 +1152,14 @@ defineExpose({
 
 /* Read-only input styles */
 .readonly-input {
-  background: rgba(255, 255, 255, 0.03) !important;
-  color: rgba(255, 255, 255, 0.7) !important;
+  background: rgba(var(--bg-primary-rgb), 0.03) !important;
+  color: rgba(var(--text-primary-rgb), 0.7) !important;
   cursor: not-allowed !important;
   opacity: 0.8;
 }
 
 .readonly-input::placeholder {
-  color: rgba(255, 255, 255, 0.4) !important;
+  color: rgba(var(--text-primary-rgb), 0.4) !important;
 }
 
 /* Endpoint container layout */
@@ -1248,7 +1248,7 @@ defineExpose({
 }
 
 .select-input::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
   font-style: italic;
 }
 
@@ -1328,8 +1328,8 @@ defineExpose({
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .select-options {
@@ -1455,8 +1455,8 @@ defineExpose({
   flex-direction: column;
   gap: 8px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.03);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
 }
 
@@ -1535,7 +1535,7 @@ defineExpose({
   justify-content: space-between;
   padding: 12px 16px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   color: var(--text-primary, #ffffff);;
   cursor: pointer;
@@ -1544,7 +1544,7 @@ defineExpose({
 }
 
 .url-display:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(var(--bg-primary-rgb), 0.08);
   border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
 }
 
@@ -1564,7 +1564,7 @@ defineExpose({
 }
 
 .url-display:hover .copy-icon {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .backdrop {

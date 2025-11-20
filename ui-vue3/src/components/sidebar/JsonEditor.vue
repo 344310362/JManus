@@ -292,7 +292,7 @@ const autoResizeTextarea = (event: Event) => {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
 }
 
 .plan-basic-info {
@@ -321,7 +321,7 @@ const autoResizeTextarea = (event: Event) => {
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
-  color: white;
+  color: var(--text-primary);
   font-size: 11px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -364,7 +364,7 @@ const autoResizeTextarea = (event: Event) => {
 
 .checkbox-label {
   font-size: 11px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 /* Steps Section */
@@ -395,7 +395,7 @@ const autoResizeTextarea = (event: Event) => {
 .agent-count-badge {
   font-size: 10px;
   color: var(--text-secondary, #ffffff);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -433,7 +433,7 @@ const autoResizeTextarea = (event: Event) => {
 
 .step-item {
   background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -512,7 +512,7 @@ const autoResizeTextarea = (event: Event) => {
   margin: 0;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(var(--text-primary-rgb), 0.8);
   background: transparent;
   overflow-x: auto;
   white-space: pre-wrap;
@@ -540,13 +540,13 @@ const autoResizeTextarea = (event: Event) => {
   justify-content: center;
   gap: 6px;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  background: rgba(var(--bg-primary-rgb), 0.1);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .btn:hover:not(:disabled) {
   background: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
-  color: white;
+  color: var(--text-primary);
   transform: translateY(-1px);
 }
 
@@ -585,7 +585,7 @@ const autoResizeTextarea = (event: Event) => {
 
 .btn-add {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: white;
+  color: var(--text-primary);
 }
 
 .btn-add:hover:not(:disabled) {
@@ -595,7 +595,7 @@ const autoResizeTextarea = (event: Event) => {
 
 .btn-danger {
   background: linear-gradient(135deg, var(--error, #ef4444) 0%, #dc2626 100%);
-  color: white;
+  color: var(--text-primary);
 }
 
 .btn-danger:hover:not(:disabled) {
@@ -609,7 +609,7 @@ const autoResizeTextarea = (event: Event) => {
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
-  color: white;
+  color: var(--text-primary);
   font-size: 11px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   padding: 8px;
@@ -630,6 +630,6 @@ const autoResizeTextarea = (event: Event) => {
 }
 
 .json-editor::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
 }
 </style>

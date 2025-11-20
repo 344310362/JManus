@@ -363,7 +363,7 @@ watch(
 
 .modal-container {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 16px;
   width: 90%;
   max-width: 600px;
@@ -446,7 +446,7 @@ watch(
 .form-textarea,
 .form-select {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 12px;
   color: var(--text-primary);
@@ -464,7 +464,7 @@ watch(
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(var(--text-primary-rgb), 0.4);
 }
 
 .form-textarea {
@@ -474,7 +474,7 @@ watch(
 
 .form-help {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   margin-top: 4px;
 }
 
@@ -511,7 +511,7 @@ watch(
   cursor: pointer;
   transition: all 0.3s;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   color: var(--text-secondary, #ffffff);
 }
 
@@ -522,7 +522,7 @@ watch(
 }
 
 .template-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
 }
 
 .template-btn.active:hover {
@@ -564,12 +564,12 @@ watch(
 
 .cancel-btn {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border-primary);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
 }
 
 .save-btn {
@@ -640,7 +640,7 @@ watch(
   width: 18px;
   left: 3px;
   bottom: 3px;
-  background-color: white;
+  background-color: var(--text-primary);
   transition: .4s;
   border-radius: 50%;
 }

@@ -194,7 +194,7 @@ onUnmounted(() => {
   width: 100%;
   padding: 12px 16px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   color: var(--text-primary);
   cursor: pointer;
@@ -206,7 +206,7 @@ onUnmounted(() => {
 }
 
 .select-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
 }
 
@@ -218,7 +218,7 @@ onUnmounted(() => {
 }
 
 .placeholder-text {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   flex: 1;
 }
 
@@ -252,7 +252,7 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   background: var(--bg-secondary, #1a1a1a);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 8px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   z-index: 1000;
@@ -288,7 +288,7 @@ onUnmounted(() => {
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   color: var(--text-primary);
 }
 
@@ -302,7 +302,7 @@ onUnmounted(() => {
   width: 100%;
   padding: 8px 12px 8px 36px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   color: var(--text-primary);
   font-size: 14px;
@@ -312,11 +312,11 @@ onUnmounted(() => {
 
 .search-input:focus {
   border-color: #a8b3ff;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
 }
 
 .search-input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
 }
 
 .search-icon {
@@ -324,7 +324,7 @@ onUnmounted(() => {
   left: 24px;
   top: 50%;
   transform: translateY(-50%);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   font-size: 16px;
 }
 
@@ -353,7 +353,7 @@ onUnmounted(() => {
 }
 
 .group-count {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(var(--text-primary-rgb), 0.5);
   font-size: 12px;
 }
 
@@ -370,7 +370,7 @@ onUnmounted(() => {
   align-items: flex-start;
   padding: 12px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
   color: var(--text-primary);
   cursor: pointer;
@@ -380,7 +380,7 @@ onUnmounted(() => {
 }
 
 .model-option:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
 }
 

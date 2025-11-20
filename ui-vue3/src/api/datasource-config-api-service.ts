@@ -8,6 +8,8 @@
  *      https://www.apache.org/licenses/LICENSE-2.0
  */
 
+import {apiFetch} from "@/utils/api-fetch";
+
 export interface DatasourceConfig {
   id?: number
   name: string
@@ -29,7 +31,7 @@ export class DatasourceConfigApiService {
    * Get all datasource configurations
    */
   public static async getAllConfigs(): Promise<DatasourceConfig[]> {
-    const response = await fetch(this.BASE_URL)
+    const response = await apiFetch(this.BASE_URL)
     if (!response.ok) {
       throw new Error(`Failed to fetch datasource configurations: ${response.statusText}`)
     }
@@ -40,7 +42,7 @@ export class DatasourceConfigApiService {
    * Get datasource configuration by ID
    */
   public static async getConfigById(id: number): Promise<DatasourceConfig> {
-    const response = await fetch(`${this.BASE_URL}/${id}`)
+    const response = await apiFetch(`${this.BASE_URL}/${id}`)
     if (!response.ok) {
       throw new Error(`Failed to fetch datasource configuration: ${response.statusText}`)
     }
@@ -51,7 +53,7 @@ export class DatasourceConfigApiService {
    * Get datasource configuration by name
    */
   public static async getConfigByName(name: string): Promise<DatasourceConfig> {
-    const response = await fetch(`${this.BASE_URL}/name/${encodeURIComponent(name)}`)
+    const response = await apiFetch(`${this.BASE_URL}/name/${encodeURIComponent(name)}`)
     if (!response.ok) {
       throw new Error(`Failed to fetch datasource configuration: ${response.statusText}`)
     }
@@ -62,7 +64,7 @@ export class DatasourceConfigApiService {
    * Get enabled datasource configurations
    */
   public static async getEnabledConfigs(): Promise<DatasourceConfig[]> {
-    const response = await fetch(`${this.BASE_URL}/enabled`)
+    const response = await apiFetch(`${this.BASE_URL}/enabled`)
     if (!response.ok) {
       throw new Error(`Failed to fetch enabled datasource configurations: ${response.statusText}`)
     }
@@ -73,7 +75,7 @@ export class DatasourceConfigApiService {
    * Create new datasource configuration
    */
   public static async createConfig(config: DatasourceConfig): Promise<DatasourceConfig> {
-    const response = await fetch(this.BASE_URL, {
+    const response = await apiFetch(this.BASE_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -93,7 +95,7 @@ export class DatasourceConfigApiService {
     id: number,
     config: DatasourceConfig
   ): Promise<DatasourceConfig> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
+    const response = await apiFetch(`${this.BASE_URL}/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -110,7 +112,7 @@ export class DatasourceConfigApiService {
    * Delete datasource configuration
    */
   public static async deleteConfig(id: number): Promise<void> {
-    const response = await fetch(`${this.BASE_URL}/${id}`, {
+    const response = await apiFetch(`${this.BASE_URL}/${id}`, {
       method: 'DELETE',
     })
     if (!response.ok) {
@@ -122,7 +124,7 @@ export class DatasourceConfigApiService {
    * Check if datasource configuration exists by name
    */
   public static async existsByName(name: string): Promise<boolean> {
-    const response = await fetch(`${this.BASE_URL}/exists/${encodeURIComponent(name)}`)
+    const response = await apiFetch(`${this.BASE_URL}/exists/${encodeURIComponent(name)}`)
     if (!response.ok) {
       throw new Error(`Failed to check datasource configuration existence: ${response.statusText}`)
     }
@@ -135,7 +137,7 @@ export class DatasourceConfigApiService {
   public static async testConnection(
     config: DatasourceConfig
   ): Promise<{ success: boolean; message: string }> {
-    const response = await fetch(`${this.BASE_URL}/test-connection`, {
+    const response = await apiFetch(`${this.BASE_URL}/test-connection`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

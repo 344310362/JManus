@@ -185,7 +185,7 @@ defineExpose({
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.3);
-  color: white;
+  color: var(--text-primary);
   font-size: 11px;
   font-family: inherit;
   transition: all 0.2s ease;
@@ -200,7 +200,7 @@ defineExpose({
 
 .form-select option {
   background: rgba(0, 0, 0, 0.8);
-  color: white;
+  color: var(--text-primary);
 }
 
 .prompt-input {
@@ -208,7 +208,7 @@ defineExpose({
   background: rgba(0, 0, 0, 0.3);
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
-  color: white;
+  color: var(--text-primary);
   font-size: 12px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   padding: 8px;
@@ -222,7 +222,7 @@ defineExpose({
   }
 
   &::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: rgba(var(--text-primary-rgb), 0.4);
   }
 }
 
@@ -281,7 +281,7 @@ defineExpose({
   }
 
   &.btn-secondary {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(var(--bg-primary-rgb), 0.1);
     color: var(--text-secondary);
     border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
 

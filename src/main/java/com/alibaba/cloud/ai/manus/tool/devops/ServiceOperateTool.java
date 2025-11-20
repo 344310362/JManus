@@ -322,9 +322,9 @@ public class ServiceOperateTool extends AbstractBaseTool<ServiceOperateTool.Serv
     @Override
     public String getDescription() {
         return "Service Management Tool for DevOps Platform - Provides lifecycle and observability operations for services registered in the CMDB service tree. "
-            + "All operations require user specifying a valid environment: dev (development), test (testing), pre (pre-production), or prod (production). "
+            + "All most operations require user specifying a valid environment: dev (development), test (testing), pre (pre-production), or prod (production). "
             + "For scaling operations (scale_out / scale_in), you MUST ask user provide 'target_replicas' indicating the desired number of service instances (e.g., 3, 5). "
-            + "For pod ip search,you must ask user provide ip. "
+            + "For 'search_ip', only 'ip' is required; 'service_name' and 'environment' are optional (used for filtering if provided). "
             + "Workflow: "
             + "1. Confirm the target service exists in the CMDB service tree. "
             + "2. Ensure you are the service owner (as defined in CMDB). "

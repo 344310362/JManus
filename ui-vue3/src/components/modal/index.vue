@@ -126,7 +126,7 @@ onUnmounted(() => {
 
 .modal-container {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   border-radius: 16px;
   width: 90%;
   max-width: 900px;
@@ -216,12 +216,12 @@ onUnmounted(() => {
 
 .cancel-btn {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border-primary);
+  color: rgba(var(--text-primary-rgb), 0.8);
 }
 
 .cancel-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
 }
 
 .confirm-btn {

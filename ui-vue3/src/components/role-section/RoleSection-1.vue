@@ -134,7 +134,7 @@
   }
 
   .role-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    background: linear-gradient(135deg, #f8f9fa 0%, var(--bg-input, #ffffff) 100%);
     border-radius: 12px;
     padding: 20px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -158,7 +158,7 @@
     align-items: center;
     justify-content: center;
     margin-bottom: 15px;
-    color: white;
+    color: var(--text-primary);
     font-size: 18px;
     font-weight: bold;
   }
@@ -184,7 +184,7 @@
     display: flex;
     align-items: center;
     padding: 8px 12px;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(var(--bg-primary-rgb), 0.7);
     border-radius: 6px;
     margin-bottom: 8px;
     font-size: 0.9rem;
@@ -206,7 +206,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
+    color: var(--text-primary);
     font-size: 12px;
   }
 
@@ -218,7 +218,7 @@
     border: none;
     border-radius: 8px;
     background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
-    color: white;
+    color: var(--text-primary);
     font-size: 16px;
     cursor: pointer;
     text-align: center;

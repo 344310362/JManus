@@ -135,7 +135,7 @@ const { formatTimestamp, formatFileSize } = useMessageFormatting()
 }
 
 .user-message-action-btn {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   border: 1px solid var(--border-primary, var(--scrollbar-thumb, rgba(255, 255, 255, 0.2)));
   border-radius: 6px;
   color: var(--text-tertiary, rgba(255, 255, 255, 0.7));

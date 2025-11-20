@@ -291,9 +291,9 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-primary);
   overflow: hidden;
 }
 
@@ -324,7 +324,7 @@ onUnmounted(() => {
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(var(--bg-primary-rgb), 0.15);
   border: 1px solid var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
   border-radius: 8px;
   color: var(--text-primary, #ffffff);
@@ -349,8 +349,8 @@ onUnmounted(() => {
 }
 
 .refresh-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(var(--bg-primary-rgb), 0.25);
+  border-color: rgba(var(--text-primary-rgb), 0.4);
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
@@ -368,13 +368,13 @@ onUnmounted(() => {
 .refresh-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: rgba(var(--bg-primary-rgb), 0.08);
+  border-color: rgba(var(--text-primary-rgb), 0.15);
 }
 
 .refresh-btn:disabled .iconify,
 .refresh-btn:disabled svg {
-  color: rgba(255, 255, 255, 0.4) !important;
+  color: rgba(var(--text-primary-rgb), 0.4) !important;
   fill: rgba(255, 255, 255, 0.4) !important;
 }
 
@@ -529,7 +529,7 @@ onUnmounted(() => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--bg-primary-rgb), 0.1);
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
   color: var(--text-primary, #ffffff);
@@ -539,7 +539,7 @@ onUnmounted(() => {
 
 .download-btn:hover,
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(var(--bg-primary-rgb), 0.15);
   transform: translateY(-1px);
 }
 
