@@ -23,7 +23,7 @@ import { apiFetch } from '@/utils/api-fetch'
 export class PlanActApiService {
   private static readonly PLAN_TEMPLATE_URL = '/api/plan-template'
 
-  // Execute generated plan using ManusController.executeByToolNameAsync
+  // Execute generated plan using LynxeController.executeByToolNameAsync
   public static async executePlan(
     planTemplateId: string,
     rawParam?: string,
