@@ -31,16 +31,16 @@
             <button class="config-button" @click="newChat" :title="$t('memory.newChat')">
               <Icon icon="carbon:add" width="20" />
             </button>
-<!--            <button class="config-button" @click="handleConfig" :title="$t('direct.configuration')">
-              <Icon icon="carbon:settings-adjust" width="20" />
-            </button>-->
-<!--            <button
-              class="cron-task-btn"
-              @click="memoryStore.toggleSidebar()"
-              :title="$t('memory.selectMemory')"
-            >
-              <Icon icon="carbon:calendar" width="20" />
-            </button>-->
+            <!--            <button class="config-button" @click="handleConfig" :title="$t('direct.configuration')">
+                          <Icon icon="carbon:settings-adjust" width="20" />
+                        </button>-->
+            <!--            <button
+                          class="cron-task-btn"
+                          @click="memoryStore.toggleSidebar()"
+                          :title="$t('memory.selectMemory')"
+                        >
+                          <Icon icon="carbon:calendar" width="20" />
+                        </button>-->
           </div>
         </div>
 
@@ -91,7 +91,7 @@ import Memory from '@/components/memory/Memory.vue'
 import RightPanel from '@/components/right-panel/RightPanel.vue'
 import Sidebar from '@/components/sidebar/Sidebar.vue'
 import { useConversationHistorySingleton } from '@/composables/useConversationHistory'
-import { useMessageDialogSingleton } from '@/composables/useMessageDialog'
+import { useMessageDialogSingleton } from '@/composables/useMessageDialogSM'
 import { usePlanExecutionSingleton } from '@/composables/usePlanExecution'
 import { useToast } from '@/composables/useToast'
 import { memoryStore } from '@/stores/memory'
@@ -242,19 +242,32 @@ onMounted(() => {
 
     // Check if task content is not empty before processing
     if (taskContent.trim()) {
-      // Mark the task as processed to prevent duplicate responses
-      taskStore.markTaskAsProcessed()
-
       // Execute task directly without showing content in input box
       nextTick(async () => {
         try {
-          console.log('[Direct] Calling messageDialog.sendMessage with taskContent:', taskContent)
-          await messageDialog.sendMessage({
-            input: taskContent,
-          })
+          // 如果任务包含planTemplateId，则使用它
+          if (taskStore.currentTask && taskStore.currentTask.planTemplateId) {
+            console.log('[Direct] Found planTemplateId in task:', taskStore.currentTask.planTemplateId)
+            await messageDialog.sendMessage({
+              input: taskContent,
+              toolName: taskStore.currentTask.planTemplateId,
+              replacementParams: {
+                userRequirement: taskContent
+              }
+            })
+          } else {
+            console.log('[Direct] Calling messageDialog.sendMessage with taskContent:', taskContent)
+            await messageDialog.sendMessage({
+              input: taskContent,
+            })
+          }
+          // Mark the task as processed to prevent duplicate responses
+          taskStore.markTaskAsProcessed()
         } catch (error) {
           console.warn('[Direct] messageDialog.sendMessage failed, falling back to prompt:', error)
           prompt.value = taskContent
+          // Still mark as processed even if there was an error
+          taskStore.markTaskAsProcessed()
         }
       })
     } else {
