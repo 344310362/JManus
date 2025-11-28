@@ -1,4 +1,4 @@
-package com.alibaba.cloud.ai.manus.utils;
+package com.alibaba.cloud.ai.lynxe.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.FactoryBean;

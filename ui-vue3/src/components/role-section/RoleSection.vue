@@ -38,7 +38,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { useTaskStore } from '@/stores/taskSM'
+import { useTaskStore } from '@/stores/task'
 import { useMessageDialogSingleton } from '@/composables/useMessageDialogSM'
 import { memoryStore } from '@/stores/memory'
 const router = useRouter()
@@ -54,6 +54,7 @@ const roles = [
     tasks: [
       { id: 'aliyun-gujia', icon: '💬', text: '查看阿里巴巴今日股价',describe: '打开百度搜索阿里巴巴今日股价' },
       { id: 'article-ai', icon: '💬', text: '生成小说-AI统治地球',describe: '生成小说-AI统治地球',"planTemplateId": "new-1763632772594" },
+      { id: '', icon: '💬', text: '节假日查询',describe: '这个月和下个月的节假日查询' },
     ]
   },
   {
@@ -109,85 +110,25 @@ const getActiveRole = computed(() => {
 // 方法
 const handleTaskClick = async (task: any) => {
   // 设置任务描述，同时传递planTemplateId
-  taskStore.setTask(task.describe? task.describe :task.text, task.planTemplateId)
+  taskStore.setTask(task.describe? task.describe :task.text)
+  console.log('[Home] Task set to store, current task:', taskStore.currentTask)
 
-  // 调试：打印task对象
-  console.log('[RoleSection] Task object:', task)
-  console.log('[RoleSection] Task planTemplateId:', task.planTemplateId)
+  // Navigate to direct page
+  const chatId = Date.now().toString()
+  console.log('[Home] Navigating to direct page with chatId:', chatId)
 
-  // 强制重置会话以确保创建新对话
-  resetSession();
-  memoryStore.clearConversationId();
-  messageDialog.reset()
-  // 检查是否为计划任务 (有 planTemplateId)
-  if (task.planTemplateId) {
-    try {
+  router
+    .push({
+      name: 'direct',
+      params: { id: chatId },
+    })
+    .then(() => {
+      console.log('[Home] Navigation to direct page completed')
+    })
+    .catch(error => {
+      console.error('[Home] Navigation error:', error)
+    })
 
-      // 添加一个助手的“思考中”消息占位符
-      const thinkingMessage = messageDialog.addMessage('assistant', '', {
-        isStreaming: true,
-        thinking: 'Planning execution...',
-      })
-
-      // 开始流式传输
-      messageDialog.startStreaming(thinkingMessage.id)
-
-      // 构建计划执行请求载荷
-      const planData = {
-        title: task.text || 'Execution Plan',
-        steps: [],
-        directResponse: false,
-        planTemplateId: task.planTemplateId,
-      }
-
-      const title = task.text || 'Execution Plan'
-
-      const payload = {
-        title,
-        planData,
-        params: undefined,
-        replacementParams: undefined,
-        uploadedFiles: [],
-        uploadKey: null,
-      }
-
-      // 生成新的 conversationId 来开启新对话
-      const newConversationId = `conv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-
-      // 在 payload 中添加新的 conversationId
-      const payloadWithNewConversation = {
-        ...payload,
-        conversationId: newConversationId
-      }
-
-      // 执行计划任务
-      const result = await messageDialog.executePlan(payloadWithNewConversation)
-
-      if (result.success && result.planId) {
-        // 设置正在运行的任务
-        taskStore.setTaskRunning(result.planId)
-        // 导航到对话页面 (使用 'direct' 路由)
-        router.push({ name: 'direct', params: { id: result.planId } })
-      } else {
-        console.error('[RoleSection] ❌ Plan execution failed:', result.error)
-        // 如果计划任务执行失败，则创建一个普通对话
-        const chatId = Date.now().toString()
-        router.push({ name: 'direct', params: { id: chatId } })
-      }
-    } catch (error) {
-      console.error('[RoleSection] ❌ Error executing plan:', error)
-      // 如果计划任务执行出错，则创建一个普通对话
-      const chatId = Date.now().toString()
-      router.push({ name: 'direct', params: { id: chatId } })
-    } finally {
-      // 隐藏加载状态
-      messageDialog.isLoading.value = false
-    }
-  } else {
-    // 动态任务 (没有 planId)，创建普通对话
-    const chatId = Date.now().toString()
-    router.push({ name: 'direct', params: { id: chatId } })
-  }
 }
 /**
  * 重置会话以确保创建新对话

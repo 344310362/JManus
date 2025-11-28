@@ -6,7 +6,7 @@ import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import com.alibaba.cloud.ai.lynxe.config.rpc.AuthContext;
 import com.alibaba.cloud.ai.lynxe.tool.AbstractBaseTool;
 import com.alibaba.cloud.ai.lynxe.tool.code.ToolExecuteResult;
-import com.alibaba.cloud.ai.manus.utils.ServiceHelper;
+import com.alibaba.cloud.ai.lynxe.utils.ServiceHelper;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.commons.lang3.StringUtils;

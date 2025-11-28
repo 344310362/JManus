@@ -91,6 +91,7 @@ import { computed, nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import RoleSection from '@/components/role-section/RoleSection.vue'
+import { userStore } from "@/stores/user"
 
 // Define component name for Vue linting rules
 defineOptions({
@@ -148,7 +149,7 @@ const goToDirectPage = () => {
     })
 }
 
-const examples = computed(() => [
+/*const examples = computed(() => [
   {
     title: t('home.examples.stockPrice.title'),
     type: 'github' as const,
@@ -194,7 +195,7 @@ const plans = computed(() => [
     url: t('home.examples.formInputDemo.url'),
   },
 ])
-const allCards = computed(() => [...examples.value, ...plans.value])
+const allCards = computed(() => [...examples.value, ...plans.value])*/
 
 const openGitHubPage = (item: CardItem) => {
   console.log('[Home] openGitHubPage called with item:', item)
@@ -214,9 +215,11 @@ const handleCardClick = (item: CardItem) => {
 }
 
 onMounted(() => {
+
+  console.log('userStore.user:', userStore.user);
   console.log('[Home] onMounted called')
   console.log('[Home] taskStore:', taskStore)
-  console.log('[Home] examples:', examples)
+//  console.log('[Home] examples:', examples)
 
   // Mark that the home page has been visited
   taskStore.markHomeVisited()

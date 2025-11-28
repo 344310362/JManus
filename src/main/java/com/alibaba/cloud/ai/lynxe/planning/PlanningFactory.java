@@ -292,8 +292,7 @@ public class PlanningFactory {
           new ImageRecognitionExecutorPool(lynxeProperties)),
         excelProcessingService, objectMapper, toolI18nService));
       // toolDefinitions.add(new ExcelProcessorTool(excelProcessingService));
-      ServiceOperateTool serviceOperateTool = new ServiceOperateTool();
-      toolDefinitions.add(serviceOperateTool);
+      toolDefinitions.add(new ServiceOperateTool());
       toolDefinitions.add(new HRTool());
     }
     else {
