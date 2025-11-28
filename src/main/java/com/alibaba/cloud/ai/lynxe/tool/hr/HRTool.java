@@ -1,7 +1,7 @@
-package com.alibaba.cloud.ai.manus.tool.hr;
+package com.alibaba.cloud.ai.lynxe.tool.hr;
 
-import com.alibaba.cloud.ai.manus.tool.AbstractBaseTool;
-import com.alibaba.cloud.ai.manus.tool.code.ToolExecuteResult;
+import com.alibaba.cloud.ai.lynxe.tool.AbstractBaseTool;
+import com.alibaba.cloud.ai.lynxe.tool.code.ToolExecuteResult;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

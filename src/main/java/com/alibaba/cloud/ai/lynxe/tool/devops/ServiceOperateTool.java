@@ -1,11 +1,11 @@
-package com.alibaba.cloud.ai.manus.tool.devops;
+package com.alibaba.cloud.ai.lynxe.tool.devops;
 
 import cn.iocoder.cloud.devops.api.service.ServiceApi;
 import cn.iocoder.cloud.devops.api.service.dto.ServiceOperateReqDTO;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
-import com.alibaba.cloud.ai.manus.config.rpc.AuthContext;
-import com.alibaba.cloud.ai.manus.tool.AbstractBaseTool;
-import com.alibaba.cloud.ai.manus.tool.code.ToolExecuteResult;
+import com.alibaba.cloud.ai.lynxe.config.rpc.AuthContext;
+import com.alibaba.cloud.ai.lynxe.tool.AbstractBaseTool;
+import com.alibaba.cloud.ai.lynxe.tool.code.ToolExecuteResult;
 import com.alibaba.cloud.ai.manus.utils.ServiceHelper;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -337,7 +337,7 @@ onUnmounted(() => {
         left: 0;
         right: 0;
         height: 2px;
-        background: linear-gradient(90deg, transparent, #4f46e5, transparent);
+        background: linear-gradient(90deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
         animation: streaming-pulse 2s ease-in-out infinite;
       }
     }
@@ -351,7 +351,7 @@ onUnmounted(() => {
 
     .user-content {
       max-width: 70%;
-      background: linear-gradient(135deg, #667eea 0%, var(--primer-color) 100%);
+      background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
       color: var(--text-primary);
       padding: 12px 16px;
       border-radius: 18px 18px 4px 18px;

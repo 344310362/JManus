@@ -1,4 +1,4 @@
-package com.alibaba.cloud.ai.manus.config.rpc;
+package com.alibaba.cloud.ai.lynxe.config.rpc;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

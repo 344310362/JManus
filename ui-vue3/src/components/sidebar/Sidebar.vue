@@ -140,12 +140,11 @@ defineExpose({
       text-overflow: ellipsis;
       white-space: nowrap;
     }
-  }
 
     .new-task-btn {
       margin: 0px 14px;
       padding: 7px 14px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
       border: none;
       border-radius: 6px;
       color: var(--text-secondary);
@@ -173,99 +172,6 @@ defineExpose({
     flex: 1;
     min-height: 0;
   }
-
-  .config-tab {
-    .config-container {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      overflow-y: auto;
-      padding-right: 12px;
-
-      .template-info-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 16px;
-        padding: 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: 8px;
-
-        .template-info {
-          flex: 1;
-          min-width: 0;
-
-          h3 {
-            margin: 0 0 4px 0;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-          }
-
-          .template-id {
-            font-size: 11px;
-            color: rgba(255, 255, 255, 0.5);
-          }
-        }
-
-        .back-to-list-btn {
-          width: 28px;
-          height: 28px;
-          background: transparent;
-          border: none;
-          border-radius: 4px;
-          color: rgba(255, 255, 255, 0.7);
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s ease;
-
-          &:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-          }
-        }
-      }
-
-      .json-editor {
-        width: 100%;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        border-radius: 6px;
-        color: white;
-        font-size: 12px;
-        font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
-        padding: 8px;
-        resize: vertical;
-        min-height: 100px;
-
-        &:focus {
-          outline: none;
-          border-color: #667eea;
-          box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
-        }
-
-        &::placeholder {
-          color: rgba(255, 255, 255, 0.4);
-        }
-      }
-
-      .json-editor {
-        min-height: 200px;
-        font-size: 11px;
-        line-height: 1.5;
-        white-space: pre-wrap;
-        overflow-wrap: break-word;
-        word-break: break-word;
-        tab-size: 2;
-        font-variant-ligatures: none;
-      }
-    }
-  }
 }
 
 @keyframes spin {
@@ -284,7 +190,7 @@ defineExpose({
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(var(--bg-primary-rgb), 0.5);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -553,7 +553,7 @@ const newChat = () => {
     margin: 0;
     font-size: 20px;
     font-weight: 600;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -570,7 +570,7 @@ const newChat = () => {
 .direct-chat {
   height: calc(100vh - 65px); /* Subtract branding header height */
   width: 100%;
-  background: #0a0a0a;
+  background: var(--bg-primary);
   display: flex;
   flex: 1;
 }
@@ -588,7 +588,7 @@ const newChat = () => {
 .panel-resizer {
   width: 6px;
   height: 100%; /* Fit within parent container */
-  background: #1a1a1a;
+  background: var(--bg-primary);
   cursor: col-resize;
   position: relative;
   display: flex;

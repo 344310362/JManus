@@ -471,7 +471,7 @@ const formatToolParameters = (parameters?: string): string => {
           .result-content, .error-content {
             margin: 0;
             padding: 8px;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(var(--bg-primary-rgb), 0.2);
             border-radius: 4px;
             font-family: monospace;
             font-size: 12px;

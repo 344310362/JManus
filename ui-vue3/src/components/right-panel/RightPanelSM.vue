@@ -17,15 +17,6 @@
   <div class="right-panel">
     <div class="preview-header">
       <div class="preview-tabs">
-        <!-- Func-Agent Config tab -->
-        <div
-          class="tab-item"
-          :class="{ active: activeTab === 'config' }"
-          @click="activeTab = 'config'"
-        >
-          <Icon icon="carbon:settings" />
-          <span>{{ t('sidebar.configuration') }}</span>
-        </div>
         <!-- Step Execution Details tab -->
         <div
           class="tab-item"

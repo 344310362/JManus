@@ -1,4 +1,4 @@
-package com.alibaba.cloud.ai.manus.config.rpc;
+package com.alibaba.cloud.ai.lynxe.config.rpc;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

@@ -668,8 +668,8 @@ const words: I18nType = {
 
   // 聊天组件
   chat: {
-    botName: 'Lynxe:',
-    thinkingLabel: 'Lynxe 思考/处理',
+    botName: '元气精灵:',
+    thinkingLabel: '元气精灵 思考/处理',
     processing: '处理中...',
     step: '步骤',
     stepNumber: '步骤 {number}',

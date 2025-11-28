@@ -90,6 +90,7 @@ import { Icon } from '@iconify/vue'
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import RoleSection from '@/components/role-section/RoleSection.vue'
 
 // Define component name for Vue linting rules
 defineOptions({

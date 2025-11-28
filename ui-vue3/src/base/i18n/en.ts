@@ -716,7 +716,7 @@ const words: I18nType = {
 
   // Chat component
   chat: {
-    botName: 'Lynxe:',
+    botName: '元气精灵:',
     thinkingLabel: 'Lynxe Thinking/Processing',
     processing: 'Processing...',
     step: 'Step',

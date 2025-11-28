@@ -16,8 +16,8 @@
 
 package com.alibaba.cloud.ai.lynxe.planning;
 
-import com.alibaba.cloud.ai.manus.tool.devops.ServiceOperateTool;
-import com.alibaba.cloud.ai.manus.tool.hr.HRTool;
+import com.alibaba.cloud.ai.lynxe.tool.devops.ServiceOperateTool;
+import com.alibaba.cloud.ai.lynxe.tool.hr.HRTool;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

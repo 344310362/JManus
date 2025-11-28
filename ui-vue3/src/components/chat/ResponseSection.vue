@@ -318,7 +318,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
       align-items: center;
       gap: 8px;
       padding: 12px 16px;
-      background: rgba(239, 68, 68, 0.1);
+      background: rgba(var(--bg-primary-rgb), 0.1);
       border: 1px solid rgba(239, 68, 68, 0.2);
       border-radius: 8px;
       color: #ff9999;

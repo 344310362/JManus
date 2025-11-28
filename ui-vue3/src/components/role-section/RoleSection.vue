@@ -115,7 +115,8 @@ const handleTaskClick = async (task: any) => {
   console.log('[RoleSection] Task object:', task)
   console.log('[RoleSection] Task planTemplateId:', task.planTemplateId)
 
-  memoryStore.clearMemoryId();
+  // 强制重置会话以确保创建新对话
+  resetSession();
   memoryStore.clearConversationId();
   messageDialog.reset()
   // 检查是否为计划任务 (有 planTemplateId)
@@ -188,8 +189,19 @@ const handleTaskClick = async (task: any) => {
     router.push({ name: 'direct', params: { id: chatId } })
   }
 }
+/**
+ * 重置会话以确保创建新对话
+ */
+const resetSession = () => {
+  console.log('[RoleSection] 🔄 Resetting session to ensure new conversation')
+  memoryStore.clearMemoryId()
+  memoryStore.clearConversationId()
+  messageDialog.reset()
+  // 清除 localStorage 中的会话信息
+  localStorage.removeItem('currentPlanId')
+  console.log('[RoleSection] ✅ Session reset completed')
+}
 </script>
-
 <style scoped>
 .roles-section {
   padding: 30px 30px;
