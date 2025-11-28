@@ -11,7 +11,8 @@ import 'vue3-colorpicker/style.css'
 
 import App from './App.vue'
 import router from './router'
-import { i18n } from './base/i18n'
+import { i18n,initializeLanguage } from './base/i18n'
+import 'ant-design-vue/dist/reset.css'
 import { themeConfig } from './utils/theme'
 import actions from '@/qiankun/actions'
 import { userStore } from "@/stores/user"
@@ -26,100 +27,110 @@ let mountPoint: Element | null = null
 
 // 渲染函数
 function render(props: QiankunProps = {}) {
-    console.log('render function is called with props:', props);
-    const { container,    userVo,
-        accessToken,onGoToLogin } = props
+  console.log('render function is called with props:', props);
+  const { container,    userVo,
+    accessToken,onGoToLogin } = props
 
-    userStore.setUserInfo({
-        permissions: [],
-        roles: [],
-        user: userVo,
-        token: accessToken
+  userStore.setUserInfo({
+    permissions: [],
+    roles: [],
+    user: userVo,
+    token: accessToken
+  })
+  console.log('userStore.user:', userStore.user);
+
+  // 让主应用跳转登录页
+  if (container  && !accessToken) {
+    if (typeof onGoToLogin === 'function') {
+      onGoToLogin();
+    }
+    return;
+  }
+
+  window.addEventListener('tokenUpdated', (e) => {
+    userStore.updateAccessToken(e.detail.accessToken);
+    console.log('token updated:', e.detail.accessToken)
+  });
+
+  // 指定挂载节点（防止 ID 冲突）
+  mountPoint = container?.querySelector('#app') || document.querySelector('#app')
+
+  if (!mountPoint) {
+    console.error('[sub-app] mount point not found')
+    return
+  }
+
+  // 避免重复挂载
+  if (instance) {
+    instance.unmount()
+    instance = null
+  }
+
+  instance = createApp(App)
+  // Initialize theme
+  themeConfig.initTheme()
+  const pinia = createPinia()
+
+  // 注册所有插件
+  instance.use(pinia)
+  instance.use(Antd)
+  instance.use(Vue3ColorPicker)
+  instance.use(i18n)
+  instance.use(router)
+
+
+  // 传递父应用通信能力（可选）
+  if (props.onGlobalStateChange) {
+    actions.setActions(props)
+  }
+
+  initializeLanguage()
+    .then(() => {
+      // 挂载到指定容器
+      instance.mount(mountPoint)
     })
-    console.log('userStore.user:', userStore.user);
+    .catch(error => {
+      console.error('Failed to initialize language, mounting app with default language:', error)
+      // 挂载到指定容器
+      instance.mount(mountPoint)
+    })
 
-    // 让主应用跳转登录页
-    if (container  && !accessToken) {
-      if (typeof onGoToLogin === 'function') {
-        onGoToLogin();
-      }
-      return;
-    }
-
-    window.addEventListener('tokenUpdated', (e) => {
-        userStore.updateAccessToken(e.detail.accessToken);
-        console.log('token updated:', e.detail.accessToken)
-    });
-
-    // 指定挂载节点（防止 ID 冲突）
-    mountPoint = container?.querySelector('#app') || document.querySelector('#app')
-
-    if (!mountPoint) {
-        console.error('[sub-app] mount point not found')
-        return
-    }
-
-    // 避免重复挂载
-    if (instance) {
-        instance.unmount()
-        instance = null
-    }
-
-    instance = createApp(App)
-    // Initialize theme
-    themeConfig.initTheme()
-    const pinia = createPinia()
-
-    // 注册所有插件
-    instance.use(pinia)
-    instance.use(Antd)
-    instance.use(Vue3ColorPicker)
-    instance.use(i18n)
-    instance.use(router)
-
-    // 传递父应用通信能力（可选）
-    if (props.onGlobalStateChange) {
-        actions.setActions(props)
-    }
-
-    // 挂载到指定容器
-    instance.mount(mountPoint)
 }
 
 
 const initQianKun = () => {
-    console.log('initQianKun function is called');
-    // ✅ qiankun 注册生命周期
-    renderWithQiankun({
-        bootstrap() {
-            console.log('[sub-app] bootstrap')
-        },
-        mount(props) {
-            console.log('[sub-app] mount with props:', props)
-            render(props)
-        },
-        unmount() {
-            console.log('[sub-app1] unmount')
-            if (instance) {
-                instance.unmount()
-                instance = null
-            }
-            // 安全地清理挂载点
-            if (mountPoint) {
-                try {
-                    while (mountPoint.firstChild) {
-                        mountPoint.removeChild(mountPoint.firstChild)
-                    }
-                } catch (e) {
-                    console.warn('[sub-app1] Error while cleaning mount point:', e)
-                }
-                mountPoint = null
-            }
-        },
-        update(props) {
-            console.log('[sub-app] update', props)
+  console.log('initQianKun function is called');
+  // ✅ qiankun 注册生命周期
+  renderWithQiankun({
+    bootstrap() {
+      console.log('[sub-app] bootstrap')
+    },
+    mount(props) {
+      console.log('[sub-app] mount with props:', props)
+      render(props)
+    },
+    unmount() {
+      console.log('[sub-app1] unmount')
+      if (instance) {
+        instance.unmount()
+        instance = null
+      }
+      // 安全地清理挂载点
+      if (mountPoint) {
+        try {
+          while (mountPoint.firstChild) {
+            mountPoint.removeChild(mountPoint.firstChild)
+          }
+        } catch (e) {
+          console.warn('[sub-app1] Error while cleaning mount point:', e)
         }
-    })
+        mountPoint = null
+      }
+    },
+    update(props) {
+      console.log('[sub-app] update', props)
+    }
+  })
 }
 
 qiankunWindow.__POWERED_BY_QIANKUN__ ? initQianKun() : render()
