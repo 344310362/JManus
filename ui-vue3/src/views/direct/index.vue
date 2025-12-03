@@ -22,8 +22,8 @@
     <header class="branding-header">
       <div class="branding-content">
         <div class="branding-logo">
-          <img src="/Java-AI.svg" alt="Lynxe" class="java-logo" />
-          <h1>Lynxe</h1>
+          <img src="/Java-AI.svg" alt="元气小精灵" class="java-logo" />
+          <h1>元气小精灵</h1>
         </div>
         <div class="branding-actions">
           <LanguageSwitcher />
@@ -524,7 +524,7 @@ const newChat = () => {
 .branding-header {
   width: 100%;
   padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
   border-bottom: 1px solid #1a1a1a;
   flex-shrink: 0;
   z-index: 200;
@@ -597,7 +597,7 @@ const newChat = () => {
   flex-shrink: 0;
 
   &:hover {
-    background: #2a2a2a;
+    background: var(--bg-primary);;
 
     .resizer-line {
       background: #4a90e2;
@@ -606,14 +606,14 @@ const newChat = () => {
   }
 
   &:active {
-    background: #3a3a3a;
+    background: var(--bg-primary);
   }
 }
 
 .resizer-line {
   width: 1px;
   height: 40px;
-  background: #3a3a3a;
+  background: var(--bg-primary);
   border-radius: 1px;
   transition: all 0.2s ease;
 }

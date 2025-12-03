@@ -22,7 +22,7 @@
     <header class="branding-header">
       <div class="branding-content">
         <div class="branding-logo">
-          <img src="/img/yuanqi.png" alt="Lynxe" class="java-logo" />
+          <img src="/img/yuanqi.png" alt="元气小精灵" class="java-logo" />
           <h1>元气小精灵</h1>
         </div>
         <div class="branding-actions">

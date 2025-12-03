@@ -888,7 +888,7 @@ defineExpose({
 
 .no-steps-message {
   text-align: center;
-  color: #666666;
+  color: var(--bg-primary);
   font-style: italic;
   margin-top: 16px;
 
@@ -899,7 +899,7 @@ defineExpose({
 
 .no-execution-message {
   padding: 20px;
-  background: #f8f9fa;
+  color: var(--bg-primary);
   border: 1px solid #e9ecef;
   border-radius: 8px;
   margin-top: 16px;
