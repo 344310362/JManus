@@ -72,6 +72,7 @@ import com.alibaba.cloud.ai.lynxe.tool.code.ToolExecuteResult;
 import com.alibaba.cloud.ai.lynxe.tool.convertToMarkdown.ImageOcrProcessor;
 import com.alibaba.cloud.ai.lynxe.tool.convertToMarkdown.MarkdownConverterTool;
 import com.alibaba.cloud.ai.lynxe.tool.convertToMarkdown.PdfOcrProcessor;
+import com.alibaba.cloud.ai.lynxe.tool.oss.OssClientTool;
 import com.alibaba.cloud.ai.lynxe.tool.cron.CronTool;
 import com.alibaba.cloud.ai.lynxe.tool.database.DataSourceService;
 import com.alibaba.cloud.ai.lynxe.tool.database.DatabaseMetadataTool;
@@ -291,6 +292,7 @@ public class PlanningFactory {
         new ImageOcrProcessor(unifiedDirectoryManager, llmService, lynxeProperties,
           new ImageRecognitionExecutorPool(lynxeProperties)),
         excelProcessingService, objectMapper, toolI18nService));
+      toolDefinitions.add(new OssClientTool(unifiedDirectoryManager, objectMapper, toolI18nService));
       // toolDefinitions.add(new ExcelProcessorTool(excelProcessingService));
       toolDefinitions.add(new ServiceOperateTool());
       toolDefinitions.add(new HRTool());

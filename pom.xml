@@ -370,6 +370,18 @@
             <artifactId>commons-io</artifactId>
             <version>2.17.0</version>
         </dependency>
+
+        <!-- Aliyun OSS SDK -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.17.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>7.15.0</version>
+        </dependency>
     </dependencies>
 
 
