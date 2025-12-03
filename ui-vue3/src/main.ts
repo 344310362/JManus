@@ -16,7 +16,16 @@ import 'ant-design-vue/dist/reset.css'
 import { themeConfig } from './utils/theme'
 import actions from '@/qiankun/actions'
 import { userStore } from "@/stores/user"
+// Configure Iconify
+import { addAPIProvider } from '@iconify/vue'
 
+// Add fallback API providers
+addAPIProvider('', {
+  resources: ['https://api.iconify.design', 'https://api.unisvg.com', 'https://api.simplesvg.com'],
+})
+import 'nprogress/nprogress.css'
+import Vue3ColorPicker from 'vue3-colorpicker'
+import 'vue3-colorpicker/style.css'
 // qiankun 相关辅助
 import { renderWithQiankun, qiankunWindow,type QiankunProps } from 'vite-plugin-qiankun/dist/helper'
 
@@ -77,6 +86,7 @@ function render(props: QiankunProps = {}) {
   instance.use(Vue3ColorPicker)
   instance.use(i18n)
   instance.use(router)
+  instance.use(Vue3ColorPicker)
 
 
   // 传递父应用通信能力（可选）

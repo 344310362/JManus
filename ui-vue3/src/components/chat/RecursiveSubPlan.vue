@@ -22,34 +22,23 @@
         <div class="sub-plan-details">
           <div class="sub-plan-title">
             {{ subPlan.title || $t('chat.subPlan') }} #{{ subPlanIndex + 1 }}
-            <span v-if="(nestingLevel ?? 0) > 0" class="nesting-level">(L{{ (nestingLevel ?? 0) + 1 }})</span>
+            <span v-if="(nestingLevel ?? 0) > 0" class="nesting-level"
+            >(L{{ (nestingLevel ?? 0) + 1 }})</span
+            >
           </div>
           <div class="sub-plan-id">{{ subPlan.currentPlanId }}</div>
         </div>
       </div>
-      <div class="sub-plan-meta">
-        <div class="sub-plan-status-badge" :class="getSubPlanStatusClass()">
-          {{ getSubPlanStatusText() }}
-        </div>
-        <div v-if="subPlan.parentActToolCall" class="trigger-tool">
-          <Icon icon="carbon:function" class="trigger-icon" />
-          <span class="trigger-text">{{ subPlan.parentActToolCall.name }}</span>
-        </div>
-      </div>
     </div>
 
-    <!-- Sub-plan progress -->
-    <div v-if="subPlan.agentExecutionSequence?.length" class="sub-plan-progress">
-      <div class="progress-info">
-        <span class="progress-text">
-          {{ $t('chat.progress') }}: {{ getSubPlanCompletedCount() }} / {{ subPlan.agentExecutionSequence.length }}
-        </span>
-        <div class="progress-bar">
-          <div
-            class="progress-fill"
-            :style="{ width: getSubPlanProgress() + '%' }"
-          ></div>
-        </div>
+    <!-- Sub-plan meta (status badge and trigger tool) -->
+    <div class="sub-plan-meta">
+      <div v-if="subPlan.parentActToolCall" class="trigger-tool">
+        <Icon icon="carbon:function" class="trigger-icon" />
+        <span class="trigger-text">{{ subPlan.parentActToolCall.name }}</span>
+      </div>
+      <div class="sub-plan-status-badge" :class="getSubPlanStatusClass()">
+        {{ getSubPlanStatusText() }}
       </div>
     </div>
 
@@ -68,7 +57,20 @@
         >
           <div class="agent-step-header">
             <Icon :icon="getAgentPreviewStatusIcon(agent.status)" class="agent-icon" />
-            <span class="agent-name">{{ agent.agentName || $t('chat.unknownAgent') }}</span>
+            <span
+              class="agent-name"
+              :title="
+                agent.agentName === 'ConfigurableDynaAgent'
+                  ? $t('chat.clickToViewExecutionDetails')
+                  : ''
+              "
+            >
+              {{
+                agent.agentName === 'ConfigurableDynaAgent'
+                  ? $t('chat.funcAgentExecutionDetails')
+                  : agent.agentName || $t('chat.unknownAgent')
+              }}
+            </span>
             <div class="agent-status-badge" :class="getAgentPreviewStatusClass(agent.status)">
               {{ getAgentStatusText(agent.status) }}
             </div>
@@ -98,7 +100,9 @@
             <div v-if="agent.thinkActSteps?.length" class="think-act-preview">
               <div class="think-act-header">
                 <Icon icon="carbon:thinking" class="think-act-icon" />
-                <span class="think-act-label">{{ $t('chat.thinkActSteps') }} ({{ agent.thinkActSteps.length }})</span>
+                <span class="think-act-label"
+                >{{ $t('chat.thinkActSteps') }} ({{ agent.thinkActSteps.length }})</span
+                >
               </div>
               <div class="think-act-steps-preview">
                 <div
@@ -108,12 +112,18 @@
                   @click.stop="handleThinkActStepClick(agentIndex, stepIndex, agent)"
                 >
                   <span class="step-number">#{{ stepIndex + 1 }}</span>
-                  <span class="step-description">{{ step.actionDescription || $t('chat.thinking') }}</span>
+                  <span class="step-description">{{
+                      step.actionDescription || $t('chat.thinking')
+                    }}</span>
                   <Icon icon="carbon:arrow-right" class="step-arrow" />
                 </div>
                 <div v-if="agent.thinkActSteps.length > (maxVisibleSteps ?? 2)" class="more-steps">
                   <span class="more-steps-text">
-                    {{ $t('chat.andMoreSteps', { count: agent.thinkActSteps.length - (maxVisibleSteps ?? 2) }) }}
+                    {{
+                      $t('chat.andMoreSteps', {
+                        count: agent.thinkActSteps.length - (maxVisibleSteps ?? 2),
+                      })
+                    }}
                   </span>
                 </div>
               </div>
@@ -168,10 +178,15 @@
 </template>
 
 <script setup lang="ts">
-import { } from 'vue'
-import { useI18n } from 'vue-i18n'
+import type {
+  AgentExecutionRecord,
+  ExecutionStatus,
+  PlanExecutionRecord,
+  ThinkActRecord,
+} from '@/types/plan-execution-record'
 import { Icon } from '@iconify/vue'
-import type { PlanExecutionRecord, AgentExecutionRecord, ExecutionStatus, ThinkActRecord } from '@/types/plan-execution-record'
+import {} from 'vue'
+import { useI18n } from 'vue-i18n'
 
 interface Props {
   subPlan: PlanExecutionRecord
@@ -182,14 +197,19 @@ interface Props {
 }
 
 interface Emits {
-  (e: 'sub-plan-selected', agentIndex: number, subPlanIndex: number, subPlan: PlanExecutionRecord): void
+  (
+    e: 'sub-plan-selected',
+    agentIndex: number,
+    subPlanIndex: number,
+    subPlan: PlanExecutionRecord
+  ): void
   (e: 'step-selected', stepId: string): void
 }
 
 const props = withDefaults(defineProps<Props>(), {
   nestingLevel: 0,
   maxNestingDepth: 3,
-  maxVisibleSteps: 2
+  maxVisibleSteps: 2,
 })
 
 const emit = defineEmits<Emits>()
@@ -208,12 +228,16 @@ const getSubPlanStatusClass = (): string => {
     return 'completed'
   }
 
-  const hasRunningAgent = props.subPlan.agentExecutionSequence?.some(agent => agent.status === 'RUNNING')
+  const hasRunningAgent = props.subPlan.agentExecutionSequence?.some(
+    agent => agent.status === 'RUNNING'
+  )
   if (hasRunningAgent) {
     return 'running'
   }
 
-  const hasFinishedAgent = props.subPlan.agentExecutionSequence?.some(agent => agent.status === 'FINISHED')
+  const hasFinishedAgent = props.subPlan.agentExecutionSequence?.some(
+    agent => agent.status === 'FINISHED'
+  )
   if (hasFinishedAgent) {
     return 'in-progress'
   }
@@ -252,18 +276,20 @@ const getSubPlanStatusIcon = (): string => {
   }
 }
 
-const getSubPlanProgress = (): number => {
-  if (!props.subPlan.agentExecutionSequence?.length) return 0
-  if (props.subPlan.completed) return 100
+// Unused function - kept for potential future use
+// const getSubPlanProgress = (): number => {
+//   if (!props.subPlan.agentExecutionSequence?.length) return 0
+//   if (props.subPlan.completed) return 100
+//
+//   const completedCount = getSubPlanCompletedCount()
+//   return Math.min(100, (completedCount / props.subPlan.agentExecutionSequence.length) * 100)
+// }
 
-  const completedCount = getSubPlanCompletedCount()
-  return Math.min(100, (completedCount / props.subPlan.agentExecutionSequence.length) * 100)
-}
-
-const getSubPlanCompletedCount = (): number => {
-  if (!props.subPlan.agentExecutionSequence?.length) return 0
-  return props.subPlan.agentExecutionSequence.filter(agent => agent.status === 'FINISHED').length
-}
+// Unused function - kept for potential future use
+// const getSubPlanCompletedCount = (): number => {
+//   if (!props.subPlan.agentExecutionSequence?.length) return 0
+//   return props.subPlan.agentExecutionSequence.filter(agent => agent.status === 'FINISHED').length
+// }
 
 // Agent preview status methods
 const getAgentPreviewStatusClass = (status?: ExecutionStatus): string => {
@@ -321,12 +347,20 @@ const handleSubPlanAgentClick = (agentIndex: number, agent: AgentExecutionRecord
   emit('step-selected', stepId)
 }
 
-const handleThinkActStepClick = (agentIndex: number, _stepIndex: number, agent: AgentExecutionRecord) => {
+const handleThinkActStepClick = (
+  agentIndex: number,
+  _stepIndex: number,
+  agent: AgentExecutionRecord
+) => {
   const stepId = agent.stepId ?? `subplan-${props.subPlanIndex}-agent-${agentIndex}`
   emit('step-selected', stepId)
 }
 
-const handleNestedSubPlanSelected = (agentIndex: number, subPlanIndex: number, subPlan: PlanExecutionRecord) => {
+const handleNestedSubPlanSelected = (
+  agentIndex: number,
+  subPlanIndex: number,
+  subPlan: PlanExecutionRecord
+) => {
   emit('sub-plan-selected', agentIndex, subPlanIndex, subPlan)
 }
 
@@ -520,7 +554,6 @@ const handleNestedStepSelected = (stepId: string) => {
       }
     }
   }
-
   .sub-plan-agents-steps {
     .agents-steps-header {
       color: var(--text-tertiary, #aaaaaa);

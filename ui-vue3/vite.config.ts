@@ -19,6 +19,7 @@ import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
 import checker from 'vite-plugin-checker'
 import qiankun from 'vite-plugin-qiankun'
+import { codeInspectorPlugin } from 'code-inspector-plugin'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
@@ -26,46 +27,49 @@ export default defineConfig(({ mode }) => {
   return {
     base: env.VITE_BASE_PATH || '/ui',
     build: {
-    outDir: env.VITE_OUT_DIR || './ui',
-    sourcemap: true, // Enable source maps for production builds
-  },
-  css: {
-    devSourcemap: true, // Enable CSS source maps in development
-  },
-  server: {
-    open: true, // Automatically open browser on startup
-    host: true, // Allow external access
-    proxy: {
-      '/api': {
-        target: 'http://localhost:18080',
-        changeOrigin: true,
-      },
-      '/admin': {
-        target: 'http://localhost:18080',
-        changeOrigin: true,
+      outDir: env.VITE_OUT_DIR || './ui',
+      sourcemap: true, // Enable source maps for production builds
+    },
+    css: {
+      devSourcemap: true, // Enable CSS source maps in development
+    },
+    server: {
+      open: true, // Automatically open browser on startup
+      host: true, // Allow external access
+      proxy: {
+        '/api': {
+          target: 'http://localhost:18080',
+          changeOrigin: true,
+        },
+        '/admin': {
+          target: 'http://localhost:18080',
+          changeOrigin: true,
+        },
       },
     },
-  },
-  plugins: [
-    vue(),
-    vueJsx(),
-    qiankun('sc-ai-manuas', { useDevMode: true }),
-    checker({
-      // Enable TypeScript checking in development
-      typescript: true,
-      // Temporarily disable Vue template type checking due to @volar/typescript compatibility issue
-      // vueTsc: true,
-      // Temporarily disable ESLint checking - vite-plugin-checker 0.9.3 has compatibility issues with ESLint 9.x
-      // ESLint can still be run manually via: pnpm lint
-      // eslint: {
-      //   lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"',
-      // },
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    plugins: [
+      vue(),
+      vueJsx(),
+      qiankun('sc-ai-manuas', { useDevMode: true }),
+      checker({
+        // Enable TypeScript checking in development
+        typescript: true,
+        // Temporarily disable Vue template type checking due to @volar/typescript compatibility issue
+        // vueTsc: true,
+        // Temporarily disable ESLint checking - vite-plugin-checker 0.9.3 has compatibility issues with ESLint 9.x
+        // ESLint can still be run manually via: pnpm lint
+        // eslint: {
+        //   lintCommand: 'eslint "./src/**/*.{ts,tsx,vue}"',
+        // },
+      }),
+      codeInspectorPlugin({
+        bundler: 'vite',
+      }),
+    ],
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+      },
+      extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     },
-    extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
-  },
-}})
+  }})
