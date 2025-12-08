@@ -18,6 +18,7 @@ import type {
   CreateOrUpdatePlanTemplateWithToolResponse,
   PlanTemplateConfigVO,
 } from '../types/plan-template'
+import {apiFetch} from "@/utils/api-fetch";
 
 /**
  * Plan template API service class
@@ -61,7 +62,7 @@ export class PlanTemplateApiService {
     data: PlanTemplateConfigVO
   ): Promise<CreateOrUpdatePlanTemplateWithToolResponse> {
     try {
-      const response = await fetch('/api/plan-template/create-or-update-with-tool', {
+      const response = await apiFetch('/api/plan-template/create-or-update-with-tool', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +82,7 @@ export class PlanTemplateApiService {
    */
   static async getPlanTemplateConfigVO(planTemplateId: string): Promise<PlanTemplateConfigVO> {
     try {
-      const response = await fetch(`/api/plan-template/${planTemplateId}/config`)
+      const response = await apiFetch(`/api/plan-template/${planTemplateId}/config`)
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {
@@ -95,7 +96,7 @@ export class PlanTemplateApiService {
    */
   static async getAllPlanTemplateConfigVOs(): Promise<PlanTemplateConfigVO[]> {
     try {
-      const response = await fetch('/api/plan-template/list-config')
+      const response = await apiFetch('/api/plan-template/list-config')
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {
@@ -109,7 +110,7 @@ export class PlanTemplateApiService {
    */
   static async deletePlanTemplate(planTemplateId: string): Promise<unknown> {
     try {
-      const response = await fetch('/api/plan-template/delete', {
+      const response = await apiFetch('/api/plan-template/delete', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +130,7 @@ export class PlanTemplateApiService {
    */
   static async exportAllPlanTemplates(): Promise<PlanTemplateConfigVO[]> {
     try {
-      const response = await fetch('/api/plan-template/export-all')
+      const response = await apiFetch('/api/plan-template/export-all')
       const result = await this.handleResponse(response)
       return await result.json()
     } catch (error) {
@@ -149,7 +150,7 @@ export class PlanTemplateApiService {
     errors: Array<{ planTemplateId: string; message: string }>
   }> {
     try {
-      const response = await fetch('/api/plan-template/import-all', {
+      const response = await apiFetch('/api/plan-template/import-all', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

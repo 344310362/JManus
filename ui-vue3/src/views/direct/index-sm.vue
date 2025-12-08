@@ -22,7 +22,7 @@
     <header class="branding-header">
       <div class="branding-content">
         <div class="branding-logo">
-          <img src="/img/yuanqi.png" alt="元气小精灵" class="java-logo" />
+          <img src="https://sm-ai-manus.exexm.com/ui/img/yuanqi.png" alt="元气小精灵" class="java-logo" />
           <h1>元气小精灵</h1>
         </div>
         <div class="branding-actions">
@@ -37,7 +37,7 @@
       </div>
     </header>
     <div class="direct-chat">
-<!--      <Sidebar ref="sidebarRef" :width="sidebarWidth" />-->
+      <Sidebar ref="sidebarRef" :width="sidebarWidth" />
       <!-- Sidebar Resizer -->
       <div
         class="panel-resizer"
@@ -50,7 +50,7 @@
       <!-- Left Panel - Config/Preview (RightPanel component) -->
       <RightPanel
         ref="rightPanelRef"
-        :style="{ width: '50%' }"
+        :style="{ width: 100 - sidebarWidth - leftPanelWidth + '%' }"
         :current-root-plan-id="currentRootPlanId"
       />
 
@@ -65,7 +65,7 @@
       </div>
 
       <!-- Right Panel - Chat -->
-      <div class="left-panel" :style="{ width: '50%' }">
+      <div class="left-panel" :style="{ width: leftPanelWidth + '%' }">
         <div class="chat-header">
           <h2>{{ $t('conversation') }}</h2>
           <div class="header-actions">
@@ -109,8 +109,8 @@ import ChatContainer from '@/components/chat/ChatContainer.vue'
 import InputArea from '@/components/input/InputArea.vue'
 import LanguageSwitcher from '@/components/language-switcher/LanguageSwitcher.vue'
 import Memory from '@/components/memory/Memory.vue'
-import RightPanel from '@/components/right-panel/RightPanelSM.vue'
-import Sidebar from '@/components/sidebar/Sidebar.vue'
+import RightPanel from '@/components/right-panel/RightPanel.vue'
+import Sidebar from '@/components/sidebar/SidebarSM.vue'
 import { useConversationHistorySingleton } from '@/composables/useConversationHistory'
 import { useMessageDialogSingleton } from '@/composables/useMessageDialog'
 import { usePlanExecutionSingleton } from '@/composables/usePlanExecution'
@@ -143,7 +143,7 @@ const currentRootPlanId = ref<string | null>(null)
 // Related to panel width
 // Note: leftPanelWidth variable name is kept for backward compatibility
 // It actually controls the chat panel width (which is now on the right side)
-const leftPanelWidth = ref(100) // Chat panel width percentage
+const leftPanelWidth = ref(30) // Chat panel width percentage
 const sidebarWidth = ref(80) // Sidebar width percentage
 const isResizing = ref(false)
 const startX = ref(0)
@@ -491,12 +491,12 @@ const handleConfig = () => {
 }
 
 const memorySelected = async () => {
-  // Memory sidebar is already closed by selectMemory() calling toggleSidebar()
-  // Load conversation history if a memory is selected
-  if (memoryStore.selectMemoryId) {
-    console.log('[DirectView] Memory selected:', memoryStore.selectMemoryId)
+  // Memory sidebar is already closed by selectConversation() calling toggleSidebar()
+  // Load conversation history if a conversation is selected
+  if (memoryStore.conversationId) {
+    console.log('[DirectView] Conversation selected:', memoryStore.conversationId)
     try {
-      await conversationHistory.loadConversationHistory(memoryStore.selectMemoryId, true, true)
+      await conversationHistory.loadConversationHistory(memoryStore.conversationId, true, true)
     } catch (error) {
       console.error('[DirectView] Failed to load conversation history:', error)
       // Error toast is already shown by loadConversationHistory
@@ -505,8 +505,7 @@ const memorySelected = async () => {
 }
 
 const newChat = () => {
-  memoryStore.clearMemoryId()
-  memoryStore.clearConversationId()
+  memoryStore.clearSelectedConversation()
   // Reset all dialog state including conversationId to start a fresh conversation
   messageDialog.reset()
 }
@@ -525,7 +524,7 @@ const newChat = () => {
 .branding-header {
   width: 100%;
   padding: 4px 12px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--bg-primary-rgb), 0.02);
   border-bottom: 1px solid #1a1a1a;
   flex-shrink: 0;
   z-index: 200;
@@ -598,7 +597,7 @@ const newChat = () => {
   flex-shrink: 0;
 
   &:hover {
-    background: #2a2a2a;
+    background: var(--bg-primary);;
 
     .resizer-line {
       background: #4a90e2;
@@ -607,14 +606,14 @@ const newChat = () => {
   }
 
   &:active {
-    background: #3a3a3a;
+    background: var(--bg-primary);
   }
 }
 
 .resizer-line {
   width: 1px;
   height: 40px;
-  background: #3a3a3a;
+  background: var(--bg-primary);
   border-radius: 1px;
   transition: all 0.2s ease;
 }

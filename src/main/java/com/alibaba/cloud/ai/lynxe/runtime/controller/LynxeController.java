@@ -15,13 +15,16 @@
  */
 package com.alibaba.cloud.ai.lynxe.runtime.controller;
 
+import com.alibaba.cloud.ai.lynxe.config.rpc.AuthContext;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
-
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
@@ -360,6 +363,7 @@ public class LynxeController implements LynxeListener<PlanExceptionEvent> {
 				toolName, planTemplateId, uploadedFiles != null ? uploadedFiles.size() : "null",
 				replacementParams != null ? replacementParams.size() : "null", uploadKey, conversationId);
 
+
 		return executePlanSync(planTemplateId, uploadedFiles, replacementParams, requestSource, uploadKey,
 				conversationId);
 	}
@@ -578,6 +582,18 @@ public class LynxeController implements LynxeListener<PlanExceptionEvent> {
 			currentPlanId = planIdDispatcher.generatePlanId();
 			rootPlanId = currentPlanId;
 			logger.info("🆕 Generated new planId: {}", currentPlanId);
+
+      /*SM-CLOUD 自定义部分*/
+      ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+      if(attributes != null){
+        HttpServletRequest request = attributes.getRequest();
+        String currentToken = request.getHeader("Authorization");
+        String username = request.getHeader("USERNAME");
+        if (currentToken != null) {
+          AuthContext.setToken(rootPlanId,currentToken);
+          AuthContext.setUsername(rootPlanId,username);
+        }
+      }
 
 			// Get the latest plan version JSON string
 			planJson = planTemplateService.getLatestPlanVersion(planTemplateId);

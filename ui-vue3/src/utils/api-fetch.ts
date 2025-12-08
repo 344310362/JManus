@@ -21,15 +21,17 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || '';
 export async function apiFetch(input: RequestInfo | URL, init?: RequestInit): Promise<Response> {
   // Convert input to string for URL manipulation
   const url = input.toString();
-  
+
   // Prepend base URL if it's a relative path and doesn't already start with http
   const fullUrl = url.startsWith('http') ? url : `${BASE_URL}${url.startsWith('/') ? url : `/${url}`}`;
 
   // 获取 userStore 实例（注意：必须在组件 setup 或已初始化 Pinia 的上下文中调用）
   const token = userStore.token;
+  const username = userStore.user.username;
   const headers = new Headers(init?.headers || {});
   if (token) {
     headers.set('Authorization', `Bearer ${token}`);
+    headers.set('USERNAME', `${username}`);
   }
 
   // 构造新的 init 配置

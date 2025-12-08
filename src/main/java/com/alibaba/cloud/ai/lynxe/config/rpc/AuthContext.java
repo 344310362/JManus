@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AuthContext {
   private static final ThreadLocal<String> CONTEXT_PLAN_ID = new ThreadLocal<>();
   private static final ApproxLruMap<String,String> TOKEN_HOLDER = new ApproxLruMap<>(500);
+  private static final ApproxLruMap<String,String> USERNAME_HOLDER = new ApproxLruMap<>(500);
 
   public static void setContextPlanId(String rootPlanId) {
     CONTEXT_PLAN_ID.set(rootPlanId);
@@ -16,8 +17,17 @@ public class AuthContext {
     TOKEN_HOLDER.put(rootPlanId,token);
   }
 
+  public static void setUsername(String rootPlanId,String username) {
+    USERNAME_HOLDER.put(rootPlanId,username);
+  }
+
   public static String getToken(String rootPlanId) {
     return TOKEN_HOLDER.get(rootPlanId);
+  }
+
+  public static String getUsername() {
+    String rootPlanId = CONTEXT_PLAN_ID.get();
+    return USERNAME_HOLDER.get(rootPlanId);
   }
   public static String getToken() {
     String rootPlanId = CONTEXT_PLAN_ID.get();

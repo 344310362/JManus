@@ -1,10 +1,12 @@
 #cFROM registry.cn-beijing.aliyuncs.com/exe/sm-ai-manus:dev-rj-1
 FROM registry.cn-beijing.aliyuncs.com/exe/sm-ai-manus:base-rj-1
 
-COPY target/jmanus.jar /app/app.jar
+RUN rm -rf /app/*
+COPY target/lynxe.jar /app/app.jar
 
 # Extract JAR file for faster startup
-RUN mkdir -p /app/extracted && \
+RUN java -jar app.jar playwright-init && \
+    mkdir -p /app/extracted && \
     cd /app/extracted && \
     jar -xf /app/app.jar && \
     rm /app/app.jar
@@ -37,7 +39,7 @@ RUN echo '#!/bin/bash' > /app/start.sh && \
     echo 'export DOCKER_ENV=true' >> /app/start.sh && \
     echo 'echo "Starting application with docker profile..."' >> /app/start.sh && \
     echo 'cd /app/extracted' >> /app/start.sh && \
-    echo 'exec java $JAVA_OPTS -cp /app/extracted/BOOT-INF/classes:/app/extracted/BOOT-INF/lib/*:. com.alibaba.cloud.ai.manus.OpenManusSpringBootApplication' >> /app/start.sh && \
+    echo 'exec java $JAVA_OPTS -cp /app/extracted/BOOT-INF/classes:/app/extracted/BOOT-INF/lib/*:. com.alibaba.cloud.ai.lynxe.OpenLynxeSpringBootApplication' >> /app/start.sh && \
     chmod +x /app/start.sh
 
 # Add labels for better image management

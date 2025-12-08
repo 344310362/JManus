@@ -208,7 +208,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
         :deep(h6) {
           margin: 16px 0 8px 0;
           font-weight: 600;
-          color: #ffffff;
+          color: var(--text-primary, #ffffff);
           line-height: 1.4;
         }
 
@@ -327,7 +327,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
           border-left: 4px solid #667eea;
           background: rgba(102, 126, 234, 0.1);
           border-radius: 4px;
-          color: #cccccc;
+          color: var(--text-primary, #ffffff);
           font-style: italic;
         }
 
@@ -361,7 +361,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
 
         :deep(th) {
           font-weight: 600;
-          color: #ffffff;
+          color: var(--text-primary, #ffffff);
         }
 
         :deep(tbody tr:last-child td) {

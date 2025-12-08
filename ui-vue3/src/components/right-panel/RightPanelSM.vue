@@ -17,6 +17,15 @@
   <div class="right-panel">
     <div class="preview-header">
       <div class="preview-tabs">
+        <!-- Func-Agent Config tab -->
+        <div
+          class="tab-item"
+          :class="{ active: activeTab === 'config' }"
+          @click="activeTab = 'config'"
+        >
+          <Icon icon="carbon:settings" />
+          <span>{{ t('sidebar.configuration') }}</span>
+        </div>
         <!-- Step Execution Details tab -->
         <div
           class="tab-item"
@@ -39,6 +48,62 @@
     </div>
 
     <div class="preview-content">
+      <!-- Func-Agent Config -->
+      <div v-if="activeTab === 'config'" class="config-tab-content">
+        <div v-if="templateConfig.selectedTemplate.value" class="config-container">
+          <!-- Template Info Header -->
+          <div class="template-info-header">
+            <div class="template-info">
+              <h3>
+                {{ templateConfig.selectedTemplate.value.title || t('sidebar.unnamedPlan') }}
+              </h3>
+              <span class="template-id"
+              >ID: {{ templateConfig.selectedTemplate.value.planTemplateId }}</span
+              >
+            </div>
+            <button class="back-to-list-btn" @click="sidebarStore.switchToTab('list')">
+              <Icon icon="carbon:arrow-left" width="16" />
+            </button>
+          </div>
+
+          <!-- JSON Editor -->
+          <JsonEditorV2 />
+
+          <!-- Execution Controller -->
+          <ExecutionController />
+        </div>
+        <div v-else class="no-template-selected">
+          <div class="action-buttons">
+            <button class="new-task-btn" @click="handleCreateNewPlan">
+              <Icon icon="carbon:add" width="16" />
+              {{ t('rightPanel.newFuncAgentPlan') }}
+            </button>
+            <label class="new-task-btn" :title="t('rightPanel.importExistingPlan')">
+              <Icon icon="carbon:import" width="16" />
+              {{ t('rightPanel.importExistingPlan') }}
+              <input
+                type="file"
+                accept=".json"
+                @change="handleImportExistingPlan"
+                style="display: none"
+              />
+            </label>
+          </div>
+          <p class="import-description">
+            {{ t('rightPanel.importDescription') }}
+            <a
+              href="https://github.com/Lynxe-public/Lynxe-public-prompts"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="prompt-library-link"
+            >
+              {{ t('rightPanel.promptLibrary') }}
+            </a>
+            {{ t('rightPanel.importDescriptionSuffix') }}
+          </p>
+        </div>
+      </div>
+
       <!-- Step Execution Details -->
       <div v-if="activeTab === 'details'" class="step-details">
         <!-- Step basic information -->
@@ -116,8 +181,8 @@
                   <div class="step-header">
                     <span class="step-number">#{{ index + 1 }}</span>
                     <span class="step-status" :class="tas.status">{{
-                      tas.status || t('rightPanel.executing')
-                    }}</span>
+                        tas.status || t('rightPanel.executing')
+                      }}</span>
                   </div>
 
                   <!-- Think section - strictly follow right-sidebar.js logic -->
@@ -139,7 +204,7 @@
                               <Icon icon="carbon:copy" />
                             </button>
                             <span class="char-count-badge"
-                              >{{ tas.inputCharCount ?? 0 }} chars</span
+                            >{{ tas.inputCharCount ?? 0 }} chars</span
                             >
                           </div>
                         </div>
@@ -159,7 +224,7 @@
                               <Icon icon="carbon:copy" />
                             </button>
                             <span class="char-count-badge"
-                              >{{ tas.outputCharCount ?? 0 }} chars</span
+                            >{{ tas.outputCharCount ?? 0 }} chars</span
                             >
                           </div>
                         </div>
@@ -214,8 +279,8 @@
                           <div class="sub-plan-info">
                             <span class="label">{{ $t('rightPanel.subPlanId') }}:</span>
                             <span class="value">{{
-                              tas.subPlanExecutionRecord.currentPlanId
-                            }}</span>
+                                tas.subPlanExecutionRecord.currentPlanId
+                              }}</span>
                           </div>
                           <div class="sub-plan-info" v-if="tas.subPlanExecutionRecord.title">
                             <span class="label">{{ $t('rightPanel.title') }}:</span>
@@ -260,8 +325,8 @@
                   <div class="info-item">
                     <span class="label">{{ t('rightPanel.stepName') }}:</span>
                     <span class="value">{{
-                      selectedStep.title || selectedStep.description || selectedStep.stepId
-                    }}</span>
+                        selectedStep.title || selectedStep.description || selectedStep.stepId
+                      }}</span>
                   </div>
                   <div class="info-item" v-if="selectedStep.description">
                     <span class="label">{{ $t('rightPanel.description') }}:</span>
@@ -412,7 +477,7 @@ const shouldAutoScrollToBottom = ref(true)
 const selectedStep = computed(() => rightPanel.selectedStep.value)
 const activeTab = computed({
   get: () => rightPanel.activeTab.value,
-  set: (value: 'details' | 'files') => rightPanel.setActiveTab(value),
+  set: (value: 'config' | 'details' | 'files') => rightPanel.setActiveTab(value),
 })
 const fileBrowserPlanId = computed(() => rightPanel.fileBrowserPlanId.value)
 const shouldShowNoTaskMessage = computed(() => rightPanel.shouldShowNoTaskMessage.value)
@@ -475,6 +540,8 @@ const handleImportExistingPlan = async (event: Event) => {
     onReload: async () => {
       // Reload template list
       await templateStore.loadPlanTemplateList()
+      // Reload available tools to show newly imported tools and dependencies
+      await availableToolsStore.loadAvailableTools()
     },
     onSingleTemplateImported: async template => {
       // If only one template was imported, select it
@@ -712,7 +779,7 @@ defineExpose({
 .step-info {
   padding: 20px;
   margin: 0 20px;
-  background: rgba(var(bg-primary-rgb), 0.8);
+  background: rgba(41, 42, 45, 0.8);
   border-radius: 8px;
   margin-bottom: 16px;
   min-height: 100px; /* Ensure minimum height */
@@ -821,7 +888,7 @@ defineExpose({
 
 .no-steps-message {
   text-align: center;
-  color: #666666;
+  color: var(--bg-primary);
   font-style: italic;
   margin-top: 16px;
 
@@ -832,7 +899,7 @@ defineExpose({
 
 .no-execution-message {
   padding: 20px;
-  background: #f8f9fa;
+  color: var(--bg-primary);
   border: 1px solid #e9ecef;
   border-radius: 8px;
   margin-top: 16px;
@@ -1500,7 +1567,7 @@ defineExpose({
   .new-task-btn {
     width: 100%;
     padding: 10px 16px;
-  background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
+    background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
     border: none;
     border-radius: 6px;
     color: white;

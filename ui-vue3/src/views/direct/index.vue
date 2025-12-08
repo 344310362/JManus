@@ -22,7 +22,7 @@
     <header class="branding-header">
       <div class="branding-content">
         <div class="branding-logo">
-          <img src="/Java-AI.svg" alt="元气小精灵" class="java-logo" />
+          <img src="https://sm-ai-manus.exexm.com/ui/img/yuanqi.png" alt="元气小精灵" class="java-logo" />
           <h1>元气小精灵</h1>
         </div>
         <div class="branding-actions">
@@ -143,7 +143,7 @@ const currentRootPlanId = ref<string | null>(null)
 // Related to panel width
 // Note: leftPanelWidth variable name is kept for backward compatibility
 // It actually controls the chat panel width (which is now on the right side)
-const leftPanelWidth = ref(50) // Chat panel width percentage
+const leftPanelWidth = ref(30) // Chat panel width percentage
 const sidebarWidth = ref(80) // Sidebar width percentage
 const isResizing = ref(false)
 const startX = ref(0)

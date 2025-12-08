@@ -737,7 +737,7 @@ const words: I18nType = {
 
   // 输入组件
   input: {
-    placeholder: '向 Lynxe 发送消息',
+    placeholder: '向 元气小精灵 发送消息',
     send: '发送',
     stop: '停止',
     planMode: 'Func-Agent模式',

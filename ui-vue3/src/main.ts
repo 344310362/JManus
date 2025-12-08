@@ -6,7 +6,6 @@ import './assets/themes/light.css'
 import { createApp, type App as VueApp } from 'vue'
 import { createPinia } from 'pinia'
 import Antd from 'ant-design-vue'
-import Vue3ColorPicker from 'vue3-colorpicker'
 import 'vue3-colorpicker/style.css'
 
 import App from './App.vue'
