@@ -483,6 +483,12 @@ const words: I18nType = {
         imageType: '图像类型',
         maxRetryAttempts: '最大重试次数',
       },
+      versionInfo: {
+        title: '版本信息',
+        version: '版本号',
+        buildTime: '构建时间',
+        currentTime: '当前时间',
+      },
       systemSettings: {
         systemName: '系统名称',
         language: '语言',
@@ -777,6 +783,7 @@ const words: I18nType = {
     deleteConfirmMessage: '确定要删除计划模板 "{templateName}" 吗？此操作不可恢复。',
     deleteSuccess: '计划模板删除成功',
     deleteFailed: '删除计划模板失败',
+    versionOutdated: '函数版本旧，检查是否仍可用，点函数的保存可消除此告警',
     jsonTemplate: 'Func-Agent计划模板编辑器',
     rollback: '回滚',
     restore: '恢复',
@@ -804,6 +811,7 @@ const words: I18nType = {
     statusApiUrl: '状态查询 API',
     executing: '执行中...',
     executePlan: '执行计划',
+    stopTask: '停止任务',
     toolNameRequired: '工具名称是必需的，请确保模板已正确配置',
     executionInProgress: '当前有任务正在执行中，请等待完成后再发起新任务',
     publishMcpService: '发布为工具服务',
@@ -1209,6 +1217,8 @@ const words: I18nType = {
     },
     // 默认步骤标题
     defaultStepTitle: '步骤 {number}',
+    copyToClipboard: '复制到剪贴板',
+    copySuccess: '已复制到剪贴板',
   },
 
   // 定时任务

@@ -11,6 +11,7 @@ import 'vue3-colorpicker/style.css'
 import App from './App.vue'
 import router from './router'
 import { i18n,initializeLanguage } from './base/i18n'
+import { useMessageDialogSingleton } from '@/composables/useMessageDialog'
 import 'ant-design-vue/dist/reset.css'
 import { themeConfig } from './utils/theme'
 import actions from '@/qiankun/actions'
@@ -86,6 +87,9 @@ function render(props: QiankunProps = {}) {
   instance.use(i18n)
   instance.use(router)
   instance.use(Vue3ColorPicker)
+  // Initialize message dialog singleton early to ensure watchEffect is registered
+// This ensures plan execution tracking works regardless of which route is accessed
+  useMessageDialogSingleton()
 
 
   // 传递父应用通信能力（可选）

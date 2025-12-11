@@ -33,8 +33,6 @@ public class PlanTemplateConfigVO {
 
 	private List<StepConfig> steps;
 
-	private Boolean directResponse;
-
 	private String planType;
 
 	@JsonProperty("planTemplateId")
@@ -55,12 +53,13 @@ public class PlanTemplateConfigVO {
 
 	private String updateTime;
 
+	private String version;
+
 	/**
 	 * Default constructor
 	 */
 	public PlanTemplateConfigVO() {
 		this.steps = new ArrayList<>();
-		this.directResponse = false;
 		this.planType = "dynamic_agent";
 		this.accessLevel = PlanTemplateAccessLevel.EDITABLE;
 		this.readOnly = false;
@@ -82,14 +81,6 @@ public class PlanTemplateConfigVO {
 
 	public void setSteps(List<StepConfig> steps) {
 		this.steps = steps != null ? steps : new ArrayList<>();
-	}
-
-	public Boolean getDirectResponse() {
-		return directResponse;
-	}
-
-	public void setDirectResponse(Boolean directResponse) {
-		this.directResponse = directResponse != null ? directResponse : false;
 	}
 
 	public String getPlanType() {
@@ -186,6 +177,14 @@ public class PlanTemplateConfigVO {
 
 	public void setUpdateTime(String updateTime) {
 		this.updateTime = updateTime;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
 	}
 
 	/**
@@ -417,9 +416,9 @@ public class PlanTemplateConfigVO {
 
 	@Override
 	public String toString() {
-		return "PlanTemplateConfigVO{" + "title='" + title + '\'' + ", steps=" + steps + ", directResponse="
-				+ directResponse + ", planType='" + planType + '\'' + ", planTemplateId='" + planTemplateId + '\''
-				+ ", accessLevel=" + getAccessLevel() + ", toolConfig=" + toolConfig + '}';
+		return "PlanTemplateConfigVO{" + "title='" + title + '\'' + ", steps=" + steps + ", planType='" + planType
+				+ '\'' + ", planTemplateId='" + planTemplateId + '\'' + ", accessLevel=" + getAccessLevel()
+				+ ", toolConfig=" + toolConfig + '}';
 	}
 
 }

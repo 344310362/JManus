@@ -60,6 +60,12 @@ public class PlanTemplateConfigService {
 	@Autowired(required = false)
 	private com.alibaba.cloud.ai.lynxe.planning.repository.PlanTemplateVersionRepository planTemplateVersionRepository;
 
+	@Autowired
+	private com.alibaba.cloud.ai.lynxe.runtime.service.IPlanIdDispatcher planIdDispatcher;
+
+	@Autowired
+	private com.alibaba.cloud.ai.lynxe.runtime.service.VersionService versionService;
+
 	/**
 	 * Prepare PlanTemplateConfigVO with toolConfig This method ensures toolConfig is
 	 * properly set with input schema
@@ -271,6 +277,28 @@ public class PlanTemplateConfigService {
 			List<FuncAgentToolEntity> existingTemplates = funcAgentToolRepository.findByPlanTemplateId(planTemplateId);
 			boolean isNewTemplate = existingTemplates.isEmpty();
 
+			// Compatibility handling: If not found by planTemplateId, try to find by
+			// serviceGroup and toolName
+			// This handles the case where planTemplateId was changed (e.g., from new-
+			// prefix to plan-template- prefix)
+			if (isNewTemplate) {
+				String serviceGroup = configVO.getServiceGroup();
+				if (serviceGroup != null && !serviceGroup.trim().isEmpty()) {
+					Optional<FuncAgentToolEntity> existingByGroupAndName = funcAgentToolRepository
+						.findByServiceGroupAndToolName(serviceGroup, title);
+					if (existingByGroupAndName.isPresent()) {
+						FuncAgentToolEntity oldTemplate = existingByGroupAndName.get();
+						// Found old record with different planTemplateId, delete it first
+						log.info(
+								"Found existing template with same serviceGroup '{}' and toolName '{}' but different planTemplateId (old: {}, new: {}). Deleting old template for compatibility.",
+								serviceGroup, title, oldTemplate.getPlanTemplateId(), planTemplateId);
+						funcAgentToolRepository.deleteById(oldTemplate.getId());
+						// Clear the list to proceed with creating new template
+						existingTemplates.clear();
+					}
+				}
+			}
+
 			// Save plan template
 			if (isNewTemplate) {
 				// Create new plan template
@@ -378,12 +406,40 @@ public class PlanTemplateConfigService {
 			throw new PlanTemplateConfigException("INTERNAL_ERROR", "Failed to create PlanTemplate: " + e.getMessage());
 		}
 		catch (org.springframework.dao.DataIntegrityViolationException e) {
-			// Check if it's a unique constraint violation on title
+			// Check if it's a unique constraint violation
 			Throwable rootCause = e.getRootCause();
 			if (rootCause instanceof java.sql.SQLException) {
 				java.sql.SQLException sqlException = (java.sql.SQLException) rootCause;
 				if (sqlException.getSQLState() != null && sqlException.getSQLState().equals("23505")) {
 					String errorMessage = sqlException.getMessage();
+					// Check if it's a unique constraint violation on (serviceGroup,
+					// toolName)
+					if (errorMessage != null && (errorMessage.contains("service_group")
+							|| errorMessage.contains("tool_name") || errorMessage.contains("coordinator_tools"))) {
+						// Try to find and delete the conflicting record by serviceGroup
+						// and toolName
+						String serviceGroup = configVO.getServiceGroup();
+						String title = configVO.getTitle() != null ? configVO.getTitle() : "Untitled Plan";
+						String planTemplateId = configVO.getPlanTemplateId();
+						if (serviceGroup != null && !serviceGroup.trim().isEmpty()) {
+							Optional<FuncAgentToolEntity> conflictingTemplate = funcAgentToolRepository
+								.findByServiceGroupAndToolName(serviceGroup, title);
+							if (conflictingTemplate.isPresent()) {
+								FuncAgentToolEntity conflicting = conflictingTemplate.get();
+								// If the conflicting record has a different
+								// planTemplateId, delete it and retry
+								if (!conflicting.getPlanTemplateId().equals(planTemplateId)) {
+									log.warn(
+											"Data integrity violation detected. Found conflicting template with same serviceGroup '{}' and toolName '{}' but different planTemplateId (conflicting: {}, new: {}). Deleting conflicting template and retrying.",
+											serviceGroup, title, conflicting.getPlanTemplateId(), planTemplateId);
+									funcAgentToolRepository.deleteById(conflicting.getId());
+									// Retry the operation recursively
+									return createPlanTemplateFromConfig(configVO);
+								}
+							}
+						}
+					}
+					// Check if it's a unique constraint violation on title
 					if (errorMessage != null && errorMessage.contains("title")) {
 						log.warn("Duplicate plan title detected: {}", configVO.getTitle());
 						throw new PlanTemplateConfigException("DUPLICATE_TITLE",
@@ -418,6 +474,17 @@ public class PlanTemplateConfigService {
 		if (planTemplateId == null || planTemplateId.trim().isEmpty()) {
 			throw new PlanTemplateConfigException("VALIDATION_ERROR",
 					"planTemplateId is required in PlanTemplateConfigVO");
+		}
+
+		// Check if planTemplateId starts with "new-" and replace it with
+		// backend-generated ID
+		if (planTemplateId.startsWith("new-")) {
+			String newPlanTemplateId = planIdDispatcher.generatePlanTemplateId();
+			log.info(
+					"Frontend provided planTemplateId '{}' starts with 'new-', replacing with backend-generated ID: {}",
+					planTemplateId, newPlanTemplateId);
+			configVO.setPlanTemplateId(newPlanTemplateId);
+			planTemplateId = newPlanTemplateId;
 		}
 
 		log.info("Creating or updating coordinator tool from PlanTemplateConfigVO for planTemplateId: {}",
@@ -508,6 +575,11 @@ public class PlanTemplateConfigService {
 				// Set enableMcpService to false by default for backward compatibility
 				existingEntity.setEnableMcpService(false);
 			}
+
+			// Auto-update version when updating tool
+			String currentVersion = versionService.getCurrentVersion();
+			existingEntity.setVersion(currentVersion);
+			log.debug("Updated version to '{}' for coordinator tool ID: {}", currentVersion, id);
 
 			FuncAgentToolEntity savedEntity = funcAgentToolRepository.save(existingEntity);
 			log.info("Successfully updated FuncAgentToolEntity: {} with ID: {}", savedEntity.getToolDescription(),
@@ -664,6 +736,11 @@ public class PlanTemplateConfigService {
 			// Set enableMcpService to false by default for backward compatibility
 			entity.setEnableMcpService(false);
 
+			// Auto-set current version when creating tool
+			String currentVersion = versionService.getCurrentVersion();
+			entity.setVersion(currentVersion);
+			log.debug("Set version '{}' for new coordinator tool: {}", currentVersion, configVO.getPlanTemplateId());
+
 			FuncAgentToolEntity savedEntity = funcAgentToolRepository.save(entity);
 			log.info("Successfully saved FuncAgentToolEntity: {} with ID: {}", savedEntity.getToolDescription(),
 					savedEntity.getId());
@@ -801,6 +878,7 @@ public class PlanTemplateConfigService {
 				configVO.setPlanTemplateId(entity.getPlanTemplateId());
 				configVO.setTitle(entity.getToolName());
 				configVO.setServiceGroup(entity.getServiceGroup());
+				configVO.setVersion(entity.getVersion());
 				PlanTemplateAccessLevel entityAccessLevel = entity.getAccessLevel();
 				if (entityAccessLevel != null) {
 					configVO.setAccessLevel(entityAccessLevel);
@@ -884,7 +962,6 @@ public class PlanTemplateConfigService {
 					configVO.setTitle(planTemplate.getTitle());
 					configVO.setPlanType(planInterface.getPlanType());
 					configVO.setServiceGroup(planTemplate.getServiceGroup());
-					configVO.setDirectResponse(planInterface.isDirectResponse());
 					configVO.setAccessLevel(planTemplate.getAccessLevel());
 
 					// Convert ExecutionStep list to StepConfig list
@@ -1015,9 +1092,11 @@ public class PlanTemplateConfigService {
 	private PlanTemplateConfigVO convertEntityToPlanTemplateConfigVO(FuncAgentToolEntity entity) {
 		PlanTemplateConfigVO configVO = new PlanTemplateConfigVO();
 		configVO.setPlanTemplateId(entity.getPlanTemplateId());
+		configVO.setTitle(entity.getToolName());
 
 		// Get additional info from entity
 		configVO.setServiceGroup(entity.getServiceGroup());
+		configVO.setVersion(entity.getVersion());
 		PlanTemplateAccessLevel entityAccessLevel = entity.getAccessLevel();
 		if (entityAccessLevel != null) {
 			configVO.setAccessLevel(entityAccessLevel.getValue());
