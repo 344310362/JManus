@@ -15,32 +15,11 @@
  */
 package com.alibaba.cloud.ai.lynxe.tool.browser;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.alibaba.cloud.ai.lynxe.config.LynxeProperties;
 import com.alibaba.cloud.ai.lynxe.tool.AbstractBaseTool;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.BrowserRequestVO;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.ClickByElementAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.CloseTabAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.ExecuteJsAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.GetElementPositionByNameAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.GetTextAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.InputTextAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.KeyEnterAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.MoveToAndClickAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.NavigateAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.NewTabAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.RefreshAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.ScreenShotAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.ScrollAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.SwitchTabAction;
-import com.alibaba.cloud.ai.lynxe.tool.browser.actions.WriteCurrentWebContentAction;
+import com.alibaba.cloud.ai.lynxe.tool.browser.actions.*;
 import com.alibaba.cloud.ai.lynxe.tool.code.ToolExecuteResult;
+import com.alibaba.cloud.ai.lynxe.tool.filesystem.UnifiedDirectoryManager;
 import com.alibaba.cloud.ai.lynxe.tool.i18n.ToolI18nService;
 import com.alibaba.cloud.ai.lynxe.tool.innerStorage.SmartContentSavingService;
 import com.alibaba.cloud.ai.lynxe.tool.textOperator.TextFileService;
@@ -48,6 +27,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.PlaywrightException;
 import com.microsoft.playwright.TimeoutError;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 
@@ -65,15 +50,19 @@ public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 
 	private final ToolI18nService toolI18nService;
 
+	private final UnifiedDirectoryManager unifiedDirectoryManager;
+
 	public BrowserUseTool(ChromeDriverService chromeDriverService, SmartContentSavingService innerStorageService,
 			ObjectMapper objectMapper, com.alibaba.cloud.ai.lynxe.tool.shortUrl.ShortUrlService shortUrlService,
-			TextFileService textFileService, ToolI18nService toolI18nService) {
+			TextFileService textFileService, ToolI18nService toolI18nService,
+			UnifiedDirectoryManager unifiedDirectoryManager) {
 		this.chromeDriverService = chromeDriverService;
 		this.innerStorageService = innerStorageService;
 		this.objectMapper = objectMapper;
 		this.shortUrlService = shortUrlService;
 		this.textFileService = textFileService;
 		this.toolI18nService = toolI18nService;
+		this.unifiedDirectoryManager = unifiedDirectoryManager;
 	}
 
 	public DriverWrapper getDriver() {
@@ -107,9 +96,9 @@ public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 	public static synchronized BrowserUseTool getInstance(ChromeDriverService chromeDriverService,
 			SmartContentSavingService innerStorageService, ObjectMapper objectMapper,
 			com.alibaba.cloud.ai.lynxe.tool.shortUrl.ShortUrlService shortUrlService, TextFileService textFileService,
-			ToolI18nService toolI18nService) {
+			ToolI18nService toolI18nService, UnifiedDirectoryManager unifiedDirectoryManager) {
 		BrowserUseTool instance = new BrowserUseTool(chromeDriverService, innerStorageService, objectMapper,
-				shortUrlService, textFileService, toolI18nService);
+				shortUrlService, textFileService, toolI18nService, unifiedDirectoryManager);
 		return instance;
 	}
 
@@ -243,6 +232,21 @@ public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 						result = executeActionWithRetry(
 								() -> new WriteCurrentWebContentAction(this, textFileService).execute(requestVO),
 								action);
+						break;
+					}
+					case "download": {
+						// Get download directory for current plan
+						java.nio.file.Path downloadDir = unifiedDirectoryManager.getRootPlanDirectory(rootPlanId)
+							.resolve("downloads");
+						try {
+							unifiedDirectoryManager.ensureDirectoryExists(downloadDir);
+						}
+						catch (java.io.IOException e) {
+							log.error("Failed to create download directory: {}", e.getMessage());
+							return new ToolExecuteResult("Failed to create download directory: " + e.getMessage());
+						}
+						result = executeActionWithRetry(
+								() -> new DownloadFileAction(this, downloadDir).execute(requestVO), action);
 						break;
 					}
 					default:
@@ -427,11 +431,11 @@ public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 				try {
 					page.waitForLoadState(com.microsoft.playwright.options.LoadState.NETWORKIDLE,
 							new Page.WaitForLoadStateOptions().setTimeout(3000)); // 3
-																					// second
-																					// timeout
-																					// for
-																					// network
-																					// idle
+					// second
+					// timeout
+					// for
+					// network
+					// idle
 				}
 				catch (TimeoutError e) {
 					// If network idle timeout, wait a bit more for dynamic content to
@@ -499,6 +503,9 @@ public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 
 			// Generate ARIA snapshot using the new AriaSnapshot utility with error
 			// handling
+			// Note: AriaSnapshot now returns error messages instead of throwing
+			// exceptions
+			// for timeouts, so the flow continues normally
 			try {
 				AriaSnapshotOptions snapshotOptions = new AriaSnapshotOptions().setSelector("body")
 					.setTimeout(getBrowserTimeout() * 1000); // Convert to milliseconds
@@ -506,11 +513,13 @@ public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 				// Use compressUrl based on configuration
 				Boolean enableShortUrl = getLynxeProperties().getEnableShortUrl();
 				boolean compressUrl = enableShortUrl != null ? enableShortUrl : true; // Default
-																						// to
-																						// true
+				// to
+				// true
 				String snapshot = AriaElementHelper.parsePageAndAssignRefs(page, snapshotOptions, compressUrl,
 						shortUrlService, rootPlanId);
 				if (snapshot != null && !snapshot.trim().isEmpty()) {
+					// Snapshot may contain error message if timeout occurred, which is
+					// fine
 					state.put("interactive_elements", snapshot);
 				}
 				else {
@@ -519,11 +528,13 @@ public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 			}
 			catch (PlaywrightException e) {
 				log.warn("Playwright error getting ARIA snapshot: {}", e.getMessage());
-				state.put("interactive_elements", "Error getting interactive elements: " + e.getMessage());
+				state.put("interactive_elements", "Error getting interactive elements: " + e.getMessage()
+						+ ". You can continue with available page information (URL, title, tabs).");
 			}
 			catch (Exception e) {
 				log.warn("Unexpected error getting ARIA snapshot: {}", e.getMessage());
-				state.put("interactive_elements", "Error getting interactive elements: " + e.getMessage());
+				state.put("interactive_elements", "Error getting interactive elements: " + e.getMessage()
+						+ ". You can continue with available page information (URL, title, tabs).");
 			}
 
 			return state;
@@ -571,64 +582,75 @@ public class BrowserUseTool extends AbstractBaseTool<BrowserRequestVO> {
 					""";
 		}
 
-		DriverWrapper driver = getDriver();
-		Map<String, Object> state = getCurrentState(driver.getCurrentPage());
-		// Build URL and title information
-		String urlInfo = String.format("\n   URL: %s\n   Title: %s", state.get("url"), state.get("title"));
+		try {
+			DriverWrapper driver = getDriver();
+			Map<String, Object> state = getCurrentState(driver.getCurrentPage());
+			// Build URL and title information
+			String urlInfo = String.format("\n   URL: %s\n   Title: %s", state.get("url"), state.get("title"));
 
-		// Build tab information
+			// Build tab information
 
-		List<Map<String, Object>> tabs = (List<Map<String, Object>>) state.get("tabs");
-		String tabsInfo = (tabs != null) ? String.format("\n   %d tab(s) available", tabs.size()) : "";
-		if (tabs != null) {
-			for (int i = 0; i < tabs.size(); i++) {
-				Map<String, Object> tab = tabs.get(i);
-				String tabUrl = (String) tab.get("url");
-				String tabTitle = (String) tab.get("title");
-				tabsInfo += String.format("\n   [%d] %s: %s", i, tabTitle, tabUrl);
+			List<Map<String, Object>> tabs = (List<Map<String, Object>>) state.get("tabs");
+			String tabsInfo = (tabs != null) ? String.format("\n   %d tab(s) available", tabs.size()) : "";
+			if (tabs != null) {
+				for (int i = 0; i < tabs.size(); i++) {
+					Map<String, Object> tab = tabs.get(i);
+					String tabUrl = (String) tab.get("url");
+					String tabTitle = (String) tab.get("title");
+					tabsInfo += String.format("\n   [%d] %s: %s", i, tabTitle, tabUrl);
+				}
 			}
+			// Get scroll information
+			Object scrollInfoObj = state.get("scroll_info");
+			String contentAbove = "";
+			String contentBelow = "";
+			if (scrollInfoObj instanceof Map<?, ?> scrollInfoMap) {
+
+				Map<String, Object> scrollInfo = (Map<String, Object>) scrollInfoMap;
+				Object pixelsAboveObj = scrollInfo.get("pixels_above");
+				Object pixelsBelowObj = scrollInfo.get("pixels_below");
+
+				if (pixelsAboveObj instanceof Long pixelsAbove) {
+					contentAbove = pixelsAbove > 0 ? String.format(" (%d pixels)", pixelsAbove) : "";
+				}
+				if (pixelsBelowObj instanceof Long pixelsBelow) {
+					contentBelow = pixelsBelow > 0 ? String.format(" (%d pixels)", pixelsBelow) : "";
+				}
+			}
+
+			// Get interactive element information
+			String elementsInfo = (String) state.get("interactive_elements");
+
+			// Build final status string
+			String retString = String.format("""
+
+					- Current URL and page title:
+					%s
+
+					- Available tabs:
+					%s
+
+					- Interactive elements and their indices:
+					%s
+
+					- Content above%s or below%s the viewport (if indicated)
+
+					- Any action results or errors:
+					%s
+					""", urlInfo, tabsInfo, elementsInfo != null ? elementsInfo : "", contentAbove, contentBelow,
+					state.containsKey("error") ? state.get("error") : "");
+
+			return retString;
 		}
-		// Get scroll information
-		Object scrollInfoObj = state.get("scroll_info");
-		String contentAbove = "";
-		String contentBelow = "";
-		if (scrollInfoObj instanceof Map<?, ?> scrollInfoMap) {
-
-			Map<String, Object> scrollInfo = (Map<String, Object>) scrollInfoMap;
-			Object pixelsAboveObj = scrollInfo.get("pixels_above");
-			Object pixelsBelowObj = scrollInfo.get("pixels_below");
-
-			if (pixelsAboveObj instanceof Long pixelsAbove) {
-				contentAbove = pixelsAbove > 0 ? String.format(" (%d pixels)", pixelsAbove) : "";
-			}
-			if (pixelsBelowObj instanceof Long pixelsBelow) {
-				contentBelow = pixelsBelow > 0 ? String.format(" (%d pixels)", pixelsBelow) : "";
-			}
+		catch (Exception e) {
+			// Handle any unexpected errors gracefully - return a valid state string
+			// This ensures the flow continues even if state retrieval fails
+			log.warn("Error getting browser tool state string (non-fatal): {}", e.getMessage(), e);
+			return String.format("""
+					Browser tool state retrieval encountered an error: %s
+					You can continue with available browser information or try again.
+					""", e.getMessage());
 		}
-
-		// Get interactive element information
-		String elementsInfo = (String) state.get("interactive_elements");
-
-		// Build final status string
-		String retString = String.format("""
-
-				- Current URL and page title:
-				%s
-
-				- Available tabs:
-				%s
-
-				- Interactive elements and their indices:
-				%s
-
-				- Content above%s or below%s the viewport (if indicated)
-
-				- Any action results or errors:
-				%s
-				""", urlInfo, tabsInfo, elementsInfo != null ? elementsInfo : "", contentAbove, contentBelow,
-				state.containsKey("error") ? state.get("error") : "");
-
-		return retString;
 	}
 
 	// cleanup method already exists, just ensure it conforms to interface specification

@@ -406,7 +406,7 @@ public class ChromeDriverService implements IChromeDriverService {
 				if (browserPath != null) {
 					java.nio.file.Path browsersDir = java.nio.file.Paths.get(browserPath);
 					if (!java.nio.file.Files.exists(browsersDir)) {
-						log.warn(
+						log.debug(
 								"Browser binaries directory does not exist: {}. Playwright will download browsers on first use.",
 								browserPath);
 					}
@@ -470,7 +470,7 @@ public class ChromeDriverService implements IChromeDriverService {
 						"--remote-allow-origins=*", "--disable-blink-features=AutomationControlled",
 						"--disable-infobars", "--disable-notifications", "--disable-dev-shm-usage", "--no-sandbox",
 						"--disable-gpu", "--lang=zh-CN,zh,en-US,en", "--user-agent=" + userAgent,
-						"--window-size=1920,1080",
+						"--window-size=1440,900",
 						// Ensure normal mode (not incognito) - do not add --incognito
 						// flag
 						// Performance optimizations - disable background network requests
@@ -517,7 +517,7 @@ public class ChromeDriverService implements IChromeDriverService {
 				launchOptions.setArgs(args);
 
 				// Set viewport size
-				launchOptions.setViewportSize(1920, 1080);
+				launchOptions.setViewportSize(1440, 900);
 
 				// Set user agent
 				launchOptions.setUserAgent(userAgent);
@@ -645,7 +645,7 @@ public class ChromeDriverService implements IChromeDriverService {
 
 					// Create context with the same options
 					Browser.NewContextOptions contextOptions = new Browser.NewContextOptions();
-					contextOptions.setViewportSize(1920, 1080);
+					contextOptions.setViewportSize(1440, 900);
 					if (userAgent != null) {
 						contextOptions.setUserAgent(userAgent);
 					}
@@ -669,18 +669,21 @@ public class ChromeDriverService implements IChromeDriverService {
 					throw new RuntimeException("Browser context was created but is null");
 				}
 
-				// Set up browser crash listener for better error handling
+				// Set up browser disconnect listener for cleanup
+				// Note: This event fires both on normal close and unexpected crashes
 				if (browser != null) {
 					browser.onDisconnected((Browser disconnectedBrowser) -> {
-						log.error("Browser disconnected unexpectedly - possible crash detected");
+						// Use DEBUG level since this is expected during normal browser
+						// shutdown
+						log.debug("Browser disconnected for planId: {}", findPlanIdForBrowser(disconnectedBrowser));
 						// Mark driver as unhealthy for this planId
 						String disconnectedPlanId = findPlanIdForBrowser(disconnectedBrowser);
 						if (disconnectedPlanId != null) {
-							log.warn("Removing crashed browser driver for planId: {}", disconnectedPlanId);
+							log.debug("Removing disconnected browser driver for planId: {}", disconnectedPlanId);
 							drivers.remove(disconnectedPlanId);
 						}
 					});
-					log.debug("Browser crash listener registered");
+					log.debug("Browser disconnect listener registered");
 				}
 
 			}

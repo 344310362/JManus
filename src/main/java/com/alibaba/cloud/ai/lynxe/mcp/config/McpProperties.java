@@ -38,6 +38,12 @@ public class McpProperties {
 	private Duration timeout = Duration.ofSeconds(60);
 
 	/**
+	 * Initialization timeout duration (separate from request timeout) Used for MCP client
+	 * initialization, which may take longer than regular requests
+	 */
+	private Duration initializationTimeout = Duration.ofSeconds(120);
+
+	/**
 	 * Cache expiration time after access
 	 */
 	private Duration cacheExpireAfterAccess = Duration.ofMinutes(10);
@@ -57,6 +63,33 @@ public class McpProperties {
 	 */
 	private String userAgent = "MCP-Client/1.0.0";
 
+	/**
+	 * SSE read timeout in seconds. Set to 0 to disable read timeout (recommended for SSE
+	 * long connections). Default: 0 (disabled)
+	 */
+	private long sseReadTimeoutSeconds = 0;
+
+	/**
+	 * SSE write timeout in seconds. Default: 30 seconds
+	 */
+	private long sseWriteTimeoutSeconds = 30;
+
+	/**
+	 * SSE connection timeout in milliseconds. Default: 30000 (30 seconds)
+	 */
+	private int sseConnectTimeoutMillis = 30000;
+
+	/**
+	 * Request retry count for automatic retry on connection failure. Default: 3
+	 */
+	private int requestRetryCount = 3;
+
+	/**
+	 * Connection rebuild delay in milliseconds before rebuilding connection after
+	 * timeout. Default: 100ms
+	 */
+	private long connectionRebuildDelayMillis = 100;
+
 	// Getters and Setters
 	public int getMaxRetries() {
 		return maxRetries;
@@ -72,6 +105,14 @@ public class McpProperties {
 
 	public void setTimeout(Duration timeout) {
 		this.timeout = timeout;
+	}
+
+	public Duration getInitializationTimeout() {
+		return initializationTimeout;
+	}
+
+	public void setInitializationTimeout(Duration initializationTimeout) {
+		this.initializationTimeout = initializationTimeout;
 	}
 
 	public Duration getCacheExpireAfterAccess() {
@@ -104,6 +145,46 @@ public class McpProperties {
 
 	public void setUserAgent(String userAgent) {
 		this.userAgent = userAgent;
+	}
+
+	public long getSseReadTimeoutSeconds() {
+		return sseReadTimeoutSeconds;
+	}
+
+	public void setSseReadTimeoutSeconds(long sseReadTimeoutSeconds) {
+		this.sseReadTimeoutSeconds = sseReadTimeoutSeconds;
+	}
+
+	public long getSseWriteTimeoutSeconds() {
+		return sseWriteTimeoutSeconds;
+	}
+
+	public void setSseWriteTimeoutSeconds(long sseWriteTimeoutSeconds) {
+		this.sseWriteTimeoutSeconds = sseWriteTimeoutSeconds;
+	}
+
+	public int getSseConnectTimeoutMillis() {
+		return sseConnectTimeoutMillis;
+	}
+
+	public void setSseConnectTimeoutMillis(int sseConnectTimeoutMillis) {
+		this.sseConnectTimeoutMillis = sseConnectTimeoutMillis;
+	}
+
+	public int getRequestRetryCount() {
+		return requestRetryCount;
+	}
+
+	public void setRequestRetryCount(int requestRetryCount) {
+		this.requestRetryCount = requestRetryCount;
+	}
+
+	public long getConnectionRebuildDelayMillis() {
+		return connectionRebuildDelayMillis;
+	}
+
+	public void setConnectionRebuildDelayMillis(long connectionRebuildDelayMillis) {
+		this.connectionRebuildDelayMillis = connectionRebuildDelayMillis;
 	}
 
 }

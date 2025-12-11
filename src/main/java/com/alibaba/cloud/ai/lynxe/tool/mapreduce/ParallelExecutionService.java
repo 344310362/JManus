@@ -62,20 +62,20 @@ public class ParallelExecutionService {
 
 	/**
 	 * Look up tool context using qualified key conversion This method handles the
-	 * conversion from raw tool name to qualified key format (toolName*index*) based on
-	 * serviceGroup, and provides fallback to original toolName if conversion fails.
+	 * conversion from raw tool name to qualified key format (serviceGroup_toolName) based
+	 * on serviceGroup, and provides fallback to original toolName if conversion fails.
 	 * @param toolName The raw tool name to look up
 	 * @param toolCallbackMap Map of tool callbacks
 	 * @return ToolCallBackContext if found, null otherwise
 	 */
 	public ToolCallBackContext lookupToolContext(String toolName, Map<String, ToolCallBackContext> toolCallbackMap) {
-		// Convert tool name to qualified key format (toolName*index*) if needed
+		// Convert tool name to qualified key format (serviceGroup_toolName) if needed
 		// This handles the case where tools are registered with qualified keys based on
 		// serviceGroup
 		String lookupKey = toolName;
 		if (serviceGroupIndexService != null) {
 			try {
-				String convertedKey = serviceGroupIndexService.convertToolKeyToQualifiedKey(toolName);
+				String convertedKey = serviceGroupIndexService.constructFrontendToolKey(toolName);
 				if (convertedKey != null && !convertedKey.equals(toolName)) {
 					lookupKey = convertedKey;
 					logger.debug("Converted tool key from '{}' to '{}' for lookup", toolName, lookupKey);
@@ -133,15 +133,15 @@ public class ParallelExecutionService {
 		// Fill missing required parameters with empty string
 		Map<String, Object> filledParams = fillMissingParameters(params, requiredParamNames);
 
-		// Extract parent toolCallId and planDepth from context if available
-		String parentToolCallId = null;
+		// Extract planDepth and toolCallId from context if available
+		// If toolCallId is provided in context, use it to ensure consistency with
+		// ActToolParam
+		// Otherwise, generate a new one for proper sub-plan association
 		Integer propagatedPlanDepth = null;
+		String toolCallId = null;
 		try {
 			if (toolContext != null && toolContext.getContext() != null) {
-				Object v = toolContext.getContext().get("toolcallId");
-				if (v != null) {
-					parentToolCallId = String.valueOf(v);
-				}
+				// Extract planDepth
 				Object d = toolContext.getContext().get("planDepth");
 				if (d instanceof Number) {
 					propagatedPlanDepth = ((Number) d).intValue();
@@ -149,14 +149,23 @@ public class ParallelExecutionService {
 				else if (d instanceof String) {
 					propagatedPlanDepth = Integer.parseInt((String) d);
 				}
+				// Extract toolCallId if provided (for consistency with ActToolParam)
+				Object t = toolContext.getContext().get("toolcallId");
+				if (t != null) {
+					toolCallId = String.valueOf(t);
+				}
 			}
 		}
 		catch (Exception ignore) {
 			// ignore extraction errors
 		}
 
-		// Generate tool call ID
-		String toolCallId = (parentToolCallId != null) ? parentToolCallId : planIdDispatcher.generateToolCallId();
+		// Generate a unique tool call ID if not provided in context
+		// This ensures each tool call has its own toolCallId for proper sub-plan
+		// association
+		if (toolCallId == null) {
+			toolCallId = planIdDispatcher.generateToolCallId();
+		}
 
 		// Determine depth level
 		final int depthLevel = (propagatedPlanDepth != null) ? propagatedPlanDepth : 0;
@@ -309,7 +318,18 @@ public class ParallelExecutionService {
 
 		for (int i = 0; i < executions.size(); i++) {
 			ParallelExecutionRequest request = executions.get(i);
-			futures.add(executeTool(request.getToolName(), request.getParams(), toolCallbackMap, toolContext, i));
+			// Create a tool-specific context that includes the toolCallId if provided
+			ToolContext toolSpecificContext = toolContext;
+			if (request.getToolCallId() != null) {
+				Map<String, Object> contextMap = new HashMap<>();
+				if (toolContext != null && toolContext.getContext() != null) {
+					contextMap.putAll(toolContext.getContext());
+				}
+				contextMap.put("toolcallId", request.getToolCallId());
+				toolSpecificContext = new ToolContext(contextMap);
+			}
+			futures
+				.add(executeTool(request.getToolName(), request.getParams(), toolCallbackMap, toolSpecificContext, i));
 		}
 
 		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).thenApply(v -> {
@@ -414,12 +434,20 @@ public class ParallelExecutionService {
 
 		private Map<String, Object> params;
 
+		private String toolCallId;
+
 		public ParallelExecutionRequest() {
 		}
 
 		public ParallelExecutionRequest(String toolName, Map<String, Object> params) {
 			this.toolName = toolName;
 			this.params = params;
+		}
+
+		public ParallelExecutionRequest(String toolName, Map<String, Object> params, String toolCallId) {
+			this.toolName = toolName;
+			this.params = params;
+			this.toolCallId = toolCallId;
 		}
 
 		public String getToolName() {
@@ -436,6 +464,14 @@ public class ParallelExecutionService {
 
 		public void setParams(Map<String, Object> params) {
 			this.params = params;
+		}
+
+		public String getToolCallId() {
+			return toolCallId;
+		}
+
+		public void setToolCallId(String toolCallId) {
+			this.toolCallId = toolCallId;
 		}
 
 	}

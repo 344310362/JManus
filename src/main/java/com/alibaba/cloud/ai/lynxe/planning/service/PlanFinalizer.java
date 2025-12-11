@@ -38,6 +38,8 @@ import com.alibaba.cloud.ai.lynxe.runtime.entity.vo.ExecutionContext;
 import com.alibaba.cloud.ai.lynxe.runtime.entity.vo.PlanExecutionResult;
 import com.alibaba.cloud.ai.lynxe.runtime.service.TaskInterruptionManager;
 import com.alibaba.cloud.ai.lynxe.workspace.conversation.service.MemoryService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import reactor.core.publisher.Flux;
 
@@ -61,6 +63,8 @@ public class PlanFinalizer {
 
 	private final MemoryService memoryService;
 
+	private final ObjectMapper objectMapper;
+
 	public PlanFinalizer(LlmService llmService, PlanExecutionRecorder recorder, LynxeProperties lynxeProperties,
 			StreamingResponseHandler streamingResponseHandler, TaskInterruptionManager taskInterruptionManager,
 			MemoryService memoryService) {
@@ -70,6 +74,7 @@ public class PlanFinalizer {
 		this.streamingResponseHandler = streamingResponseHandler;
 		this.taskInterruptionManager = taskInterruptionManager;
 		this.memoryService = memoryService;
+		this.objectMapper = new ObjectMapper();
 	}
 
 	/**
@@ -78,6 +83,41 @@ public class PlanFinalizer {
 	private void generateSummary(ExecutionContext context, PlanExecutionResult result) {
 		validateContextWithPlan(context, "ExecutionContext or its plan or title cannot be null");
 
+		// Check if resultStr already contains a message that can be used directly
+		String resultStr = context.getPlan().getResult();
+		MessageExtractionResult extractionResult = extractMessageFromJsonIfApplicable(resultStr);
+
+		// If we successfully extracted a simple text message, use it directly without
+		// calling LLM
+		if (extractionResult != null && extractionResult.isSimpleText()) {
+			log.debug("Using message from resultStr directly, skipping LLM call");
+			processAndRecordResult(context, result, extractionResult.getMessage(), "Generated summary: {}");
+			return;
+		}
+
+		// If we have structured data (array of objects), generate summary with that data
+		if (extractionResult != null && extractionResult.isStructuredData()) {
+			log.debug("Found structured data in message, generating summary with LLM");
+			Map<String, Object> promptVariables = Map.of("executionDetail",
+					context.getPlan().getPlanExecutionStateStringFormat(false), "title", context.getTitle(),
+					"structuredData", extractionResult.getStructuredData());
+
+			String summaryPrompt = """
+					You are lynxe, an AI assistant capable of responding to user requests. You need to respond to the user's request based on the execution results of this step-by-step execution plan.
+
+					Step-by-step plan execution details:
+					{executionDetail}
+
+					The execution has completed and returned the following structured data:
+					{structuredData}
+
+					Please generate a comprehensive summary message based on the structured data above. The summary should be clear, informative, and directly answer the user's request.
+					""";
+			generateWithLlm(context, result, summaryPrompt, promptVariables, "summary", "Generated summary: {}");
+			return;
+		}
+
+		// Otherwise, generate summary using LLM with standard execution details
 		Map<String, Object> promptVariables = Map.of("executionDetail",
 				context.getPlan().getPlanExecutionStateStringFormat(false), "title", context.getTitle());
 
@@ -91,28 +131,6 @@ public class PlanFinalizer {
 				Please respond to the user's request based on the information in the execution details.
 				""";
 		generateWithLlm(context, result, summaryPrompt, promptVariables, "summary", "Generated summary: {}");
-	}
-
-	/**
-	 * Generate direct LLM response for simple requests
-	 */
-	private void generateDirectResponse(ExecutionContext context, PlanExecutionResult result) {
-		validateForGeneration(context, "ExecutionContext or title cannot be null");
-
-		String title = context.getTitle();
-		log.info("Generating direct response for user request: {}", title);
-
-		Map<String, Object> promptVariables = Map.of("title", title);
-
-		String directResponsePrompt = """
-				You are lynxe, an AI assistant capable of responding to user requests. Currently in direct feedback mode, you need to directly respond to the user's simple requests without complex planning and decomposition.
-
-				The current user request is:
-
-				{title}
-				""";
-		generateWithLlm(context, result, directResponsePrompt, promptVariables, "direct response",
-				"Generated direct response: {}");
 	}
 
 	/**
@@ -198,13 +216,8 @@ public class PlanFinalizer {
 				log.debug("Generating LLM summary for plan: {}", context.getCurrentPlanId());
 				generateSummary(context, result);
 			}
-			// Check if this is a direct response plan
-			else if (context.getPlan() != null && context.getPlan().isDirectResponse()) {
-				log.debug("Generating direct response for plan: {}", context.getCurrentPlanId());
-				generateDirectResponse(context, result);
-			}
 			else {
-				log.debug("No need to generate summary or direct response for plan: {}", context.getCurrentPlanId());
+				log.debug("No need to generate summary for plan: {}", context.getCurrentPlanId());
 				processAndRecordResult(context, result, result.getFinalResult(), "Final result: {}");
 			}
 
@@ -239,11 +252,134 @@ public class PlanFinalizer {
 		try {
 			String llmResult = generateLlmResponse(context, promptName, variables,
 					Character.toUpperCase(operationType.charAt(0)) + operationType.substring(1) + " generation");
-			processAndRecordResult(context, result, llmResult, successLogTemplate);
+
+			// Try to parse JSON and extract message if output only has message key
+			MessageExtractionResult extractionResult = extractMessageFromJsonIfApplicable(llmResult);
+			String processedResult;
+			if (extractionResult != null && extractionResult.isSimpleText()) {
+				processedResult = extractionResult.getMessage();
+			}
+			else {
+				// Use original LLM result if extraction failed or returned structured
+				// data
+				processedResult = llmResult;
+			}
+			processAndRecordResult(context, result, processedResult, successLogTemplate);
 		}
 		catch (Exception e) {
 			handleLlmError(operationType, e);
 		}
+	}
+
+	/**
+	 * Result of message extraction from JSON
+	 */
+	private static class MessageExtractionResult {
+
+		private final String message;
+
+		private final String structuredData;
+
+		private final boolean isSimpleText;
+
+		public MessageExtractionResult(String message, boolean isSimpleText) {
+			this.message = message;
+			this.structuredData = null;
+			this.isSimpleText = isSimpleText;
+		}
+
+		public MessageExtractionResult(String structuredData) {
+			this.message = null;
+			this.structuredData = structuredData;
+			this.isSimpleText = false;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		public String getStructuredData() {
+			return structuredData;
+		}
+
+		public boolean isSimpleText() {
+			return isSimpleText;
+		}
+
+		public boolean isStructuredData() {
+			return structuredData != null;
+		}
+
+	}
+
+	/**
+	 * Extract message from JSON response if output only contains message key
+	 * @param jsonString The JSON string to parse (may be JSON or plain text)
+	 * @return Extracted message result if applicable, null if extraction failed or
+	 * doesn't match expected structure
+	 */
+	private MessageExtractionResult extractMessageFromJsonIfApplicable(String jsonString) {
+		if (jsonString == null || jsonString.trim().isEmpty()) {
+			return null;
+		}
+
+		try {
+			// Try to parse as JSON
+			JsonNode rootNode = objectMapper.readTree(jsonString);
+
+			JsonNode messageNode = null;
+
+			// First, check if it has "output" key
+			if (rootNode.has("output") && rootNode.get("output").isObject()) {
+				JsonNode outputNode = rootNode.get("output");
+
+				// Get all keys in output
+				java.util.Iterator<String> fieldNames = outputNode.fieldNames();
+				java.util.List<String> keys = new java.util.ArrayList<>();
+				fieldNames.forEachRemaining(keys::add);
+
+				// If output only has one key named "message", extract it
+				if (keys.size() == 1 && keys.contains("message")) {
+					messageNode = outputNode.get("message");
+				}
+			}
+			// Check if root has direct "message" key (not wrapped in "output")
+			else if (rootNode.has("message")) {
+				messageNode = rootNode.get("message");
+			}
+
+			if (messageNode != null) {
+				// If message is a simple text string, return it directly
+				if (messageNode.isTextual()) {
+					String message = messageNode.asText();
+					log.debug("Extracted text message from JSON: {}", message);
+					return new MessageExtractionResult(message, true);
+				}
+				// If message is an array of objects, return structured data for LLM
+				// summary generation
+				else if (messageNode.isArray()) {
+					String structuredDataJson = objectMapper.writeValueAsString(messageNode);
+					log.debug("Found structured data (array) in message, will generate summary: {}",
+							structuredDataJson);
+					return new MessageExtractionResult(structuredDataJson);
+				}
+				// If message is an object, return structured data for LLM summary
+				// generation
+				else if (messageNode.isObject()) {
+					String structuredDataJson = objectMapper.writeValueAsString(messageNode);
+					log.debug("Found structured data (object) in message, will generate summary: {}",
+							structuredDataJson);
+					return new MessageExtractionResult(structuredDataJson);
+				}
+			}
+		}
+		catch (Exception e) {
+			// Not valid JSON or doesn't match expected structure
+			log.debug("String is not JSON or doesn't match expected structure: {}", e.getMessage());
+		}
+
+		// Return null if extraction failed (to indicate we should use original logic)
+		return null;
 	}
 
 	/**
@@ -255,18 +391,6 @@ public class PlanFinalizer {
 		result.setFinalResult(llmResult);
 		recordPlanCompletion(context, llmResult);
 		log.info(logTemplate, llmResult);
-	}
-
-	/**
-	 * Unified validation for generation methods
-	 */
-	private void validateForGeneration(ExecutionContext context, String errorMessage) {
-		if (context == null) {
-			throw new IllegalArgumentException(errorMessage);
-		}
-		if (context.getTitle() == null) {
-			throw new IllegalArgumentException("Title cannot be null");
-		}
 	}
 
 	/**

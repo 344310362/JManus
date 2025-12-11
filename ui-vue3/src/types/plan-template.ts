@@ -78,7 +78,6 @@ export interface StepConfig {
 export interface PlanTemplateConfigVO {
   title?: string
   steps?: StepConfig[]
-  directResponse?: boolean
   planType?: string
   planTemplateId?: string
   accessLevel?: string
@@ -87,6 +86,7 @@ export interface PlanTemplateConfigVO {
   toolConfig?: ToolConfigVO
   createTime?: string
   updateTime?: string
+  version?: string
 }
 
 export interface CreateOrUpdatePlanTemplateWithToolResponse {
