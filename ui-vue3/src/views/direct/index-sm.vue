@@ -27,12 +27,9 @@
         </div>
         <div class="branding-actions">
           <LanguageSwitcher />
-          <button class="back-button" @click="goBack">
-            <Icon icon="carbon:arrow-left" />
-          </button>
-<!--          <button class="config-button" @click="handleConfig" :title="$t('direct.configuration')">
+          <button class="config-button" @click="handleConfig" :title="$t('direct.configuration')">
             <Icon icon="carbon:settings-adjust" width="20" />
-          </button>-->
+          </button>
         </div>
       </div>
     </header>
@@ -40,8 +37,8 @@
       <Sidebar ref="sidebarRef" :width="sidebarWidth" />
       <!-- Sidebar Resizer -->
       <div
+        ref="sidebarResizerRef"
         class="panel-resizer"
-        @mousedown="startSidebarResize"
         @dblclick="resetSidebarWidth"
         :title="$t('sidebar.resizeHint')"
       >
@@ -56,8 +53,8 @@
 
       <!-- Resizer -->
       <div
+        ref="panelResizerRef"
         class="panel-resizer"
-        @mousedown="startResize"
         @dblclick="resetPanelSize"
         :title="$t('direct.panelResizeHint')"
       >
@@ -110,7 +107,7 @@ import InputArea from '@/components/input/InputArea.vue'
 import LanguageSwitcher from '@/components/language-switcher/LanguageSwitcher.vue'
 import Memory from '@/components/memory/Memory.vue'
 import RightPanel from '@/components/right-panel/RightPanel.vue'
-import Sidebar from '@/components/sidebar/SidebarSM.vue'
+import Sidebar from '@/components/sidebar/Sidebar.vue'
 import { useConversationHistorySingleton } from '@/composables/useConversationHistory'
 import { useMessageDialogSingleton } from '@/composables/useMessageDialog'
 import { usePlanExecutionSingleton } from '@/composables/usePlanExecution'
@@ -118,6 +115,7 @@ import { useToast } from '@/composables/useToast'
 import { memoryStore } from '@/stores/memory'
 import { useTaskStore } from '@/stores/task'
 import { templateStore } from '@/stores/templateStore'
+import type { PlanExecutionRecord } from '@/types/plan-execution-record'
 import { Icon } from '@iconify/vue'
 import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -138,6 +136,8 @@ const conversationHistory = useConversationHistorySingleton()
 const prompt = ref<string>('')
 const rightPanelRef = ref()
 const sidebarRef = ref()
+const sidebarResizerRef = ref<HTMLElement>()
+const panelResizerRef = ref<HTMLElement>()
 const currentRootPlanId = ref<string | null>(null)
 
 // Related to panel width
@@ -160,12 +160,18 @@ onMounted(() => {
 
   // Watch for plan execution record changes (reactive approach)
   watch(
-    () => planExecution.planExecutionRecords,
+    () => planExecution.planExecutionRecords.value,
     records => {
-      // Process all records in the map
-      for (const [planId, planDetails] of records.entries()) {
+      // Process all records in the object
+      for (const [planId, planDetails] of Object.entries(records)) {
+        // Skip completed plans early to avoid unnecessary processing
+        if (planDetails?.completed) {
+          continue
+        }
+
         // Only process if this is the current root plan
-        if (!shouldProcessEventForCurrentPlan(planId)) {
+        // Cast planDetails to mutable type for function parameter
+        if (!shouldProcessEventForCurrentPlan(planId, false, planDetails as PlanExecutionRecord)) {
           continue
         }
 
@@ -181,7 +187,7 @@ onMounted(() => {
         // and ALL plans are completed
         if (planDetails.completed && planId === currentRootPlanId.value) {
           // Check if there are any other running plans
-          const recordsArray = Array.from(records.entries())
+          const recordsArray = Object.entries(records)
           const hasOtherRunningPlans = recordsArray.some(
             ([otherPlanId, otherPlanDetails]) =>
               otherPlanId !== planId &&
@@ -288,6 +294,22 @@ onMounted(() => {
     sidebarWidth.value = parseFloat(savedSidebarWidth)
   }
 
+  // Add event listeners directly with passive option for touch events
+  nextTick(() => {
+    if (sidebarResizerRef.value) {
+      sidebarResizerRef.value.addEventListener('mousedown', startSidebarResize)
+      // Add touchstart with passive: true to prevent warning
+      sidebarResizerRef.value.addEventListener('touchstart', startSidebarResizeTouch, {
+        passive: true,
+      })
+    }
+    if (panelResizerRef.value) {
+      panelResizerRef.value.addEventListener('mousedown', startResize)
+      // Add touchstart with passive: true to prevent warning
+      panelResizerRef.value.addEventListener('touchstart', startResizeTouch, { passive: true })
+    }
+  })
+
   console.log('[Direct] Final prompt value:', prompt.value)
   // Note: InputArea automatically handles taskToInput via watch
   // Note: Plan execution is now handled directly by Sidebar.vue using messageDialog.executePlan()
@@ -346,8 +368,22 @@ onUnmounted(() => {
   // Remove event listeners
   document.removeEventListener('mousemove', handleMouseMove)
   document.removeEventListener('mouseup', handleMouseUp)
+  document.removeEventListener('touchmove', handleTouchMove)
+  document.removeEventListener('touchend', handleTouchEnd)
   document.removeEventListener('mousemove', handleSidebarMouseMove)
   document.removeEventListener('mouseup', handleSidebarMouseUp)
+  document.removeEventListener('touchmove', handleSidebarTouchMove)
+  document.removeEventListener('touchend', handleSidebarTouchEnd)
+
+  // Remove resizer event listeners
+  if (sidebarResizerRef.value) {
+    sidebarResizerRef.value.removeEventListener('mousedown', startSidebarResize)
+    sidebarResizerRef.value.removeEventListener('touchstart', startSidebarResizeTouch)
+  }
+  if (panelResizerRef.value) {
+    panelResizerRef.value.removeEventListener('mousedown', startResize)
+    panelResizerRef.value.removeEventListener('touchstart', startResizeTouch)
+  }
 })
 
 // Methods related to panel size adjustment
@@ -356,12 +392,24 @@ const startResize = (e: MouseEvent) => {
   startX.value = e.clientX
   startLeftWidth.value = leftPanelWidth.value
 
-  document.addEventListener('mousemove', handleMouseMove)
-  document.addEventListener('mouseup', handleMouseUp)
+  document.addEventListener('mousemove', handleMouseMove, { passive: false })
+  document.addEventListener('mouseup', handleMouseUp, { passive: true })
   document.body.style.cursor = 'col-resize'
   document.body.style.userSelect = 'none'
 
   e.preventDefault()
+}
+
+const startResizeTouch = (e: TouchEvent) => {
+  if (e.touches.length !== 1) return
+  isResizing.value = true
+  startX.value = e.touches[0].clientX
+  startLeftWidth.value = leftPanelWidth.value
+
+  document.addEventListener('touchmove', handleTouchMove, { passive: false })
+  document.addEventListener('touchend', handleTouchEnd, { passive: true })
+  document.body.style.userSelect = 'none'
+  // touch-action: none in CSS prevents default scrolling, so we don't need preventDefault here
 }
 
 const handleMouseMove = (e: MouseEvent) => {
@@ -377,6 +425,23 @@ const handleMouseMove = (e: MouseEvent) => {
   newWidth = Math.max(20, Math.min(80, newWidth))
 
   leftPanelWidth.value = newWidth
+  e.preventDefault()
+}
+
+const handleTouchMove = (e: TouchEvent) => {
+  if (!isResizing.value || e.touches.length !== 1) return
+
+  const containerWidth = window.innerWidth
+  const deltaX = e.touches[0].clientX - startX.value
+  const deltaPercent = (-deltaX / containerWidth) * 100
+
+  let newWidth = startLeftWidth.value + deltaPercent
+
+  // Limit panel width between 20% and 80%
+  newWidth = Math.max(20, Math.min(80, newWidth))
+
+  leftPanelWidth.value = newWidth
+  e.preventDefault()
 }
 
 const handleMouseUp = () => {
@@ -384,6 +449,16 @@ const handleMouseUp = () => {
   document.removeEventListener('mousemove', handleMouseMove)
   document.removeEventListener('mouseup', handleMouseUp)
   document.body.style.cursor = ''
+  document.body.style.userSelect = ''
+
+  // Save to localStorage
+  localStorage.setItem('directPanelWidth', leftPanelWidth.value.toString())
+}
+
+const handleTouchEnd = () => {
+  isResizing.value = false
+  document.removeEventListener('touchmove', handleTouchMove)
+  document.removeEventListener('touchend', handleTouchEnd)
   document.body.style.userSelect = ''
 
   // Save to localStorage
@@ -401,12 +476,24 @@ const startSidebarResize = (e: MouseEvent) => {
   startSidebarX.value = e.clientX
   startSidebarWidth.value = sidebarWidth.value
 
-  document.addEventListener('mousemove', handleSidebarMouseMove)
-  document.addEventListener('mouseup', handleSidebarMouseUp)
+  document.addEventListener('mousemove', handleSidebarMouseMove, { passive: false })
+  document.addEventListener('mouseup', handleSidebarMouseUp, { passive: true })
   document.body.style.cursor = 'col-resize'
   document.body.style.userSelect = 'none'
 
   e.preventDefault()
+}
+
+const startSidebarResizeTouch = (e: TouchEvent) => {
+  if (e.touches.length !== 1) return
+  isSidebarResizing.value = true
+  startSidebarX.value = e.touches[0].clientX
+  startSidebarWidth.value = sidebarWidth.value
+
+  document.addEventListener('touchmove', handleSidebarTouchMove, { passive: false })
+  document.addEventListener('touchend', handleSidebarTouchEnd, { passive: true })
+  document.body.style.userSelect = 'none'
+  // touch-action: none in CSS prevents default scrolling, so we don't need preventDefault here
 }
 
 const handleSidebarMouseMove = (e: MouseEvent) => {
@@ -422,6 +509,23 @@ const handleSidebarMouseMove = (e: MouseEvent) => {
   newWidth = Math.max(15, Math.min(100, newWidth))
 
   sidebarWidth.value = newWidth
+  e.preventDefault()
+}
+
+const handleSidebarTouchMove = (e: TouchEvent) => {
+  if (!isSidebarResizing.value || e.touches.length !== 1) return
+
+  const containerWidth = window.innerWidth
+  const deltaX = e.touches[0].clientX - startSidebarX.value
+  const deltaPercent = (deltaX / containerWidth) * 100
+
+  let newWidth = startSidebarWidth.value + deltaPercent
+
+  // Limit sidebar width between 15% and 100%
+  newWidth = Math.max(15, Math.min(100, newWidth))
+
+  sidebarWidth.value = newWidth
+  e.preventDefault()
 }
 
 const handleSidebarMouseUp = () => {
@@ -429,6 +533,16 @@ const handleSidebarMouseUp = () => {
   document.removeEventListener('mousemove', handleSidebarMouseMove)
   document.removeEventListener('mouseup', handleSidebarMouseUp)
   document.body.style.cursor = ''
+  document.body.style.userSelect = ''
+
+  // Save to localStorage
+  localStorage.setItem('sidebarWidth', sidebarWidth.value.toString())
+}
+
+const handleSidebarTouchEnd = () => {
+  isSidebarResizing.value = false
+  document.removeEventListener('touchmove', handleSidebarTouchMove)
+  document.removeEventListener('touchend', handleSidebarTouchEnd)
   document.body.style.userSelect = ''
 
   // Save to localStorage
@@ -443,7 +557,8 @@ const resetSidebarWidth = () => {
 // Helper function to check if the event should be processed for the current plan
 const shouldProcessEventForCurrentPlan = (
   rootPlanId: string,
-  allowSpecialIds: boolean = false
+  allowSpecialIds: boolean = false,
+  planDetails?: PlanExecutionRecord
 ): boolean => {
   // If no current plan is set, allow all events (initial state)
   if (!currentRootPlanId.value) {
@@ -460,7 +575,12 @@ const shouldProcessEventForCurrentPlan = (
     return true
   }
 
-  // Otherwise, ignore the event
+  // If plan is completed, silently ignore without logging
+  if (planDetails?.completed) {
+    return false
+  }
+
+  // Otherwise, ignore the event (only log for active non-current plans)
   console.log(
     '[Direct] Ignoring event for non-current rootPlanId:',
     rootPlanId,
@@ -480,10 +600,6 @@ const handleStepSelected = (stepId: string) => {
   } else {
     console.warn('[DirectView] rightPanelRef.handleStepSelected method not available')
   }
-}
-
-const goBack = () => {
-  router.push('/home')
 }
 
 const handleConfig = () => {
@@ -552,7 +668,7 @@ const newChat = () => {
     margin: 0;
     font-size: 20px;
     font-weight: 600;
-    background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
+  background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -595,6 +711,7 @@ const newChat = () => {
   justify-content: center;
   transition: background-color 0.2s ease;
   flex-shrink: 0;
+  touch-action: none; /* Prevent default touch behavior to allow custom resize handling */
 
   &:hover {
     background: var(--bg-primary);;
