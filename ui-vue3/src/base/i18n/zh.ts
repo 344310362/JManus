@@ -106,6 +106,9 @@ const words: I18nType = {
     download: '下载',
     downloadToView: '下载查看',
     binaryFile: '这是一个二进制文件，无法在查看器中显示。',
+    downloadOnlyFile: '此文件类型需要下载后才能查看（如 Office 文档、PDF 等）。',
+    markdownRaw: '切换到格式化视图',
+    markdownFormatted: '切换到原始视图',
     open: '打开',
     copyPath: '复制路径',
     noPlanSelected: '未选择计划。请执行任务以查看文件。',
@@ -451,8 +454,14 @@ const words: I18nType = {
       general: {
         debugDetail: 'debug模式 ：会要求模型输出更多内容，方便查找问题，但速度更慢',
         externalLinkedFolder:
-          '外部目录映射 : 你可以指定一个外部的目录，系统会把这个目录映射到每个任务的一个子目录下面，这样就可以不需要将内容导入。 你可以用 带/或者不带/的绝对目录',
+          '外部目录映射 : 你可以指定一个外部的目录，系统会把这个目录映射到每个任务的一个子目录下面，这样就可以不需要将内容导入。 你可以用 带/或者不带/的绝对目录。映射后的目录可以通过 linked_external 子目录访问。',
         enableConversationMemory: '开启对话记忆',
+        enableSmartContentSaving:
+          '打开则系统会自动将所有超长的内容转存文件，以保护记忆不会超长，但需要你引入文件读取工具，来做后续处理。',
+        respectGitIgnore:
+          '是否遵循 .gitignore 规则：开启后，文件搜索（grep）等操作会自动忽略 .gitignore 文件中指定的文件和目录，避免搜索到不应该处理的文件（如 node_modules、.git 等）。建议保持开启状态。',
+        bashSecurityProtection:
+          'bash 安全保护：开启后会阻止所有 rm 命令的执行，因为 rm 删除的文件极难恢复。如果设置为 false，则不会阻止 rm 命令，请谨慎使用。建议保持开启状态以保护数据安全。',
       },
       interactionSettings: {
         openBrowser: '启动时自动打开浏览器',
@@ -801,7 +810,7 @@ const words: I18nType = {
     clearParams: '清空参数',
     parameterRequirements: '参数要求',
     parameterRequirementsHelp:
-      '在模版编辑器的 "任务要求" 栏目中，你可以通过<<参数名>>的方式定义可变参数（可以是多个），用于告知模型你的函数需要什么格式的输入。默认描述为参数名称。',
+      '在模版编辑器的任务要求栏目中，你可以通过双尖括号加参数名再加双尖括号的方式定义可变参数（例如：参数名）。可以是多个参数。用于告知模型你的函数需要什么格式的输入。默认描述为参数名称。',
     clearAllParams: '清空所有参数',
     historyUp: '上一个值',
     historyDown: '下一个值',
@@ -959,6 +968,9 @@ const words: I18nType = {
     // 模型和工具键
     modelName: '模型名称',
     modelNameDescription: '指定模型名字用于处理特定任务（如图片识别等），如不指定则使用默认的模型',
+    maxSteps: '最大步数',
+    maxStepsPlaceholder: '输入最大步数（可选）',
+    maxStepsDescription: '覆盖此计划模板的默认最大步数',
     noModelSelected: '空',
     noModelsFound: '未找到模型',
     noTools:
@@ -1099,32 +1111,32 @@ const words: I18nType = {
       stockPrice: {
         title: '查询股价',
         description: '获取今天阿里巴巴的最新股价（Agent可以使用浏览器工具）',
-        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/stock-price-query.md',
+        url: 'https://github.com/Lynxe-public/Lynxe-public-prompts/blob/main/chn/stock-price-query.md',
       },
       weather: {
         title: 'IP查询',
         description: '查询指定IP地址的地理位置和相关信息（Agent可以使用MCP工具服务）',
-        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/ip-query.md',
+        url: 'https://github.com/Lynxe-public/Lynxe-public-prompts/blob/main/chn/ip-query.md',
       },
       queryplan: {
         title: '增强型调研搜索',
         description: '通过搜索引擎，下载和阅读多个页面，总结关键信息（展示函数化调用）',
-        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/query-plan.md',
+        url: 'https://github.com/Lynxe-public/Lynxe-public-prompts/blob/main/chn/query-plan.md',
       },
       ainovel: {
         title: 'AI小说创作',
         description: '人工智能逐步击败人类主题小说（用于展示超长内容的输出）',
-        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/ai-novel.md',
+        url: 'https://github.com/Lynxe-public/Lynxe-public-prompts/blob/main/chn/ai-novel.md',
       },
       formInputDemo: {
         title: 'AI智能动态表单演示',
         description: '体验AI智能分析用户需求并动态生成相关表单字段的能力',
-        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/form-input-demo.md',
+        url: 'https://github.com/Lynxe-public/Lynxe-public-prompts/blob/main/chn/form-input-demo.md',
       },
       imagePdfRecognition: {
         title: '图片与PDF识别',
         description: '上传图片或PDF文件，使用OCR技术提取文本内容（展示文件处理，以及被集成能力）',
-        url: 'https://github.com/talk-flow/public-usecase/blob/main/chn/image-pdf-recognition.md',
+        url: 'https://github.com/Lynxe-public/Lynxe-public-prompts/blob/main/chn/image-pdf-recognition.md',
       },
     },
   },
@@ -1315,6 +1327,7 @@ const words: I18nType = {
     enableInConversation: '在对话中启用',
     enableInConversationDescription:
       '勾选后，此工具将在对话模式中可用，允许AI在聊天交互过程中调用此功能。',
+    singleParameterRequiredForConversation: '只有单参数方法才能在对话模式中启用。',
     publishing: '发布中...',
     delete: '删除',
     deleting: '删除中...',

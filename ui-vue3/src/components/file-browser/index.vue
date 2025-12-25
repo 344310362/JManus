@@ -27,11 +27,7 @@
           :disabled="loading"
           :title="$t('fileBrowser.refresh')"
         >
-          <Icon
-            icon="carbon:refresh"
-            :class="{ 'rotating': loading }"
-            :style="{ color: 'var(--text-primary, #ffffff)', fontSize: '18px', width: '18px', height: '18px' }"
-          />
+          <Icon icon="carbon:renew" />
         </button>
       </div>
     </div>
@@ -56,7 +52,7 @@
               </div>
             </div>
             <button @click="refreshFileTree" class="retry-btn" :disabled="loading">
-              <Icon icon="carbon:refresh" :class="{ 'rotating': loading }" />
+              <Icon icon="carbon:refresh" :class="{ rotating: loading }" />
               {{ loading ? $t('fileBrowser.checking') : $t('fileBrowser.checkNow') }}
             </button>
           </div>
@@ -89,10 +85,24 @@
         <div class="file-content-header">
           <div class="file-info">
             <Icon :icon="getFileIcon(selectedFile)" />
-            <span class="file-name">{{ selectedFile.name }}</span>
+            <span class="file-name" :title="selectedFile.name">{{
+              truncateFileName(selectedFile.name, 10)
+            }}</span>
             <span class="file-size">({{ formatFileSize(selectedFile.size) }})</span>
           </div>
           <div class="file-actions">
+            <button
+              v-if="isMarkdownFile"
+              @click="toggleMarkdownMode"
+              class="markdown-toggle-btn"
+              :title="
+                markdownRawMode
+                  ? $t('fileBrowser.markdownFormatted')
+                  : $t('fileBrowser.markdownRaw')
+              "
+            >
+              <Icon :icon="markdownRawMode ? 'carbon:view' : 'carbon:code'" />
+            </button>
             <button
               @click="handleDownloadFile(selectedFile)"
               class="download-btn"
@@ -100,11 +110,7 @@
             >
               <Icon icon="carbon:download" />
             </button>
-            <button
-              @click="closeFileViewer"
-              class="close-btn"
-              :title="$t('common.close')"
-            >
+            <button @click="closeFileViewer" class="close-btn" :title="$t('common.close')">
               <Icon icon="carbon:close" />
             </button>
           </div>
@@ -122,8 +128,24 @@
           </div>
 
           <div v-else-if="fileContent" class="file-content">
-            <div v-if="isTextFile" class="text-content">
-              <pre><code>{{ fileContent.content }}</code></pre>
+            <div v-if="fileContent.downloadOnly" class="download-only-content">
+              <Icon icon="carbon:document" />
+              <p>{{ $t('fileBrowser.downloadOnlyFile') }}</p>
+              <button @click="handleDownloadFile(selectedFile)" class="download-btn-large">
+                <Icon icon="carbon:download" />
+                {{ $t('fileBrowser.downloadToView') }}
+              </button>
+            </div>
+            <div v-else-if="isTextFile" class="text-content">
+              <div
+                v-if="isMarkdownFile && !markdownRawMode"
+                class="markdown-content"
+                v-html="formattedMarkdown"
+              ></div>
+              <pre v-else><code>{{ fileContent.content }}</code></pre>
+            </div>
+            <div v-else-if="isImageFile" class="image-content">
+              <img :src="getImageSrc()" :alt="selectedFile?.name" />
             </div>
             <div v-else class="binary-content">
               <Icon icon="carbon:document-unknown" />
@@ -141,11 +163,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
+// Define component name to satisfy Vue linting rules
+defineOptions({
+  name: 'FileBrowser',
+})
+import {
+  FileBrowserApiService,
+  type FileContent,
+  type FileNode,
+} from '@/api/file-browser-api-service'
+import { useMessageFormatting } from '@/components/chat/composables/useMessageFormatting'
 import { Icon } from '@iconify/vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 import FileTreeNode from './FileTreeNode.vue'
-import { FileBrowserApiService, type FileNode, type FileContent } from '@/api/file-browser-api-service'
 
 interface Props {
   planId: string
@@ -153,6 +184,7 @@ interface Props {
 
 const props = defineProps<Props>()
 const { t } = useI18n()
+const { formatResponseText } = useMessageFormatting()
 
 // State
 const loading = ref(false)
@@ -163,6 +195,7 @@ const fileContent = ref<FileContent | null>(null)
 const loadingContent = ref(false)
 const contentError = ref<string | null>(null)
 const autoRefreshTimer = ref<number | null>(null)
+const markdownRawMode = ref(false) // Default to formatted mode
 
 // Computed
 const isTextFile = computed(() => {
@@ -170,10 +203,32 @@ const isTextFile = computed(() => {
   return FileBrowserApiService.isTextFile(fileContent.value.mimeType, selectedFile.value.name)
 })
 
+const isImageFile = computed(() => {
+  if (!fileContent.value) return false
+  return fileContent.value.mimeType.startsWith('image/')
+})
+
+const isMarkdownFile = computed(() => {
+  if (!selectedFile.value) return false
+  const fileName = selectedFile.value.name.toLowerCase()
+  return fileName.endsWith('.md') || fileName.endsWith('.markdown')
+})
+
+const formattedMarkdown = computed(() => {
+  if (!fileContent.value || !fileContent.value.content) return ''
+  return formatResponseText(fileContent.value.content)
+})
+
+const getImageSrc = () => {
+  if (!fileContent.value) return ''
+  // If content is Base64 encoded, create data URL
+  return `data:${fileContent.value.mimeType};base64,${fileContent.value.content}`
+}
+
 const isPlanDirectoryNotFound = computed(() => {
-  return error.value && (
-    error.value.includes('Plan directory not found') ||
-    error.value.includes('not found')
+  return (
+    error.value &&
+    (error.value.includes('Plan directory not found') || error.value.includes('not found'))
   )
 })
 
@@ -211,8 +266,7 @@ const refreshFileTree = async () => {
 
     // Start auto refresh if it's a "directory not found" error
     const errorMessage = err instanceof Error ? err.message : ''
-    if (errorMessage.includes('Plan directory not found') ||
-      errorMessage.includes('not found')) {
+    if (errorMessage.includes('Plan directory not found') || errorMessage.includes('not found')) {
       startAutoRefresh()
     }
   } finally {
@@ -230,6 +284,7 @@ const handleFileSelected = async (file: FileNode) => {
 
   try {
     fileContent.value = await FileBrowserApiService.getFileContent(props.planId, file.path)
+    // Note: download-only files will be displayed with a download button, but won't auto-download
   } catch (err) {
     contentError.value = err instanceof Error ? err.message : t('fileBrowser.contentLoadError')
     console.error('Failed to load file content:', err)
@@ -251,10 +306,21 @@ const closeFileViewer = () => {
   selectedFile.value = null
   fileContent.value = null
   contentError.value = null
+  markdownRawMode.value = false // Reset to formatted mode when closing
+}
+
+const toggleMarkdownMode = () => {
+  markdownRawMode.value = !markdownRawMode.value
 }
 
 const getFileIcon = (file: FileNode) => {
   return FileBrowserApiService.getFileIcon(file)
+}
+
+const truncateFileName = (fileName: string, maxLength: number): string => {
+  if (!fileName) return ''
+  if (fileName.length <= maxLength) return fileName
+  return fileName.substring(0, maxLength) + '..'
 }
 
 const formatFileSize = (bytes: number): string => {
@@ -266,13 +332,17 @@ const formatFileSize = (bytes: number): string => {
 }
 
 // Watch for plan ID changes
-watch(() => props.planId, (newPlanId) => {
-  if (newPlanId) {
-    selectedFile.value = null
-    fileContent.value = null
-    refreshFileTree()
-  }
-}, { immediate: true })
+watch(
+  () => props.planId,
+  newPlanId => {
+    if (newPlanId) {
+      selectedFile.value = null
+      fileContent.value = null
+      refreshFileTree()
+    }
+  },
+  { immediate: true }
+)
 
 // Lifecycle
 onMounted(() => {
@@ -292,7 +362,6 @@ onUnmounted(() => {
   flex-direction: column;
   height: 100%;
   background: rgba(var(--bg-primary-rgb), 0.02);
-  border-radius: 12px;
   border: 1px solid var(--border-primary);
   overflow: hidden;
 }
@@ -301,7 +370,7 @@ onUnmounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 20px;
+  padding: 4px 16px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
 }
@@ -330,37 +399,19 @@ onUnmounted(() => {
   color: var(--text-primary, #ffffff);
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 18px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 0;
 }
 
 .refresh-btn .iconify {
   color: var(--text-primary, #ffffff) !important;
-  font-size: 18px !important;
-  width: 18px !important;
-  height: 18px !important;
-}
-
-.refresh-btn svg {
-  fill: var(--text-primary, #ffffff) !important;
-  color: var(--text-primary, #ffffff) !important;
-  width: 18px !important;
-  height: 18px !important;
+  width: 10px !important;
+  height: 10px !important;
 }
 
 .refresh-btn:hover:not(:disabled) {
   background: rgba(var(--bg-primary-rgb), 0.25);
-  border-color: rgba(var(--text-primary-rgb), 0.4);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
-
-.refresh-btn:hover:not(:disabled) .iconify,
-.refresh-btn:hover:not(:disabled) svg {
-  color: var(--text-primary, #ffffff) !important;
-  fill: var(--text-primary, #ffffff) !important;
-}
-
 .refresh-btn:active:not(:disabled) {
   transform: translateY(0);
 }
@@ -370,12 +421,6 @@ onUnmounted(() => {
   cursor: not-allowed;
   background: rgba(var(--bg-primary-rgb), 0.08);
   border-color: rgba(var(--text-primary-rgb), 0.15);
-}
-
-.refresh-btn:disabled .iconify,
-.refresh-btn:disabled svg {
-  color: rgba(var(--text-primary-rgb), 0.4) !important;
-  fill: rgba(255, 255, 255, 0.4) !important;
 }
 
 .file-browser-content {
@@ -490,9 +535,8 @@ onUnmounted(() => {
 
 .file-content-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 20px;
+  flex-direction: column;
+  padding: 10px 10px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
 }
@@ -501,15 +545,23 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex: 1;
+  min-width: 0; /* Allow flex item to shrink below its content size */
   color: var(--text-primary, #ffffff);
 }
 
 .file-info .iconify {
   font-size: 18px;
+  flex-shrink: 0; /* Prevent icon from shrinking */
 }
 
 .file-name {
   font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap; /* no wrap */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: fit-content;
 }
 
 .file-size {
@@ -523,18 +575,27 @@ onUnmounted(() => {
 }
 
 .download-btn,
-.close-btn {
+.close-btn,
+.markdown-toggle-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
+  width: 16px; /* 50% of original 32px */
+  height: 16px; /* 50% of original 32px */
   background: rgba(var(--bg-primary-rgb), 0.1);
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
   color: var(--text-primary, #ffffff);
   cursor: pointer;
   transition: all 0.2s ease;
+  padding: 0;
+}
+
+.download-btn .iconify,
+.close-btn .iconify,
+.markdown-toggle-btn .iconify {
+  width: 10px; /* Smaller icon */
+  height: 10px; /* Smaller icon */
 }
 
 .download-btn:hover,
@@ -582,7 +643,24 @@ onUnmounted(() => {
   word-wrap: break-word;
 }
 
-.binary-content {
+.image-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+  overflow: auto;
+}
+
+.image-content img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.binary-content,
+.download-only-content {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -592,22 +670,23 @@ onUnmounted(() => {
   gap: 16px;
 }
 
-.binary-content .iconify {
+.binary-content .iconify,
+.download-only-content .iconify {
   font-size: 48px;
 }
 
 .download-btn-large {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
+  gap: 6px;
+  padding: 8px 16px;
   background: rgba(103, 126, 234, 0.2);
   border: 1px solid rgba(103, 126, 234, 0.3);
-  border-radius: 8px;
+  border-radius: 6px;
   color: #677eea;
   cursor: pointer;
   transition: all 0.2s ease;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .download-btn-large:hover {
@@ -644,5 +723,136 @@ onUnmounted(() => {
 .file-tree-panel::-webkit-scrollbar-thumb:hover,
 .text-content::-webkit-scrollbar-thumb:hover {
   background: var(--scrollbar-thumb-hover, rgba(255, 255, 255, 0.3));
+}
+
+.markdown-content {
+  height: 100%;
+  overflow: auto;
+  padding: 20px;
+  color: #ffffff;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.markdown-content :deep(h1),
+.markdown-content :deep(h2),
+.markdown-content :deep(h3),
+.markdown-content :deep(h4),
+.markdown-content :deep(h5),
+.markdown-content :deep(h6) {
+  color: #ffffff;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+  font-weight: 600;
+}
+
+.markdown-content :deep(h1) {
+  font-size: 2em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.3em;
+}
+
+.markdown-content :deep(h2) {
+  font-size: 1.5em;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 0.3em;
+}
+
+.markdown-content :deep(h3) {
+  font-size: 1.25em;
+}
+
+.markdown-content :deep(p) {
+  margin: 1em 0;
+}
+
+.markdown-content :deep(code) {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9em;
+}
+
+.markdown-content :deep(pre) {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 12px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 1em 0;
+}
+
+.markdown-content :deep(pre code) {
+  background: transparent;
+  padding: 0;
+}
+
+.markdown-content :deep(ul),
+.markdown-content :deep(ol) {
+  margin: 1em 0;
+  padding-left: 2em;
+}
+
+.markdown-content :deep(li) {
+  margin: 0.5em 0;
+}
+
+.markdown-content :deep(blockquote) {
+  border-left: 4px solid rgba(255, 255, 255, 0.3);
+  padding-left: 1em;
+  margin: 1em 0;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.markdown-content :deep(a) {
+  color: #677eea;
+  text-decoration: none;
+}
+
+.markdown-content :deep(a:hover) {
+  text-decoration: underline;
+}
+
+.markdown-content :deep(table) {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.markdown-content :deep(th),
+.markdown-content :deep(td) {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.markdown-content :deep(th) {
+  background: rgba(var(--bg-primary-rgb), 0.15);
+  font-weight: 600;
+}
+
+.markdown-content :deep(hr) {
+  border: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 2em 0;
+}
+
+.markdown-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.markdown-content::-webkit-scrollbar-track {
+  background: rgba(var(--bg-primary-rgb), 0.15);
+}
+
+.markdown-content::-webkit-scrollbar-thumb {
+  background: rgba(var(--bg-primary-rgb), 0.15);
+  border-radius: 3px;
+}
+
+.markdown-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--bg-primary-rgb), 0.15);
 }
 </style>

@@ -30,6 +30,8 @@ export interface FileContent {
   content: string
   mimeType: string
   size: number
+  isBinary?: boolean
+  downloadOnly?: boolean
 }
 
 export interface ApiResponse<T> {
@@ -140,6 +142,7 @@ export class FileBrowserApiService {
     ]
 
     const textExtensions = [
+      '.eml',
       '.txt',
       '.md',
       '.json',
@@ -207,6 +210,7 @@ export class FileBrowserApiService {
       return 'vscode-icons:file-type-excel'
     if (fileName.endsWith('.ppt') || fileName.endsWith('.pptx'))
       return 'vscode-icons:file-type-powerpoint'
+    if (fileName.endsWith('.eml')) return 'carbon:email'
 
     // Images
     if (fileName.match(/\.(jpg|jpeg|png|gif|bmp|svg)$/)) return 'carbon:image'

@@ -20,9 +20,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.cloud.ai.lynxe.tool.AbstractBaseTool;
 import com.alibaba.cloud.ai.lynxe.tool.code.ToolExecuteResult;
+import com.alibaba.cloud.ai.lynxe.tool.filesystem.UnifiedDirectoryManager;
 import com.alibaba.cloud.ai.lynxe.tool.innerStorage.SmartContentSavingService;
 import com.alibaba.cloud.ai.lynxe.tool.shortUrl.ShortUrlService;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -46,25 +45,6 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 	private static final Logger log = LoggerFactory.getLogger(LocalFileOperator.class);
 
 	private static final String TOOL_NAME = "local_file_operator";
-
-	/**
-	 * Set of supported text file extensions
-	 */
-	private static final Set<String> SUPPORTED_EXTENSIONS = new HashSet<>(Set.of(".txt", ".md", ".markdown", // Plain
-																												// text
-																												// and
-																												// Markdown
-			".java", ".py", ".js", ".ts", ".jsx", ".tsx", // Common programming languages
-			".html", ".htm", ".mhtml", ".css", ".scss", ".sass", ".less", // Web-related
-			".xml", ".json", ".yaml", ".yml", ".properties", // Configuration files
-			".sql", ".sh", ".bat", ".cmd", // Scripts and database
-			".log", ".conf", ".ini", // Logs and configuration
-			".gradle", ".pom", ".mvn", // Build tools
-			".csv", ".rst", ".adoc", // Documentation and data
-			".cpp", ".c", ".h", ".go", ".rs", ".php", ".rb", ".swift", ".kt", ".scala" // Additional
-																						// programming
-																						// languages
-	));
 
 	/**
 	 * Input class for local file operations
@@ -440,12 +420,10 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 
 		// Get the current plan directory (not hierarchical - only current plan)
 		Path planDirectory = textFileService.getRootPlanDirectory(this.currentPlanId);
-		Path absolutePath = planDirectory.resolve(filePath).normalize();
+		UnifiedDirectoryManager directoryManager = textFileService.getUnifiedDirectoryManager();
 
-		// Ensure the path stays within the plan directory
-		if (!absolutePath.startsWith(planDirectory)) {
-			throw new IOException("Access denied: File path must be within the current plan directory");
-		}
+		// Use the centralized method from UnifiedDirectoryManager
+		Path absolutePath = directoryManager.resolveAndValidatePath(planDirectory, filePath);
 
 		return absolutePath;
 	}
@@ -459,7 +437,7 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 		}
 
 		String extension = getFileExtension(filePath);
-		return SUPPORTED_EXTENSIONS.contains(extension.toLowerCase());
+		return UnifiedDirectoryManager.SUPPORTED_TEXT_FILE_EXTENSIONS.contains(extension.toLowerCase());
 	}
 
 	/**
@@ -628,7 +606,7 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 			SmartContentSavingService.SmartProcessResult processedResult = innerStorageService
 				.processContent(this.currentPlanId, content, "get_all_text");
 
-			return new ToolExecuteResult(processedResult.getSummary());
+			return new ToolExecuteResult(processedResult.getComprehensiveResult());
 		}
 		catch (IOException e) {
 			log.error("Error retrieving all text from file: {}", filePath, e);
@@ -823,16 +801,13 @@ public class LocalFileOperator extends AbstractBaseTool<LocalFileOperator.LocalF
 
 			// Get the current plan directory
 			Path planDirectory = textFileService.getRootPlanDirectory(this.currentPlanId);
+			UnifiedDirectoryManager directoryManager = textFileService.getUnifiedDirectoryManager();
 
 			// If a subdirectory path is provided, resolve it within plan directory
 			Path targetDirectory = planDirectory;
 			if (directoryPath != null && !directoryPath.isEmpty()) {
-				targetDirectory = planDirectory.resolve(directoryPath).normalize();
-
-				// Ensure the target directory stays within plan directory
-				if (!targetDirectory.startsWith(planDirectory)) {
-					return new ToolExecuteResult("Error: Directory path must be within the current plan directory");
-				}
+				// Use the centralized method from UnifiedDirectoryManager
+				targetDirectory = directoryManager.resolveAndValidatePath(planDirectory, directoryPath);
 			}
 
 			// Check if directory exists - don't create it for list operation

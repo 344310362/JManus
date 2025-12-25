@@ -418,17 +418,41 @@ const testConnection = async () => {
 }
 
 .config-input select {
-  background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  color: rgba(var(--text-primary-rgb), 0.9);
+  background: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.9);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   padding: 10px 12px;
 }
 
-.config-input select:focus {
+select.config-input:focus {
   outline: none;
   border-color: rgba(102, 126, 234, 0.5);
   background: rgba(var(--bg-primary-rgb), 0.08);
+}
+
+select.config-input option {
+  background: #2a2a2a;
+  color: rgba(255, 255, 255, 0.95);
+  padding: 8px 12px;
+}
+
+select.config-input option:hover,
+select.config-input option:checked {
+  background: rgba(102, 126, 234, 0.3);
+  color: #ffffff;
+}
+
+select.config-input option:disabled,
+select.config-input option[value=''] {
+  background: #1a1a1a;
+  color: rgba(255, 255, 255, 0.6);
+  font-style: italic;
+}
+
+select.config-input option[value='']:hover {
+  background: #1a1a1a;
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .toggle-container {

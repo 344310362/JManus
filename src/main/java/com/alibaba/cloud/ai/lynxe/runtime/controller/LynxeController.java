@@ -60,6 +60,7 @@ import com.alibaba.cloud.ai.lynxe.event.PlanExceptionEvent;
 import com.alibaba.cloud.ai.lynxe.exception.PlanException;
 import com.alibaba.cloud.ai.lynxe.llm.LlmService;
 import com.alibaba.cloud.ai.lynxe.llm.StreamingResponseHandler;
+import com.alibaba.cloud.ai.lynxe.planning.exception.ParameterValidationException;
 import com.alibaba.cloud.ai.lynxe.planning.service.IPlanParameterMappingService;
 import com.alibaba.cloud.ai.lynxe.planning.service.PlanTemplateConfigService;
 import com.alibaba.cloud.ai.lynxe.planning.service.PlanTemplateService;
@@ -613,7 +614,21 @@ public class LynxeController implements LynxeListener<PlanExceptionEvent> {
 					planJson = parameterMappingService.replaceParametersInJson(planJson, parametersForReplacement);
 					logger.debug("Parameter replacement completed successfully");
 				}
+				catch (ParameterValidationException e) {
+					// Parameter validation errors should be thrown externally for proper
+					// error handling
+					// This allows the frontend to receive detailed validation error
+					// messages
+					String errorMsg = "Failed to replace parameters in plan template: " + e.getMessage();
+					logger.error(errorMsg, e);
+					CompletableFuture<PlanExecutionResult> failedFuture = new CompletableFuture<>();
+					// Keep ParameterValidationException type for proper error handling
+					// upstream
+					failedFuture.completeExceptionally(e);
+					return new PlanExecutionWrapper(failedFuture, null);
+				}
 				catch (Exception e) {
+					// Other exceptions (non-parameter validation errors)
 					String errorMsg = "Failed to replace parameters in plan template: " + e.getMessage();
 					logger.error(errorMsg, e);
 					CompletableFuture<PlanExecutionResult> failedFuture = new CompletableFuture<>();
@@ -1340,6 +1355,7 @@ public class LynxeController implements LynxeListener<PlanExceptionEvent> {
 		// modification in lambda)
 		final String[] conversationIdHolder = new String[1];
 		final long[] chatStartTimeHolder = new long[1];
+		final UserMessage[] userMessageHolder = new UserMessage[1];
 
 		// Execute asynchronously
 		CompletableFuture.runAsync(() -> {
@@ -1384,21 +1400,8 @@ public class LynxeController implements LynxeListener<PlanExceptionEvent> {
 				// Add user message with multi-media support
 				UserMessage userMessage = createUserMessageWithMedia(input, request);
 				messages.add(userMessage);
-
-				// Save user message to conversation memory
-				if (lynxeProperties != null && lynxeProperties.getEnableConversationMemory() && conversationId != null
-						&& !conversationId.trim().isEmpty()) {
-					try {
-						llmService.addToConversationMemoryWithLimit(lynxeProperties.getMaxMemory(), conversationId,
-								userMessage);
-						logger.debug("Saved user message to conversation memory for conversationId: {}",
-								conversationId);
-					}
-					catch (Exception e) {
-						logger.warn("Failed to save user message to conversation memory for conversationId: {}",
-								conversationId, e);
-					}
-				}
+				// Store userMessage for use in completion handler
+				userMessageHolder[0] = userMessage;
 
 				// Call LLM with simple chat (no tools, no plan execution)
 				ChatClient chatClient = llmService.getDiaChatClient();
@@ -1444,6 +1447,27 @@ public class LynxeController implements LynxeListener<PlanExceptionEvent> {
 						// Get conversationId and chatStartTime from holders
 						String currentConversationId = conversationIdHolder[0];
 						long currentChatStartTime = chatStartTimeHolder[0];
+						UserMessage currentUserMessage = userMessageHolder[0];
+
+						// Save user message and assistant response to conversation memory
+						// Only save when the whole execution is completed
+						if (lynxeProperties != null && lynxeProperties.getEnableConversationMemory()
+								&& currentConversationId != null && !currentConversationId.trim().isEmpty()) {
+							// Save user message first
+							if (currentUserMessage != null) {
+								try {
+									llmService.addToConversationMemoryWithLimit(lynxeProperties.getMaxMemory(),
+											currentConversationId, currentUserMessage);
+									logger.debug("Saved user message to conversation memory for conversationId: {}",
+											currentConversationId);
+								}
+								catch (Exception e) {
+									logger.warn(
+											"Failed to save user message to conversation memory for conversationId: {}",
+											currentConversationId, e);
+								}
+							}
+						}
 
 						// Save assistant response to conversation memory
 						if (lynxeProperties != null && lynxeProperties.getEnableConversationMemory()

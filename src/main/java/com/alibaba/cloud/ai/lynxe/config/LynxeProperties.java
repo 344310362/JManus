@@ -239,6 +239,31 @@ public class LynxeProperties {
 		this.enableConversationMemory = enableConversationMemory;
 	}
 
+	@ConfigProperty(group = "lynxe", subGroup = "general", key = "enableSmartContentSaving",
+			path = "lynxe.general.enableSmartContentSaving",
+			description = "lynxe.general.enableSmartContentSaving.description", defaultValue = "false",
+			inputType = ConfigInputType.CHECKBOX,
+			options = { @ConfigOption(value = "true", label = "lynxe.general.enableSmartContentSaving.option.true"),
+					@ConfigOption(value = "false", label = "lynxe.general.enableSmartContentSaving.option.false") })
+	private volatile Boolean enableSmartContentSaving;
+
+	public Boolean getEnableSmartContentSaving() {
+		String configPath = "lynxe.general.enableSmartContentSaving";
+		String value = configService.getConfigValue(configPath);
+		if (value != null) {
+			enableSmartContentSaving = Boolean.valueOf(value);
+		}
+		// Default to false if not configured
+		if (enableSmartContentSaving == null) {
+			enableSmartContentSaving = false;
+		}
+		return enableSmartContentSaving;
+	}
+
+	public void setEnableSmartContentSaving(Boolean enableSmartContentSaving) {
+		this.enableSmartContentSaving = enableSmartContentSaving;
+	}
+
 	@ConfigProperty(group = "lynxe", subGroup = "agent", key = "conversationMemoryMaxChars",
 			path = "lynxe.agent.conversationMemoryMaxChars",
 			description = "lynxe.agent.conversationMemoryMaxChars.description", defaultValue = "30000",
@@ -354,6 +379,55 @@ public class LynxeProperties {
 
 	public void setExternalLinkedFolder(String externalLinkedFolder) {
 		this.externalLinkedFolder = externalLinkedFolder;
+	}
+
+	@ConfigProperty(group = "lynxe", subGroup = "general", key = "respectGitIgnore",
+			path = "lynxe.general.respectGitIgnore", description = "lynxe.general.respectGitIgnore.description",
+			defaultValue = "true", inputType = ConfigInputType.CHECKBOX,
+			options = { @ConfigOption(value = "true", label = "lynxe.general.respectGitIgnore.option.true"),
+					@ConfigOption(value = "false", label = "lynxe.general.respectGitIgnore.option.false") })
+	private volatile Boolean respectGitIgnore;
+
+	public Boolean getRespectGitIgnore() {
+		String configPath = "lynxe.general.respectGitIgnore";
+		String value = configService.getConfigValue(configPath);
+		if (value != null) {
+			respectGitIgnore = Boolean.valueOf(value);
+		}
+		// Default to true if not configured
+		if (respectGitIgnore == null) {
+			respectGitIgnore = true;
+		}
+		return respectGitIgnore;
+	}
+
+	public void setRespectGitIgnore(Boolean respectGitIgnore) {
+		this.respectGitIgnore = respectGitIgnore;
+	}
+
+	@ConfigProperty(group = "lynxe", subGroup = "general", key = "bashSecurityProtection",
+			path = "lynxe.general.bashSecurityProtection",
+			description = "lynxe.general.bashSecurityProtection.description", defaultValue = "true",
+			inputType = ConfigInputType.CHECKBOX,
+			options = { @ConfigOption(value = "true", label = "lynxe.general.bashSecurityProtection.option.true"),
+					@ConfigOption(value = "false", label = "lynxe.general.bashSecurityProtection.option.false") })
+	private volatile Boolean bashSecurityProtection;
+
+	public Boolean getBashSecurityProtection() {
+		String configPath = "lynxe.general.bashSecurityProtection";
+		String value = configService.getConfigValue(configPath);
+		if (value != null) {
+			bashSecurityProtection = Boolean.valueOf(value);
+		}
+		// Default to true if not configured
+		if (bashSecurityProtection == null) {
+			bashSecurityProtection = true;
+		}
+		return bashSecurityProtection;
+	}
+
+	public void setBashSecurityProtection(Boolean bashSecurityProtection) {
+		this.bashSecurityProtection = bashSecurityProtection;
 	}
 
 	// MCP Service Loader Settings
@@ -546,6 +620,34 @@ public class LynxeProperties {
 	}
 
 	// Image Recognition Settings
+	// End----------------------------------------------------------------------------------------------
+
+	// Image Generation Settings
+	// Begin-------------------------------------------------------------------------------------------
+
+	@ConfigProperty(group = "lynxe", subGroup = "imageGeneration", key = "modelName",
+			path = "lynxe.imageGeneration.modelName", description = "lynxe.imageGeneration.modelName.description",
+			defaultValue = "wan2.6-t2i", inputType = ConfigInputType.TEXT)
+	private volatile String imageGenerationModelName;
+
+	public String getImageGenerationModelName() {
+		String configPath = "lynxe.imageGeneration.modelName";
+		String value = configService.getConfigValue(configPath);
+		if (value != null) {
+			imageGenerationModelName = value;
+		}
+		// Default to "wan2.6-t2i" if not configured
+		if (imageGenerationModelName == null || imageGenerationModelName.trim().isEmpty()) {
+			imageGenerationModelName = "wan2.6-t2i";
+		}
+		return imageGenerationModelName;
+	}
+
+	public void setImageGenerationModelName(String imageGenerationModelName) {
+		this.imageGenerationModelName = imageGenerationModelName;
+	}
+
+	// Image Generation Settings
 	// End----------------------------------------------------------------------------------------------
 
 }
