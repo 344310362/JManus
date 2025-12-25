@@ -143,8 +143,8 @@ const currentRootPlanId = ref<string | null>(null)
 // Related to panel width
 // Note: leftPanelWidth variable name is kept for backward compatibility
 // It actually controls the chat panel width (which is now on the right side)
-const leftPanelWidth = ref(30) // Chat panel width percentage
-const sidebarWidth = ref(80) // Sidebar width percentage
+const leftPanelWidth = ref(80) // Chat panel width percentage
+const sidebarWidth = ref(30) // Sidebar width percentage
 const isResizing = ref(false)
 const startX = ref(0)
 const startLeftWidth = ref(0)
@@ -550,8 +550,8 @@ const handleSidebarTouchEnd = () => {
 }
 
 const resetSidebarWidth = () => {
-  sidebarWidth.value = 80
-  localStorage.setItem('sidebarWidth', '80')
+  sidebarWidth.value = 30
+  localStorage.setItem('sidebarWidth', '30')
 }
 
 // Helper function to check if the event should be processed for the current plan
