@@ -15,11 +15,17 @@
  */
 package com.alibaba.cloud.ai.lynxe.tool.innerStorage;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.concurrent.ThreadLocalRandom;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.cloud.ai.lynxe.config.LynxeProperties;
+import com.alibaba.cloud.ai.lynxe.tool.filesystem.UnifiedDirectoryManager;
 
 /**
  * Internal file storage service for storing intermediate data in MapReduce processes
@@ -29,10 +35,19 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 
 	private static final Logger log = LoggerFactory.getLogger(SmartContentSavingService.class);
 
+	private static final int CONTENT_LENGTH_THRESHOLD = 3000;
+
+	private static final int TRUNCATE_PREFIX_LENGTH = 250;
+
+	private static final int TRUNCATE_SUFFIX_LENGTH = 200;
+
 	private final LynxeProperties lynxeProperties;
 
-	public SmartContentSavingService(LynxeProperties lynxeProperties) {
+	private final UnifiedDirectoryManager unifiedDirectoryManager;
+
+	public SmartContentSavingService(LynxeProperties lynxeProperties, UnifiedDirectoryManager unifiedDirectoryManager) {
 		this.lynxeProperties = lynxeProperties;
+		this.unifiedDirectoryManager = unifiedDirectoryManager;
 	}
 
 	public LynxeProperties getLynxeProperties() {
@@ -61,6 +76,20 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 			return summary;
 		}
 
+		/**
+		 * Get comprehensive result that combines summary and file name into a single
+		 * string
+		 * @return Comprehensive result with summary and file reference if file was saved
+		 */
+		public String getComprehensiveResult() {
+			if (fileName != null && !fileName.isEmpty()) {
+				// Content was saved to file, return summary with file reference
+				return summary + "\n\n[Full output saved to: " + fileName + "]";
+			}
+			// Content was returned directly
+			return summary;
+		}
+
 		@Override
 		public String toString() {
 			return String.format("SmartProcessResult{fileName='%s', summary='%s'}", fileName, summary);
@@ -83,15 +112,69 @@ public class SmartContentSavingService implements ISmartContentSavingService {
 			return new SmartProcessResult(null, content != null ? content : "No content available");
 		}
 
+		// Check if smart content saving is enabled
+		Boolean enabled = lynxeProperties.getEnableSmartContentSaving();
+		if (enabled == null || !enabled) {
+			log.debug("Smart content saving is disabled, returning content directly");
+			return new SmartProcessResult(null, content);
+		}
+
 		// Check if content is empty
 		if (content.trim().isEmpty()) {
 			log.warn("processContent called with empty content: planId={}, callingMethod={}", planId, callingMethod);
 			return new SmartProcessResult(null, "");
 		}
 
-		// Return content directly without smart processing
-		log.debug("Returning content directly for plan {}", planId);
-		return new SmartProcessResult(null, content != null && !content.trim().isEmpty() ? content : "");
+		// Check if content exceeds threshold
+		if (content.length() > CONTENT_LENGTH_THRESHOLD) {
+			try {
+				// Generate filename: callingMethod + 5-digit random number + .md
+				int randomNum = ThreadLocalRandom.current().nextInt(10000, 100000);
+				String fileName = callingMethod + randomNum + ".md";
+
+				// Get root plan directory
+				Path rootPlanDirectory = unifiedDirectoryManager.getRootPlanDirectory(planId);
+				Path filePath = rootPlanDirectory.resolve(fileName);
+
+				// Ensure directory exists
+				Files.createDirectories(rootPlanDirectory);
+
+				// Save full content to file
+				Files.writeString(filePath, content);
+				log.info("Saved long content ({} chars) to file: {}", content.length(), filePath);
+
+				// Generate truncated summary: first 250 chars + "...[truncated]..." +
+				// last 200 chars
+				String truncatedSummary = generateTruncatedSummary(content);
+
+				return new SmartProcessResult(fileName, truncatedSummary);
+			}
+			catch (IOException e) {
+				log.error("Failed to save content to file for planId={}, callingMethod={}", planId, callingMethod, e);
+				// Fall back to returning truncated content without saving
+				String truncatedSummary = generateTruncatedSummary(content);
+				return new SmartProcessResult(null, truncatedSummary);
+			}
+		}
+
+		// Return content directly if below threshold
+		log.debug("Returning content directly for plan {} (length: {})", planId, content.length());
+		return new SmartProcessResult(null, content);
+	}
+
+	/**
+	 * Generate truncated summary: first 250 chars + "...[truncated]..." + last 200 chars
+	 * @param content Original content
+	 * @return Truncated summary
+	 */
+	private String generateTruncatedSummary(String content) {
+		if (content.length() <= TRUNCATE_PREFIX_LENGTH + TRUNCATE_SUFFIX_LENGTH) {
+			return content;
+		}
+
+		String prefix = content.substring(0, TRUNCATE_PREFIX_LENGTH);
+		String suffix = content.substring(content.length() - TRUNCATE_SUFFIX_LENGTH);
+		return prefix + "...[truncated]..." + suffix;
 	}
 
 }

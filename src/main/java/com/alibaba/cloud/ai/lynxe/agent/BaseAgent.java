@@ -97,6 +97,37 @@ public abstract class BaseAgent {
 
 	private int currentStep = 0;
 
+	/**
+	 * Get the current execution step/round number
+	 * @return The current step number (1-based, first round is 1)
+	 */
+	protected int getCurrentStep() {
+		return currentStep;
+	}
+
+	/**
+	 * Set the maximum execution steps for this agent. This allows overriding the default
+	 * value from lynxeProperties.
+	 * @param maxSteps The maximum execution steps
+	 */
+	public void setMaxSteps(int maxSteps) {
+		if (maxSteps > 0) {
+			this.maxSteps = maxSteps;
+			log.debug("Agent maxSteps set to {} (overriding default value)", maxSteps);
+		}
+		else {
+			log.warn("Invalid maxSteps value: {}, ignoring", maxSteps);
+		}
+	}
+
+	/**
+	 * Get the maximum execution steps for this agent.
+	 * @return The maximum execution steps
+	 */
+	public int getMaxSteps() {
+		return maxSteps;
+	}
+
 	// Change the data map to an immutable object and initialize it properly
 	private final Map<String, Object> initSettingData;
 

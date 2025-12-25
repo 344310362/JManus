@@ -15,16 +15,19 @@
  */
 package com.alibaba.cloud.ai.lynxe.tool.filesystem;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.cloud.ai.lynxe.config.LynxeProperties;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Unified directory manager for all file system operations across tools. Provides a
@@ -49,6 +52,43 @@ public class UnifiedDirectoryManager {
 	 * Fixed directory name for external linked folder mapping
 	 */
 	private static final String LINKED_EXTERNAL_DIR = "linked_external";
+
+	/**
+	 * Unified set of supported text file extensions. This is the maximal set combining
+	 * all extensions from various file operators. All text file operators should use this
+	 * set to ensure consistency.
+	 */
+	public static final Set<String> SUPPORTED_TEXT_FILE_EXTENSIONS = new HashSet<>(Set.of(".txt", ".md", ".markdown", // Plain
+																														// text
+																														// and
+																														// Markdown
+			".java", ".py", ".js", ".ts", ".jsx", ".tsx", // Common programming languages
+			".html", ".htm", ".mhtml", ".css", ".scss", ".sass", ".less", ".vue", // Web-related
+			".xml", ".json", ".yaml", ".yml", ".properties", ".toml", ".cfg", ".env", // Configuration
+																						// files
+			".sql", ".sh", ".bat", ".cmd", ".ps1", ".pl", // Scripts and database
+			".log", ".conf", ".ini", // Logs and configuration
+			".gradle", ".pom", ".mvn", // Build tools
+			".csv", ".rst", ".adoc", ".tex", ".srt", ".vtt", // Documentation, data, and
+																// subtitles
+			".cpp", ".c", ".h", ".hpp", ".hxx", ".cc", ".cxx", // C/C++ variants
+			".go", ".rs", ".php", ".rb", ".swift", ".kt", ".scala", // Additional
+																	// programming
+																	// languages
+			".groovy", ".dart", ".lua", ".r", ".jl", ".clj", ".hs", ".elm", // More
+																			// programming
+																			// languages
+			".ex", ".exs", ".erl", ".hrl", ".fs", ".fsx", ".ml", ".mli", ".nim", ".zig", // Functional
+																							// and
+																							// other
+																							// languages
+			".m", ".mm", ".tcl", ".awk", ".sed" // Objective-C, TCL, AWK, sed
+	));
+
+	/**
+	 * Track root plan IDs that have been cleaned up to prevent recreating the link
+	 */
+	private final Set<String> cleanedUpRootPlanIds = ConcurrentHashMap.newKeySet();
 
 	/**
 	 * Get the linked external directory path for a root plan. This is the symbolic link
@@ -115,13 +155,13 @@ public class UnifiedDirectoryManager {
 			throw new IllegalArgumentException("rootPlanId cannot be null or empty");
 		}
 		Path rootPlanDir = getWorkingDirectory().resolve(INNER_STORAGE_DIR).resolve(rootPlanId);
-		// Ensure directory exists and create external folder link if configured
+		// Ensure directory exists (no lazy loading of symbolic link here)
 		try {
 			ensureDirectoryExists(rootPlanDir);
-			ensureExternalFolderLink(rootPlanDir);
 		}
 		catch (IOException e) {
-			log.warn("Failed to ensure root plan directory or external folder link: {}", e.getMessage());
+			log.warn("Failed to ensure root plan directory for rootPlanId={}, path={}: {}", rootPlanId, rootPlanDir,
+					e.getMessage(), e);
 		}
 		return rootPlanDir;
 	}
@@ -181,6 +221,58 @@ public class UnifiedDirectoryManager {
 			Files.createDirectories(directory);
 			log.debug("Created directory: {}", directory);
 		}
+	}
+
+	/**
+	 * Check if a relative path is accessing the linked_external directory
+	 * @param relativePath The relative path to check
+	 * @return true if the path is linked_external or starts with linked_external/
+	 */
+	public boolean isLinkedExternalPath(String relativePath) {
+		if (relativePath == null || relativePath.isEmpty()) {
+			return false;
+		}
+		return relativePath.equals(LINKED_EXTERNAL_DIR) || relativePath.startsWith(LINKED_EXTERNAL_DIR + "/");
+	}
+
+	/**
+	 * Resolve a relative path within a root plan directory with proper handling of
+	 * symbolic links. This method provides safe path resolution that: - Handles
+	 * linked_external symbolic links without resolving them - Normalizes other paths to
+	 * prevent path traversal attacks - Validates that the resolved path stays within the
+	 * root plan directory
+	 * @param rootPlanDirectory The root plan directory to resolve paths within
+	 * @param relativePath The relative path to resolve
+	 * @return The resolved Path object
+	 * @throws IOException if the path is invalid or outside the root plan directory
+	 */
+	public Path resolveAndValidatePath(Path rootPlanDirectory, String relativePath) throws IOException {
+		if (relativePath == null || relativePath.isEmpty()) {
+			return rootPlanDirectory;
+		}
+
+		// Check if this is accessing linked_external directory (symbolic link to external
+		// folder)
+		boolean isLinkedExternal = isLinkedExternalPath(relativePath);
+
+		Path resolvedPath;
+		if (isLinkedExternal) {
+			// For linked_external, don't use normalize() as it would resolve the symlink
+			// and break the startsWith check. Use the symlink path directly.
+			resolvedPath = rootPlanDirectory.resolve(relativePath);
+		}
+		else {
+			// For normal paths, use normalize() to resolve any relative path elements
+			resolvedPath = rootPlanDirectory.resolve(relativePath).normalize();
+		}
+
+		// Ensure the resolved path stays within root plan directory
+		// For linked_external, this checks the symlink path, not the resolved target
+		if (!resolvedPath.startsWith(rootPlanDirectory)) {
+			throw new IOException("Access denied: Path is outside root plan directory: " + relativePath);
+		}
+
+		return resolvedPath;
 	}
 
 	/**
@@ -315,9 +407,16 @@ public class UnifiedDirectoryManager {
 	 * Ensure external folder symbolic link exists in root plan directory. Creates a
 	 * symbolic link from rootPlanId/linked_external to the configured external folder.
 	 * @param rootPlanDir The root plan directory
+	 * @param rootPlanId The root plan ID (for logging and circular reference check)
 	 * @throws IOException if link creation fails
 	 */
-	private void ensureExternalFolderLink(Path rootPlanDir) throws IOException {
+	public void ensureExternalFolderLink(Path rootPlanDir, String rootPlanId) throws IOException {
+		// Skip if this plan has been cleaned up (prevents recreation after cleanup)
+		if (cleanedUpRootPlanIds.contains(rootPlanId)) {
+			log.debug("Skipping external folder link creation for rootPlanId={} as it has been cleaned up", rootPlanId);
+			return;
+		}
+
 		String externalFolder = lynxeProperties.getExternalLinkedFolder();
 		if (externalFolder == null || externalFolder.trim().isEmpty()) {
 			// No external folder configured, nothing to do
@@ -342,6 +441,18 @@ public class UnifiedDirectoryManager {
 		}
 
 		Path linkPath = rootPlanDir.resolve(LINKED_EXTERNAL_DIR);
+
+		// Prevent circular reference: external folder should not be inside the working
+		// directory
+		Path workingDir = getWorkingDirectory().toAbsolutePath().normalize();
+		Path normalizedExternalPath = externalPath.toAbsolutePath().normalize();
+
+		if (normalizedExternalPath.startsWith(workingDir)) {
+			log.warn(
+					"Circular reference detected: external folder {} is inside working directory {}. This would create a circular symlink. Skipping link creation for rootPlanId={}",
+					normalizedExternalPath, workingDir, rootPlanId);
+			return;
+		}
 
 		// Check if external folder exists with detailed logging
 		boolean exists = Files.exists(externalPath);
@@ -373,37 +484,58 @@ public class UnifiedDirectoryManager {
 			return;
 		}
 
-		// Check if link already exists
+		// Check if link already exists and handle it properly
 		if (Files.exists(linkPath)) {
 			// Check if it's already a valid symbolic link pointing to the correct target
 			try {
 				if (Files.isSymbolicLink(linkPath)) {
 					Path existingTarget = Files.readSymbolicLink(linkPath);
-					Path existingTargetAbsolute = linkPath.getParent().resolve(existingTarget).normalize();
-					if (existingTargetAbsolute.equals(externalPath)) {
+					Path existingTargetAbsolute = linkPath.getParent()
+						.resolve(existingTarget)
+						.toAbsolutePath()
+						.normalize();
+					Path expectedTargetAbsolute = externalPath.toAbsolutePath().normalize();
+
+					if (existingTargetAbsolute.equals(expectedTargetAbsolute)) {
 						// Link already exists and points to correct target
 						log.debug("External folder link already exists: {} -> {}", linkPath, externalPath);
 						return;
 					}
 					else {
 						// Link exists but points to wrong target, remove it
-						log.info("Removing existing link with wrong target: {} -> {}", linkPath, existingTarget);
-						Files.delete(linkPath);
+						log.info("Removing existing link with wrong target: {} -> {} (expected: {})", linkPath,
+								existingTargetAbsolute, expectedTargetAbsolute);
+						try {
+							Files.delete(linkPath);
+							log.debug("Successfully deleted existing symlink: {}", linkPath);
+						}
+						catch (IOException deleteException) {
+							log.error("Failed to delete existing symlink: {}", linkPath, deleteException);
+							throw deleteException;
+						}
 					}
 				}
 				else {
 					// Link path exists but is not a symbolic link, remove it
-					log.info("Removing existing non-symbolic link path: {}", linkPath);
-					if (Files.isDirectory(linkPath)) {
-						deleteDirectoryRecursively(linkPath);
+					log.info("Removing existing non-symbolic link path: {} (isDirectory: {})", linkPath,
+							Files.isDirectory(linkPath));
+					try {
+						if (Files.isDirectory(linkPath)) {
+							deleteDirectoryRecursively(linkPath);
+						}
+						else {
+							Files.delete(linkPath);
+						}
+						log.debug("Successfully removed existing path: {}", linkPath);
 					}
-					else {
-						Files.delete(linkPath);
+					catch (IOException deleteException) {
+						log.error("Failed to remove existing path: {}", linkPath, deleteException);
+						throw deleteException;
 					}
 				}
 			}
 			catch (IOException e) {
-				log.warn("Error checking existing link: {}, will try to recreate", e.getMessage());
+				log.warn("Error checking existing link: {}, will try to remove and recreate", e.getMessage());
 				try {
 					if (Files.isDirectory(linkPath)) {
 						deleteDirectoryRecursively(linkPath);
@@ -411,6 +543,7 @@ public class UnifiedDirectoryManager {
 					else {
 						Files.delete(linkPath);
 					}
+					log.debug("Successfully removed existing path after error: {}", linkPath);
 				}
 				catch (IOException deleteException) {
 					log.error("Failed to remove existing link path: {}", linkPath, deleteException);
@@ -419,10 +552,72 @@ public class UnifiedDirectoryManager {
 			}
 		}
 
+		// Verify that linkPath does not exist before creating (double-check after
+		// deletion)
+		// This handles race conditions where the file might have been recreated between
+		// deletion and creation
+		if (Files.exists(linkPath)) {
+			log.warn("Link path still exists after deletion attempt, retrying deletion: {}", linkPath);
+			try {
+				if (Files.isSymbolicLink(linkPath)) {
+					Files.delete(linkPath);
+				}
+				else if (Files.isDirectory(linkPath)) {
+					deleteDirectoryRecursively(linkPath);
+				}
+				else {
+					Files.delete(linkPath);
+				}
+				log.debug("Successfully removed existing path on retry: {}", linkPath);
+			}
+			catch (IOException deleteException) {
+				log.error("Failed to remove existing link path on retry: {}", linkPath, deleteException);
+				throw new IOException("Unable to remove existing path before creating symbolic link: " + linkPath,
+						deleteException);
+			}
+		}
+
 		// Create symbolic link
 		try {
 			Files.createSymbolicLink(linkPath, externalPath);
 			log.info("Created external folder symbolic link: {} -> {}", linkPath, externalPath);
+		}
+		catch (java.nio.file.FileAlreadyExistsException e) {
+			// Handle race condition: file was created between our check and
+			// createSymbolicLink call
+			log.warn("Symbolic link already exists (race condition): {}, will verify and reuse if valid", linkPath);
+			// Verify if it's a valid link pointing to the correct target
+			try {
+				if (Files.isSymbolicLink(linkPath)) {
+					Path existingTarget = Files.readSymbolicLink(linkPath);
+					Path existingTargetAbsolute = linkPath.getParent()
+						.resolve(existingTarget)
+						.toAbsolutePath()
+						.normalize();
+					Path expectedTargetAbsolute = externalPath.toAbsolutePath().normalize();
+
+					if (existingTargetAbsolute.equals(expectedTargetAbsolute)) {
+						log.debug("Symbolic link already exists and points to correct target: {} -> {}", linkPath,
+								externalPath);
+						return;
+					}
+					else {
+						log.warn(
+								"Symbolic link exists but points to wrong target: {} -> {} (expected: {}), "
+										+ "this may indicate a race condition",
+								linkPath, existingTargetAbsolute, expectedTargetAbsolute);
+						throw new IOException("Symbolic link exists but points to wrong target: " + linkPath, e);
+					}
+				}
+				else {
+					log.error("Path exists but is not a symbolic link: {}", linkPath);
+					throw new IOException("Path exists but is not a symbolic link: " + linkPath, e);
+				}
+			}
+			catch (IOException verifyException) {
+				log.error("Failed to verify existing symbolic link: {}", linkPath, verifyException);
+				throw verifyException;
+			}
 		}
 		catch (UnsupportedOperationException e) {
 			// Symbolic links not supported on this platform, log warning
@@ -432,6 +627,87 @@ public class UnifiedDirectoryManager {
 		catch (IOException e) {
 			log.error("Failed to create external folder symbolic link: {} -> {}", linkPath, externalPath, e);
 			throw e;
+		}
+	}
+
+	/**
+	 * Remove the external folder symbolic link from root plan directory when plan task
+	 * finishes
+	 * @param rootPlanId The root plan ID
+	 */
+	public void removeExternalFolderLink(String rootPlanId) {
+		if (rootPlanId == null || rootPlanId.trim().isEmpty()) {
+			log.warn("removeExternalFolderLink called with null or empty rootPlanId");
+			return;
+		}
+
+		Path linkPath = null;
+		try {
+			// Build path directly without calling getRootPlanDirectory() to avoid
+			// recreating the link
+			Path rootPlanDir = getWorkingDirectory().resolve(INNER_STORAGE_DIR).resolve(rootPlanId);
+			linkPath = rootPlanDir.resolve(LINKED_EXTERNAL_DIR);
+
+			log.info("Attempting to remove linked_external at path: {} for rootPlanId: {}", linkPath, rootPlanId);
+
+			if (!Files.exists(linkPath)) {
+				log.info("Symbolic link does not exist, nothing to remove: {}", linkPath);
+				// Mark as cleaned up even if it doesn't exist to prevent recreation
+				cleanedUpRootPlanIds.add(rootPlanId);
+				return;
+			}
+
+			// Check if it's a symbolic link
+			if (Files.isSymbolicLink(linkPath)) {
+				try {
+					Files.delete(linkPath);
+					log.info("Successfully removed external folder symbolic link: {}", linkPath);
+					// Mark as cleaned up to prevent recreation
+					cleanedUpRootPlanIds.add(rootPlanId);
+				}
+				catch (IOException e) {
+					log.error("Failed to delete symbolic link: {} for rootPlanId: {}. Error: {}", linkPath, rootPlanId,
+							e.getMessage(), e);
+					throw e;
+				}
+			}
+			else if (Files.isDirectory(linkPath)) {
+				// If it's a directory (not a symlink), remove it recursively
+				try {
+					deleteDirectoryRecursively(linkPath);
+					log.info("Successfully removed external folder directory (not a symlink): {}", linkPath);
+					// Mark as cleaned up to prevent recreation
+					cleanedUpRootPlanIds.add(rootPlanId);
+				}
+				catch (IOException e) {
+					log.error("Failed to delete directory: {} for rootPlanId: {}. Error: {}", linkPath, rootPlanId,
+							e.getMessage(), e);
+					throw e;
+				}
+			}
+			else {
+				// If it's a file, just delete it
+				try {
+					Files.delete(linkPath);
+					log.info("Successfully removed external folder path: {}", linkPath);
+					// Mark as cleaned up to prevent recreation
+					cleanedUpRootPlanIds.add(rootPlanId);
+				}
+				catch (IOException e) {
+					log.error("Failed to delete file: {} for rootPlanId: {}. Error: {}", linkPath, rootPlanId,
+							e.getMessage(), e);
+					throw e;
+				}
+			}
+		}
+		catch (IOException e) {
+			String pathInfo = linkPath != null ? linkPath.toString() : "unknown";
+			log.error("Failed to remove external folder symbolic link for rootPlanId={}, path={}. Error details: {}",
+					rootPlanId, pathInfo, e.getMessage(), e);
+		}
+		catch (Exception e) {
+			log.error("Unexpected error while removing external folder link for rootPlanId={}. Error: {}", rootPlanId,
+					e.getMessage(), e);
 		}
 	}
 

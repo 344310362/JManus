@@ -15,6 +15,7 @@
  */
 package com.alibaba.cloud.ai.lynxe.runtime.executor;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -37,6 +38,7 @@ import com.alibaba.cloud.ai.lynxe.runtime.entity.vo.PlanInterface;
 import com.alibaba.cloud.ai.lynxe.runtime.entity.vo.StepResult;
 import com.alibaba.cloud.ai.lynxe.runtime.service.AgentInterruptionHelper;
 import com.alibaba.cloud.ai.lynxe.runtime.service.FileUploadService;
+import com.alibaba.cloud.ai.lynxe.tool.filesystem.UnifiedDirectoryManager;
 
 /**
  * Abstract base class for plan executors. Contains common logic and basic functionality
@@ -65,6 +67,8 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 
 	protected final FileUploadService fileUploadService;
 
+	protected final UnifiedDirectoryManager unifiedDirectoryManager;
+
 	// Define static final strings for the keys used in executorParams
 	public static final String PLAN_STATUS_KEY = "planStatus";
 
@@ -78,7 +82,8 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 
 	public AbstractPlanExecutor(List<DynamicAgentEntity> agents, PlanExecutionRecorder recorder, LlmService llmService,
 			LynxeProperties lynxeProperties, LevelBasedExecutorPool levelBasedExecutorPool,
-			FileUploadService fileUploadService, AgentInterruptionHelper agentInterruptionHelper) {
+			FileUploadService fileUploadService, AgentInterruptionHelper agentInterruptionHelper,
+			UnifiedDirectoryManager unifiedDirectoryManager) {
 		this.agents = agents;
 		this.recorder = recorder;
 		this.llmService = llmService;
@@ -86,6 +91,7 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 		this.levelBasedExecutorPool = levelBasedExecutorPool;
 		this.fileUploadService = fileUploadService;
 		this.agentInterruptionHelper = agentInterruptionHelper;
+		this.unifiedDirectoryManager = unifiedDirectoryManager;
 	}
 
 	/**
@@ -100,6 +106,8 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 			if (executor == null) {
 				logger.error("No executor found for step type: {}", step.getStepInStr());
 				step.setResult("No executor found for step type: " + step.getStepInStr());
+				step.setStatus(AgentState.FAILED);
+				step.setErrorMessage("No executor found for step type: " + step.getStepInStr());
 				return null;
 			}
 
@@ -113,6 +121,15 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 			}
 
 			BaseAgent.AgentExecResult agentResult = executor.run();
+			if (agentResult == null) {
+				logger.error("Agent {} returned null result", executor.getName());
+				step.setResult("Agent execution returned null result");
+				step.setStatus(AgentState.FAILED);
+				step.setErrorMessage("Agent execution returned null result");
+				context.setSuccess(false);
+				return executor;
+			}
+
 			step.setResult(agentResult.getResult());
 			step.setStatus(agentResult.getState());
 
@@ -174,6 +191,28 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 			return matcher.group(1).trim().toUpperCase();
 		}
 		return "DEFAULT_AGENT";
+	}
+
+	/**
+	 * Initialize plan execution environment, including symbolic link creation for root
+	 * plans
+	 * @param context The execution context containing plan information
+	 */
+	protected void initializePlanExecution(ExecutionContext context) {
+		// Initialize symbolic link for root plan (only for root plans, not sub-plans)
+		if (unifiedDirectoryManager != null && context.getRootPlanId() != null
+				&& context.getRootPlanId().equals(context.getCurrentPlanId())) {
+			try {
+				Path rootPlanDir = unifiedDirectoryManager.getRootPlanDirectory(context.getRootPlanId());
+				unifiedDirectoryManager.ensureExternalFolderLink(rootPlanDir, context.getRootPlanId());
+				logger.debug("Initialized external folder symbolic link for rootPlanId: {}", context.getRootPlanId());
+			}
+			catch (Exception e) {
+				logger.warn("Failed to initialize external folder symbolic link for rootPlanId: {}",
+						context.getRootPlanId(), e);
+				// Continue execution even if symbolic link creation fails
+			}
+		}
 	}
 
 	/**
@@ -261,6 +300,10 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 				plan.setCurrentPlanId(context.getCurrentPlanId());
 				plan.setRootPlanId(context.getRootPlanId());
 				plan.updateStepIndices();
+
+				// Initialize plan execution environment
+				initializePlanExecution(context);
+
 				// Synchronize uploaded files to plan directory at the beginning of
 				// execution
 				syncUploadedFilesToPlan(context);
@@ -371,6 +414,14 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 			// This is a safety net for exceptions that occur outside the try-catch blocks
 			logger.error("Uncaught exception in CompletableFuture for planId: {}", context.getCurrentPlanId(),
 					throwable);
+			// Ensure cleanup happens even if exception occurred before finally block
+			try {
+				performCleanup(context, null);
+			}
+			catch (Exception e) {
+				logger.error("Error during cleanup in exceptionally handler for planId: {}", context.getCurrentPlanId(),
+						e);
+			}
 			PlanExecutionResult errorResult = new PlanExecutionResult();
 			errorResult.setSuccess(false);
 			String errorMessage = throwable.getMessage();
@@ -390,6 +441,33 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 		llmService.clearAgentMemory(planId);
 		if (lastExecutor != null) {
 			lastExecutor.clearUp(planId);
+		}
+		// Remove symbolic link directory when root plan task finishes
+		// Only clean up for root plan (currentPlanId == rootPlanId)
+		String rootPlanId = context.getRootPlanId();
+		if (unifiedDirectoryManager != null && rootPlanId != null && rootPlanId.equals(planId)) {
+			try {
+				logger.info("Attempting to remove external folder link for rootPlanId: {}, currentPlanId: {}",
+						rootPlanId, planId);
+				unifiedDirectoryManager.removeExternalFolderLink(rootPlanId);
+				logger.info("Successfully removed external folder link for rootPlanId: {}", rootPlanId);
+			}
+			catch (Exception e) {
+				logger.error("Failed to remove external folder symbolic link for rootPlanId: {}", rootPlanId, e);
+			}
+		}
+		else {
+			if (unifiedDirectoryManager == null) {
+				logger.info("Skipping linked_external cleanup: unifiedDirectoryManager is null");
+			}
+			else if (rootPlanId == null) {
+				logger.info("Skipping linked_external cleanup: rootPlanId is null, currentPlanId: {}", planId);
+			}
+			else if (!rootPlanId.equals(planId)) {
+				logger.info(
+						"Skipping linked_external cleanup: currentPlanId ({}) != rootPlanId ({}) - this is a sub-plan",
+						planId, rootPlanId);
+			}
 		}
 	}
 
