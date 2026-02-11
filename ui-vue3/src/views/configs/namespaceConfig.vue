@@ -31,7 +31,13 @@
       <!--left namespace list-->
       <div class="namespace-list">
         <div class="list-header">
-          <h3>{{ t('config.namespaceConfig.configured') }}</h3>
+          <div>
+            <h3>{{ t('config.namespaceConfig.configured') }}</h3>
+          </div>
+          <button class="add-btn" @click="showAddNamespaceModal">
+            <Icon icon="carbon:add" />
+            {{ t('config.namespaceConfig.createNew') }}
+          </button>
         </div>
 
         <div class="namespaces-container" v-if="!loading">
@@ -56,11 +62,6 @@
           <Icon icon="carbon:loading" class="loading-icon" />
           {{ t('common.loading') }}
         </div>
-
-        <button class="add-btn" @click="showAddNamespaceModal">
-          <Icon icon="carbon:add" />
-          {{ t('config.namespaceConfig.createNew') }}
-        </button>
       </div>
 
       <!-- detail -->
@@ -454,8 +455,15 @@ onMounted(() => {
 .list-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
   margin-bottom: 16px;
+}
+
+.list-header > div {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .list-header h3 {
@@ -596,7 +604,8 @@ onMounted(() => {
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.3s ease;
-  font-size: 14px;
+  font-size: 13px;
+  min-height: 32px;
 
   &:hover {
     background: var(--scrollbar-track, var(--bg-secondary));

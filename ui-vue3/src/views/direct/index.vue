@@ -21,7 +21,7 @@
     <!-- Branding Header -->
     <header class="branding-header">
       <div class="branding-content">
-        <div class="branding-logo">
+        <div class="branding-logo" @click="handleLogoClick">
           <img src="https://sm-ai-manus.exexm.com/ui/img/yuanqi.png" alt="元气小精灵" class="java-logo" />
           <h1>元气小精灵</h1>
         </div>
@@ -111,6 +111,7 @@ import Sidebar from '@/components/sidebar/Sidebar.vue'
 import { useConversationHistorySingleton } from '@/composables/useConversationHistory'
 import { useMessageDialogSingleton } from '@/composables/useMessageDialog'
 import { usePlanExecutionSingleton } from '@/composables/usePlanExecution'
+import { useRightPanelSingleton } from '@/composables/useRightPanel'
 import { useToast } from '@/composables/useToast'
 import { memoryStore } from '@/stores/memory'
 import { useTaskStore } from '@/stores/task'
@@ -143,8 +144,8 @@ const currentRootPlanId = ref<string | null>(null)
 // Related to panel width
 // Note: leftPanelWidth variable name is kept for backward compatibility
 // It actually controls the chat panel width (which is now on the right side)
-const leftPanelWidth = ref(80) // Chat panel width percentage
-const sidebarWidth = ref(30) // Sidebar width percentage
+const leftPanelWidth = ref(50) // Chat panel width percentage
+const sidebarWidth = ref(80) // Sidebar width percentage
 const isResizing = ref(false)
 const startX = ref(0)
 const startLeftWidth = ref(0)
@@ -625,6 +626,19 @@ const newChat = () => {
   // Reset all dialog state including conversationId to start a fresh conversation
   messageDialog.reset()
 }
+
+/**
+ * Handle logo click - reset to initial state
+ * Clear template selection and switch to config tab to show initial welcome screen
+ */
+const handleLogoClick = () => {
+  console.log('[Direct] Logo clicked, resetting to initial state')
+  // Clear template selection
+  templateStore.clearSelection()
+  // Switch to config tab
+  const rightPanel = useRightPanelSingleton()
+  rightPanel.setActiveTab('config')
+}
 </script>
 
 <style lang="less" scoped>
@@ -657,6 +671,18 @@ const newChat = () => {
   display: flex;
   align-items: center;
   gap: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 
   .java-logo {
     width: 32px;

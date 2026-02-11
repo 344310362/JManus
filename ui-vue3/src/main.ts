@@ -108,6 +108,20 @@ function render(props: QiankunProps = {}) {
       instance.mount(mountPoint)
     })
 
+  // Add global passive touchstart listener to prevent warnings
+  // This helps with performance by marking touch events as passive
+  // Note: This won't fix warnings from third-party libraries, but helps with our own code
+  if (typeof window !== 'undefined') {
+    // Add a passive touchstart listener to the document to improve scroll performance
+    // This is a workaround for browsers that warn about non-passive touchstart listeners
+    document.addEventListener(
+      'touchstart',
+      () => {
+        // Empty handler, just to mark the event as passive
+      },
+      { passive: true, capture: true }
+    )
+  }
 }
 
 

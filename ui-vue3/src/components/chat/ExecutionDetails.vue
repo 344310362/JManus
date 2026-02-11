@@ -57,16 +57,19 @@
           "
         >
           <div class="agent-info">
-            <Icon :icon="getAgentStatusIcon(agentExecution.status)" class="agent-status-icon" />
             <div class="agent-details">
               <div class="agent-name">
                 {{
-                agentExecution.agentName === 'ConfigurableDynaAgent'
-                ? $t('chat.funcAgentExecutionDetails')
-                : agentExecution.agentName || $t('chat.unknownAgent')
+                  agentExecution.agentName === 'ConfigurableDynaAgent'
+                    ? planExecution.title ||
+                      agentExecution.latestMethodName ||
+                      $t('chat.funcAgentExecutionDetails')
+                    : agentExecution.agentName || $t('chat.unknownAgent')
                 }}
               </div>
-              <pre class="request-content">{{ agentExecution.agentRequest }}</pre>
+              <div class="request-content">
+                <span class="click-hint">{{ $t('chat.clickToViewExecutionDetails') }}</span>
+              </div>
             </div>
           </div>
           <div class="agent-controls">
@@ -84,7 +87,7 @@
               <Icon icon="carbon:checkmark" class="result-icon" />
               <span class="result-label">{{ $t('chat.agentResult') }}:</span>
             </div>
-            <pre class="result-content">{{ agentExecution.result }}</pre>
+            <pre class="result-content">{{ formatExecutionResult(agentExecution.result) }}</pre>
           </div>
 
           <!-- Error message -->
@@ -94,6 +97,65 @@
               <span class="error-label">{{ $t('chat.errorMessage') }}:</span>
             </div>
             <pre class="error-content">{{ agentExecution.errorMessage }}</pre>
+          </div>
+
+          <!-- Latest tool info -->
+          <div
+            v-if="
+              agentExecution.agentRequest ||
+              agentExecution.latestMethodName ||
+              agentExecution.latestMethodArgs ||
+              agentExecution.latestRoundNumber
+            "
+            class="agent-tool-info"
+          >
+            <div
+              class="tool-info-header"
+              @click="toggleToolInfo(agentExecution)"
+              :class="{ expanded: isToolInfoExpanded(agentExecution) }"
+            >
+              <span
+                v-if="
+                  agentExecution.agentName === 'ConfigurableDynaAgent' &&
+                  agentExecution.latestRoundNumber !== undefined &&
+                  agentExecution.latestRoundNumber !== null
+                "
+                class="tool-info-round-info"
+              >
+                {{ $t('chat.roundLabel', { round: agentExecution.latestRoundNumber }) }}
+              </span>
+              <span v-if="agentExecution.latestMethodName" class="tool-info-method-name">
+                {{ agentExecution.latestMethodName }}
+              </span>
+              <Icon
+                :icon="
+                  isToolInfoExpanded(agentExecution) ? 'carbon:chevron-up' : 'carbon:chevron-right'
+                "
+                class="tool-info-toggle-icon"
+              />
+            </div>
+            <div v-if="isToolInfoExpanded(agentExecution)" class="tool-info-content">
+              <!-- User request detail -->
+              <div v-if="agentExecution.agentRequest" class="tool-info-item">
+                <Icon icon="carbon:chat" class="tool-info-item-icon" />
+                <span class="tool-info-item-label">{{ $t('chat.userRequest') }}:</span>
+                <pre class="tool-info-item-value tool-args-content">{{
+                  agentExecution.agentRequest
+                }}</pre>
+              </div>
+              <div v-if="agentExecution.latestMethodName" class="tool-info-item">
+                <Icon icon="carbon:code" class="tool-info-item-icon" />
+                <span class="tool-info-item-label">{{ $t('chat.methodName') }}:</span>
+                <span class="tool-info-item-value">{{ agentExecution.latestMethodName }}</span>
+              </div>
+              <div v-if="agentExecution.latestMethodArgs" class="tool-info-item">
+                <Icon icon="carbon:settings" class="tool-info-item-icon" />
+                <span class="tool-info-item-label">{{ $t('chat.methodArgs') }}:</span>
+                <pre class="tool-info-item-value tool-args-content">{{
+                  formatToolParameters(agentExecution.latestMethodArgs)
+                }}</pre>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -135,6 +197,7 @@ import type {
   PlanExecutionRecord,
 } from '@/types/plan-execution-record'
 import { Icon } from '@iconify/vue'
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import RecursiveSubPlan from './RecursiveSubPlan.vue'
 
@@ -157,6 +220,23 @@ const emit = defineEmits<Emits>()
 
 // Initialize i18n
 const { t } = useI18n()
+
+// Collapsible state for tool info (using agent execution ID as key)
+const toolInfoExpanded = ref<Record<string, boolean>>({})
+
+// Toggle tool info expansion
+const toggleToolInfo = (agentExecution: AgentExecutionRecord) => {
+  const key = agentExecution.id?.toString() || agentExecution.stepId || ''
+  if (key) {
+    toolInfoExpanded.value[key] = !toolInfoExpanded.value[key]
+  }
+}
+
+// Check if tool info is expanded
+const isToolInfoExpanded = (agentExecution: AgentExecutionRecord): boolean => {
+  const key = agentExecution.id?.toString() || agentExecution.stepId || ''
+  return toolInfoExpanded.value[key] || false
+}
 
 // Agent click handler
 const handleAgentClick = (agentExecution: AgentExecutionRecord) => {
@@ -192,18 +272,6 @@ const getAgentStatusText = (status?: ExecutionStatus): string => {
   }
 }
 
-const getAgentStatusIcon = (status?: ExecutionStatus): string => {
-  switch (status) {
-    case 'RUNNING':
-      return 'carbon:play'
-    case 'FINISHED':
-      return 'carbon:checkmark'
-    case 'IDLE':
-    default:
-      return 'carbon:dot-mark'
-  }
-}
-
 // Note: Sub-plan status methods are now handled by RecursiveSubPlan component
 
 // Note: Agent preview status methods are now handled by RecursiveSubPlan component
@@ -214,6 +282,14 @@ const handleSubPlanClick = (
   subPlanIndex: number,
   subPlan: PlanExecutionRecord
 ) => {
+  // If clicking on sub-plan header, select the first agent's stepId if available
+  if (agentIndex === -1 && subPlan.agentExecutionSequence?.length) {
+    const firstAgent = subPlan.agentExecutionSequence[0]
+    if (firstAgent.stepId) {
+      emit('step-selected', firstAgent.stepId)
+      return
+    }
+  }
   emit('sub-plan-selected', agentIndex, subPlanIndex, subPlan)
 }
 
@@ -225,15 +301,49 @@ const handleStepSelected = (stepId: string) => {
 
 // Helper methods
 
+/**
+ * Truncate long text by keeping start and end, replacing middle with ellipsis
+ * @param text - The text to truncate
+ * @param maxLength - Maximum length before truncation (default: 20000)
+ * @param startLength - Length to keep at the start (default: 10000)
+ * @param endLength - Length to keep at the end (default: 10000)
+ * @returns Truncated text if exceeds maxLength, original text otherwise
+ */
+const truncateLongText = (
+  text: string,
+  maxLength = 20000,
+  startLength = 10000,
+  endLength = 10000
+): string => {
+  if (!text || text.length <= maxLength) {
+    return text
+  }
+  const ellipsis = '\n\n... [Content truncated, middle part removed] ...\n\n'
+  const start = text.substring(0, startLength)
+  const end = text.substring(text.length - endLength)
+  return start + ellipsis + end
+}
+
 const formatToolParameters = (parameters?: string): string => {
   if (!parameters) return ''
 
   try {
     const parsed = JSON.parse(parameters)
-    return JSON.stringify(parsed, null, 2)
+    const formatted = JSON.stringify(parsed, null, 2)
+    return truncateLongText(formatted)
   } catch {
-    return parameters
+    return truncateLongText(parameters)
   }
+}
+
+/**
+ * Format execution result text, truncating if too long
+ * @param result - The result text to format
+ * @returns Formatted and truncated result text
+ */
+const formatExecutionResult = (result?: string): string => {
+  if (!result) return ''
+  return truncateLongText(result)
 }
 </script>
 
@@ -350,22 +460,6 @@ const formatToolParameters = (parameters?: string): string => {
           gap: 12px;
           flex: 1;
 
-          .agent-status-icon {
-            font-size: 18px;
-
-            &.running {
-              color: var(--accent-primary, #667eea);
-            }
-
-            &.completed {
-              color: var(--success, #22c55e);
-            }
-
-            &.pending {
-              color: #9ca3af;
-            }
-          }
-
           .agent-details {
             .agent-name {
               font-weight: 600;
@@ -373,8 +467,6 @@ const formatToolParameters = (parameters?: string): string => {
               font-size: 14px;
               margin-bottom: 2px;
             }
-
-
 
             .request-content {
               margin: 4px 0 0 0;
@@ -431,25 +523,37 @@ const formatToolParameters = (parameters?: string): string => {
       }
 
       .agent-execution-info {
-        padding: 16px;
+        padding: 6px 16px;
         background: rgba(0, 0, 0, 0.1);
-        border-top: 1px solid var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-        margin-bottom: 16px;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
 
-        .agent-result, .agent-error {
+        .agent-request,
+        .agent-result,
+        .agent-error,
+        .agent-tool-info {
           margin-bottom: 12px;
 
           &:last-child {
             margin-bottom: 0;
           }
 
-          .result-header, .error-header {
+          .request-header,
+          .result-header,
+          .error-header,
+          .tool-info-header {
             display: flex;
             align-items: center;
             gap: 6px;
             margin-bottom: 6px;
 
-            .result-icon, .error-icon {
+            &.expanded {
+              margin-bottom: 8px;
+            }
+
+            .request-icon,
+            .result-icon,
+            .error-icon,
+            .tool-info-icon {
               font-size: 14px;
             }
 
@@ -461,8 +565,60 @@ const formatToolParameters = (parameters?: string): string => {
               color: var(--error, #ef4444);
             }
 
-            .result-label, .error-label {
-              color: var(--text-primary, #ffffff);
+            .tool-info-icon {
+              color: #667eea;
+            }
+
+            .request-label,
+            .result-label,
+            .error-label,
+            .tool-info-label {
+              color: var(--text-secondary, #cccccc);
+              font-size: 13px;
+              font-weight: 500;
+            }
+
+            // Collapsible tool info header styles
+            &.expanded,
+            &:has(.tool-info-toggle-icon) {
+              cursor: pointer;
+              padding: 4px 8px;
+              border-radius: 4px;
+              transition: background 0.2s ease;
+
+              &:hover {
+                background: rgba(255, 255, 255, 0.05);
+              }
+            }
+
+            .tool-info-request {
+              color: #cccccc;
+              font-size: 12px;
+              font-style: italic;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              max-width: 200px;
+            }
+
+            .tool-info-separator {
+              color: #666666;
+              font-size: 12px;
+              margin: 0 6px;
+              flex-shrink: 0;
+            }
+
+            .tool-info-round-info {
+              color: #667eea;
+              font-weight: 500;
+              font-size: 13px;
+              white-space: nowrap;
+              line-height: 1.5;
+            }
+
+            .tool-info-method-name {
+              flex: 1;
+              color: #ffffff;
               font-size: 13px;
               font-weight: 500;
             }
@@ -500,14 +656,14 @@ const formatToolParameters = (parameters?: string): string => {
           margin-bottom: 12px;
 
           .sub-plans-icon {
-            font-size: 16px;
+            font-size: 11px;
             color: var(--accent-primary, #667eea);
           }
 
           .sub-plans-title {
             color: var(--text-primary, #ffffff);
             font-weight: 600;
-            font-size: 14px;
+            font-size: 11px;
           }
         }
 

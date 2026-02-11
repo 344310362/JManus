@@ -16,174 +16,113 @@
 <template>
   <div class="recursive-sub-plan" :class="getNestingClass()">
     <!-- Sub-plan header -->
-    <div class="sub-plan-header" @click="handleSubPlanClick">
+    <div
+      class="sub-plan-header"
+      @click.stop="handleSubPlanClick"
+      :title="$t('chat.clickToViewExecutionDetails')"
+    >
       <div class="sub-plan-info">
-        <Icon :icon="getSubPlanStatusIcon()" class="sub-plan-status-icon" />
         <div class="sub-plan-details">
           <div class="sub-plan-title">
             {{ subPlan.title || $t('chat.subPlan') }} #{{ subPlanIndex + 1 }}
-            <span v-if="(nestingLevel ?? 0) > 0" class="nesting-level"
-            >(L{{ (nestingLevel ?? 0) + 1 }})</span
-            >
           </div>
-          <div class="sub-plan-id">{{ subPlan.currentPlanId }}</div>
+          <div class="request-content">
+            <span class="click-hint">{{ $t('chat.clickToViewExecutionDetails') }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="sub-plan-controls">
+        <div class="sub-plan-status-badge" :class="getSubPlanStatusClass()">
+          {{ getSubPlanStatusText() }}
         </div>
       </div>
     </div>
 
-    <!-- Sub-plan meta (status badge and trigger tool) -->
-    <div class="sub-plan-meta">
-      <div v-if="subPlan.parentActToolCall" class="trigger-tool">
-        <Icon icon="carbon:function" class="trigger-icon" />
-        <span class="trigger-text">{{ subPlan.parentActToolCall.name }}</span>
-      </div>
-      <div class="sub-plan-status-badge" :class="getSubPlanStatusClass()">
-        {{ getSubPlanStatusText() }}
-      </div>
-    </div>
-
-    <!-- Sub-plan agent execution steps -->
-    <div v-if="subPlan.agentExecutionSequence?.length" class="sub-plan-agents-steps">
-      <div class="agents-steps-header">
-        <span class="agents-label">{{ $t('chat.agentExecutions') }}:</span>
-      </div>
-      <div class="agents-steps-list">
-        <div
-          v-for="(agent, agentIndex) in subPlan.agentExecutionSequence"
-          :key="agent.id || agentIndex"
-          class="agent-step-item"
-          :class="getAgentPreviewStatusClass(agent.status)"
-          @click="handleSubPlanAgentClick(agentIndex, agent)"
-          :title="
-            agent.agentName === 'ConfigurableDynaAgent'
-              ? $t('chat.clickToViewExecutionDetails')
-              : ''
+    <!-- Agent tool info -->
+    <div
+      v-if="
+        firstAgent &&
+        (firstAgent.agentRequest ||
+          firstAgent.latestMethodName ||
+          firstAgent.latestMethodArgs ||
+          firstAgent.latestRoundNumber)
+      "
+      class="agent-tool-info"
+    >
+      <div
+        class="tool-info-header"
+        @click="toggleToolInfo"
+        :class="{ expanded: isToolInfoExpanded }"
+      >
+        <span
+          v-if="
+            firstAgent.agentName === 'ConfigurableDynaAgent' &&
+            firstAgent.latestRoundNumber !== undefined &&
+            firstAgent.latestRoundNumber !== null
           "
+          class="tool-info-round-info"
         >
-          <div class="agent-step-header">
-            <Icon :icon="getAgentPreviewStatusIcon(agent.status)" class="agent-icon" />
-            <span class="agent-name">
-              {{
-                agent.agentName === 'ConfigurableDynaAgent'
-                  ? $t('chat.funcAgentExecutionDetails')
-                  : agent.agentName || $t('chat.unknownAgent')
-              }}
-            </span>
-            <div class="agent-status-badge" :class="getAgentPreviewStatusClass(agent.status)">
-              {{ getAgentStatusText(agent.status) }}
-            </div>
-          </div>
-
-          <!-- Agent execution info for sub-plan agents -->
-          <div class="sub-agent-execution-info">
-            <!-- Agent result -->
-            <div v-if="agent.result" class="agent-result">
-              <div class="result-header">
-                <Icon icon="carbon:checkmark" class="result-icon" />
-                <span class="result-label">{{ $t('chat.agentResult') }}:</span>
-              </div>
-              <pre class="result-content">{{ agent.result }}</pre>
-            </div>
-
-            <!-- Error message -->
-            <div v-if="agent.errorMessage" class="agent-error">
-              <div class="error-header">
-                <Icon icon="carbon:warning" class="error-icon" />
-                <span class="error-label">{{ $t('chat.errorMessage') }}:</span>
-              </div>
-              <pre class="error-content">{{ agent.errorMessage }}</pre>
-            </div>
-
-            <!-- Think-act steps with nested sub-plans -->
-            <div v-if="agent.thinkActSteps?.length" class="think-act-preview">
-              <div class="think-act-header">
-                <Icon icon="carbon:thinking" class="think-act-icon" />
-                <span class="think-act-label"
-                >{{ $t('chat.thinkActSteps') }} ({{ agent.thinkActSteps.length }})</span
-                >
-              </div>
-              <div class="think-act-steps-preview">
-                <div
-                  v-for="(step, stepIndex) in agent.thinkActSteps.slice(0, maxVisibleSteps ?? 2)"
-                  :key="step.id || stepIndex"
-                  class="think-act-step-preview"
-                  @click.stop="handleThinkActStepClick(agentIndex, stepIndex, agent)"
-                >
-                  <span class="step-number">#{{ stepIndex + 1 }}</span>
-                  <span class="step-description">{{
-                      step.actionDescription || $t('chat.thinking')
-                    }}</span>
-                  <Icon icon="carbon:arrow-right" class="step-arrow" />
-                </div>
-                <div v-if="agent.thinkActSteps.length > (maxVisibleSteps ?? 2)" class="more-steps">
-                  <span class="more-steps-text">
-                    {{
-                      $t('chat.andMoreSteps', {
-                        count: agent.thinkActSteps.length - (maxVisibleSteps ?? 2),
-                      })
-                    }}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Nested sub-plans from think-act steps -->
-            <div v-if="hasNestedSubPlans(agent)" class="nested-sub-plans">
-              <div class="nested-sub-plans-header">
-                <Icon icon="carbon:tree-view-alt" class="nested-icon" />
-                <span class="nested-label">{{ $t('chat.nestedSubPlans') }}</span>
-              </div>
-              <div class="nested-sub-plans-list">
-                <RecursiveSubPlan
-                  v-for="(nestedStep, nestedStepIndex) in getNestedSubPlans(agent)"
-                  :key="nestedStep.id || nestedStepIndex"
-                  :sub-plan="nestedStep.subPlanExecutionRecord!"
-                  :sub-plan-index="nestedStepIndex"
-                  :nesting-level="(nestingLevel ?? 0) + 1"
-                  :max-nesting-depth="maxNestingDepth ?? 3"
-                  :max-visible-steps="maxVisibleSteps ?? 2"
-                  @sub-plan-selected="handleNestedSubPlanSelected"
-                  @step-selected="handleNestedStepSelected"
-                />
-              </div>
-            </div>
-
-            <!-- Direct sub-plans from agent -->
-            <div v-if="agent.subPlanExecutionRecords?.length" class="direct-sub-plans">
-              <div class="direct-sub-plans-header">
-                <Icon icon="carbon:tree-view" class="direct-icon" />
-                <span class="direct-label">{{ $t('chat.directSubPlans') }}</span>
-              </div>
-              <div class="direct-sub-plans-list">
-                <RecursiveSubPlan
-                  v-for="(directSubPlan, directIndex) in agent.subPlanExecutionRecords"
-                  :key="directSubPlan.currentPlanId || directIndex"
-                  :sub-plan="directSubPlan"
-                  :sub-plan-index="directIndex"
-                  :nesting-level="(nestingLevel ?? 0) + 1"
-                  :max-nesting-depth="maxNestingDepth ?? 3"
-                  :max-visible-steps="maxVisibleSteps ?? 2"
-                  @sub-plan-selected="handleNestedSubPlanSelected"
-                  @step-selected="handleNestedStepSelected"
-                />
-              </div>
-            </div>
-          </div>
+          {{ $t('chat.roundLabel', { round: firstAgent.latestRoundNumber }) }}
+        </span>
+        <span v-if="firstAgent.latestMethodName" class="tool-info-method-name">
+          {{ firstAgent.latestMethodName }}
+        </span>
+        <Icon
+          :icon="isToolInfoExpanded ? 'carbon:chevron-up' : 'carbon:chevron-right'"
+          class="tool-info-toggle-icon"
+        />
+      </div>
+      <div v-if="isToolInfoExpanded" class="tool-info-content">
+        <!-- User request detail -->
+        <div v-if="firstAgent.agentRequest" class="tool-info-item">
+          <Icon icon="carbon:chat" class="tool-info-item-icon" />
+          <span class="tool-info-item-label">{{ $t('chat.userRequest') }}:</span>
+          <pre class="tool-info-item-value tool-args-content">{{ firstAgent.agentRequest }}</pre>
         </div>
+        <div v-if="firstAgent.latestMethodName" class="tool-info-item">
+          <Icon icon="carbon:code" class="tool-info-item-icon" />
+          <span class="tool-info-item-label">{{ $t('chat.methodName') }}:</span>
+          <span class="tool-info-item-value">{{ firstAgent.latestMethodName }}</span>
+        </div>
+        <div v-if="firstAgent.latestMethodArgs" class="tool-info-item">
+          <Icon icon="carbon:settings" class="tool-info-item-icon" />
+          <span class="tool-info-item-label">{{ $t('chat.methodArgs') }}:</span>
+          <pre class="tool-info-item-value tool-args-content">{{
+              formatToolParameters(firstAgent.latestMethodArgs)
+            }}</pre>
+        </div>
+      </div>
+    </div>
+
+    <!-- Direct sub-plans from all agents -->
+    <div v-if="allDirectSubPlans.length > 0" class="direct-sub-plans">
+      <div class="direct-sub-plans-header">
+        <Icon icon="carbon:tree-view" class="direct-icon" />
+        <span class="direct-label">
+          {{ $t('chat.subPlanExecutions') }} ({{ allDirectSubPlans.length }})
+        </span>
+      </div>
+      <div class="direct-sub-plans-list">
+        <RecursiveSubPlan
+          v-for="(directSubPlan, directIndex) in allDirectSubPlans"
+          :key="directSubPlan.currentPlanId || directIndex"
+          :sub-plan="directSubPlan"
+          :sub-plan-index="directIndex"
+          :nesting-level="(nestingLevel ?? 0) + 1"
+          :max-nesting-depth="maxNestingDepth ?? 3"
+          :max-visible-steps="maxVisibleSteps ?? 2"
+          @sub-plan-selected="handleNestedSubPlanSelected"
+          @step-selected="handleNestedStepSelected"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import type {
-  AgentExecutionRecord,
-  ExecutionStatus,
-  PlanExecutionRecord,
-  ThinkActRecord,
-} from '@/types/plan-execution-record'
+import type { AgentExecutionRecord, PlanExecutionRecord } from '@/types/plan-execution-record'
 import { Icon } from '@iconify/vue'
-import {} from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 interface Props {
@@ -259,21 +198,6 @@ const getSubPlanStatusText = (): string => {
   }
 }
 
-const getSubPlanStatusIcon = (): string => {
-  const statusClass = getSubPlanStatusClass()
-  switch (statusClass) {
-    case 'completed':
-      return 'carbon:checkmark'
-    case 'running':
-      return 'carbon:play'
-    case 'in-progress':
-      return 'carbon:in-progress'
-    case 'pending':
-    default:
-      return 'carbon:dot-mark'
-  }
-}
-
 // Unused function - kept for potential future use
 // const getSubPlanProgress = (): number => {
 //   if (!props.subPlan.agentExecutionSequence?.length) return 0
@@ -289,69 +213,55 @@ const getSubPlanStatusIcon = (): string => {
 //   return props.subPlan.agentExecutionSequence.filter(agent => agent.status === 'FINISHED').length
 // }
 
-// Agent preview status methods
-const getAgentPreviewStatusClass = (status?: ExecutionStatus): string => {
-  switch (status) {
-    case 'FINISHED':
-      return 'completed'
-    case 'RUNNING':
-      return 'running'
-    case 'IDLE':
-    default:
-      return 'pending'
+// Get first agent for tool info display
+const firstAgent = computed((): AgentExecutionRecord | undefined => {
+  return props.subPlan.agentExecutionSequence?.[0]
+})
+
+// Collect all direct sub-plans from all agents
+const allDirectSubPlans = computed(() => {
+  const subPlans: PlanExecutionRecord[] = []
+  if (props.subPlan.agentExecutionSequence) {
+    for (const agent of props.subPlan.agentExecutionSequence) {
+      if (agent.subPlanExecutionRecords) {
+        subPlans.push(...agent.subPlanExecutionRecords)
+      }
+    }
   }
+  return subPlans
+})
+
+// Collapsible state for tool info
+const toolInfoExpanded = ref(false)
+
+// Toggle tool info expansion
+const toggleToolInfo = () => {
+  toolInfoExpanded.value = !toolInfoExpanded.value
 }
 
-const getAgentPreviewStatusIcon = (status?: ExecutionStatus): string => {
-  switch (status) {
-    case 'FINISHED':
-      return 'carbon:checkmark'
-    case 'RUNNING':
-      return 'carbon:play'
-    case 'IDLE':
-    default:
-      return 'carbon:dot-mark'
+// Check if tool info is expanded
+const isToolInfoExpanded = computed(() => toolInfoExpanded.value)
+
+// Format tool parameters
+const formatToolParameters = (parameters?: string): string => {
+  if (!parameters) return ''
+
+  try {
+    const parsed = JSON.parse(parameters)
+    return JSON.stringify(parsed, null, 2)
+  } catch {
+    return parameters
   }
-}
-
-const getAgentStatusText = (status?: ExecutionStatus): string => {
-  switch (status) {
-    case 'RUNNING':
-      return t('chat.status.executing')
-    case 'FINISHED':
-      return t('chat.status.completed')
-    case 'IDLE':
-    default:
-      return t('chat.status.pending')
-  }
-}
-
-// Nested sub-plans detection
-const hasNestedSubPlans = (agent: AgentExecutionRecord): boolean => {
-  return agent.thinkActSteps?.some(step => step.subPlanExecutionRecord) ?? false
-}
-
-const getNestedSubPlans = (agent: AgentExecutionRecord): ThinkActRecord[] => {
-  return agent.thinkActSteps?.filter(step => step.subPlanExecutionRecord) ?? []
 }
 
 // Event handlers
-const handleSubPlanClick = () => {
+const handleSubPlanClick = (event?: Event) => {
+  console.log('[RecursiveSubPlan] handleSubPlanClick called', {
+    subPlanIndex: props.subPlanIndex,
+    subPlanId: props.subPlan.currentPlanId,
+    eventTarget: event?.target,
+  })
   emit('sub-plan-selected', -1, props.subPlanIndex, props.subPlan)
-}
-
-const handleSubPlanAgentClick = (agentIndex: number, agent: AgentExecutionRecord) => {
-  const stepId = agent.stepId ?? `subplan-${props.subPlanIndex}-agent-${agentIndex}`
-  emit('step-selected', stepId)
-}
-
-const handleThinkActStepClick = (
-  agentIndex: number,
-  _stepIndex: number,
-  agent: AgentExecutionRecord
-) => {
-  const stepId = agent.stepId ?? `subplan-${props.subPlanIndex}-agent-${agentIndex}`
-  emit('step-selected', stepId)
 }
 
 const handleNestedSubPlanSelected = (
@@ -372,9 +282,10 @@ const handleNestedStepSelected = (stepId: string) => {
   background: rgba(102, 126, 234, 0.05);
   border: 1px solid rgba(102, 126, 234, 0.1);
   border-radius: 6px;
-  padding: 12px;
+  padding: 0;
   margin-bottom: 8px;
   transition: all 0.2s ease;
+  overflow: hidden;
 
   &:hover {
     background: rgba(102, 126, 234, 0.1);
@@ -399,7 +310,7 @@ const handleNestedStepSelected = (stepId: string) => {
   // Nesting level styles
   &.nesting-level-1 {
     margin-left: 16px;
-    border-left: 3px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
+    border-left: 3px solid rgba(102, 126, 234, 0.3);
   }
 
   &.nesting-level-2 {
@@ -416,47 +327,42 @@ const handleNestedStepSelected = (stepId: string) => {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    padding: 12px 16px;
+    background: rgba(255, 255, 255, 0.02);
     cursor: pointer;
+    transition: background 0.2s ease;
+    margin-bottom: 8px;
+    user-select: none;
+    position: relative;
+    z-index: 1;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    &:active {
+      background: rgba(255, 255, 255, 0.08);
+    }
 
     .sub-plan-info {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
       flex: 1;
 
-      .sub-plan-status-icon {
-        font-size: 16px;
-
-        &.completed {
-          color: var(--success, #22c55e);
-        }
-
-        &.running {
-          color: var(--accent-primary, #667eea);
-        }
-
-        &.in-progress {
-          color: var(--warning, #fbbf24);
-        }
-
-        &.pending {
-          color: #9ca3af;
-        }
-      }
-
+      pointer-events: none;
       .sub-plan-details {
         .sub-plan-title {
           font-weight: 600;
-          color: var(--text-primary, #ffffff);
-          font-size: 13px;
+          color: var(--accent-primary, #667eea);
+          font-size: 14px;
           margin-bottom: 2px;
           display: flex;
           align-items: center;
           gap: 6px;
 
           .nesting-level {
-            color: #888888;
+            color: var(--accent-primary, #667eea);
             font-size: 10px;
             font-weight: 400;
             background: rgba(136, 136, 136, 0.2);
@@ -477,6 +383,12 @@ const handleNestedStepSelected = (stepId: string) => {
       display: flex;
       align-items: center;
       gap: 8px;
+        .request-content {
+          margin: 4px 0 0 0;
+          padding: 4px 0px;
+          color: #aaaaaa;
+          font-size: 12px;
+          font-style: italic;
 
       .trigger-tool {
         display: flex;
@@ -527,32 +439,9 @@ const handleNestedStepSelected = (stepId: string) => {
     }
   }
 
-  .sub-plan-progress {
-    margin-bottom: 8px;
-
-    .progress-info {
-      .progress-text {
-        color: var(--text-tertiary, #aaaaaa);
-        font-size: 10px;
-        margin-bottom: 4px;
-      }
-
-      .progress-bar {
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 4px;
-        height: 4px;
-        overflow: hidden;
-
-        .progress-fill {
-          height: 100%;
-          background: linear-gradient(90deg, var(--accent-primary, #667eea), #09df75);
-          transition: width 0.3s ease;
-          border-radius: 4px;
-        }
-      }
-    }
-  }
   .sub-plan-agents-steps {
+    padding: 12px;
+
     .agents-steps-header {
       color: var(--text-tertiary, #aaaaaa);
       font-size: 11px;
@@ -647,7 +536,8 @@ const handleNestedStepSelected = (stepId: string) => {
         .sub-agent-execution-info {
           margin-left: 22px;
 
-          .agent-result, .agent-error {
+          .agent-result,
+          .agent-error {
             margin-bottom: 8px;
 
             &:last-child {
@@ -679,7 +569,8 @@ const handleNestedStepSelected = (stepId: string) => {
               }
             }
 
-            .result-content, .error-content {
+            .result-content,
+            .error-content {
               margin: 0;
               padding: 6px;
               background: rgba(0, 0, 0, 0.2);
@@ -764,28 +655,28 @@ const handleNestedStepSelected = (stepId: string) => {
             }
           }
 
-          .nested-sub-plans, .direct-sub-plans {
+          .nested-sub-plans {
             margin-top: 12px;
 
-            .nested-sub-plans-header, .direct-sub-plans-header {
+            .nested-sub-plans-header {
               display: flex;
               align-items: center;
-              gap: 6px;
-              margin-bottom: 8px;
+              gap: 8px;
+              margin-bottom: 12px;
 
-              .nested-icon, .direct-icon {
+              .nested-icon {
                 font-size: 12px;
                 color: var(--warning, #fbbf24);
               }
 
-              .nested-label, .direct-label {
+              .nested-label {
                 color: var(--text-tertiary, #aaaaaa);
                 font-size: 11px;
                 font-weight: 500;
               }
             }
 
-            .nested-sub-plans-list, .direct-sub-plans-list {
+            .nested-sub-plans-list {
               display: flex;
               flex-direction: column;
               gap: 6px;
