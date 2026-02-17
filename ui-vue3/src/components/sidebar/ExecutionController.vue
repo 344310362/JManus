@@ -1379,8 +1379,8 @@ defineExpose({
     color: var(--text-secondary, #ffffff);
     line-height: 1.4;
     padding: 6px 8px;
-    background: rgba(102, 126, 234, 0.1);
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    background: var(--accent-surface-2);
+    border: 1px solid var(--accent-surface-3);
     border-radius: 4px;
   }
 
@@ -1412,14 +1412,14 @@ defineExpose({
       gap: 4px;
 
       .required {
-        color: #ff6b6b;
+        color: var(--error-text);
         font-weight: bold;
       }
     }
 
     .parameter-input {
       width: 100%;
-      background: rgba(0, 0, 0, 0.3);
+      background: var(--overlay-medium);
       border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
       border-radius: 6px;
       color: var(--text-primary);
@@ -1431,7 +1431,7 @@ defineExpose({
       &:focus {
         outline: none;
         border-color: var(--accent-primary, #667eea);
-        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        box-shadow: 0 0 0 2px var(--accent-surface-3);
       }
 
       &::placeholder {
@@ -1439,12 +1439,12 @@ defineExpose({
       }
 
       &.error {
-        border-color: #ff6b6b;
+        border-color: var(--error-text);
         box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.2);
       }
 
       &.viewing-history {
-        background: rgba(102, 126, 234, 0.15);
+        background: var(--accent-glow);
         border-color: rgba(102, 126, 234, 0.4);
       }
     }
@@ -1469,7 +1469,7 @@ defineExpose({
 
       .history-position {
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-tertiary);
         min-width: 32px;
         text-align: center;
         flex-shrink: 0;
@@ -1482,17 +1482,17 @@ defineExpose({
         width: 24px;
         height: 24px;
         padding: 0;
-        background: rgba(102, 126, 234, 0.2);
-        border: 1px solid rgba(102, 126, 234, 0.3);
+        background: var(--accent-surface-3);
+        border: 1px solid var(--accent-border-3);
         border-radius: 4px;
-        color: rgba(255, 255, 255, 0.8);
+        color: var(--text-secondary);
         cursor: pointer;
         transition: all 0.2s ease;
         flex-shrink: 0;
 
         &:hover:not(:disabled) {
-          background: rgba(102, 126, 234, 0.3);
-          border-color: rgba(102, 126, 234, 0.5);
+          background: var(--accent-border-3);
+          border-color: var(--accent-border-3);
           color: rgba(255, 255, 255, 1);
         }
 
@@ -1515,16 +1515,16 @@ defineExpose({
         width: 24px;
         height: 24px;
         padding: 0;
-        background: rgba(102, 126, 234, 0.2);
-        border: 1px solid rgba(102, 126, 234, 0.3);
+        background: var(--accent-surface-3);
+        border: 1px solid var(--accent-border-3);
         border-radius: 4px;
-        color: rgba(255, 255, 255, 0.8);
+        color: var(--text-secondary);
         cursor: pointer;
         transition: all 0.2s ease;
 
         &:hover:not(:disabled) {
-          background: rgba(102, 126, 234, 0.3);
-          border-color: rgba(102, 126, 234, 0.5);
+          background: var(--accent-border-3);
+          border-color: var(--accent-border-3);
           color: white;
           transform: translateY(-1px);
         }
@@ -1541,7 +1541,7 @@ defineExpose({
     }
 
     .parameter-error {
-      color: #ff6b6b;
+      color: var(--error-text);
       font-size: 11px;
       margin-top: 4px;
       display: block;
@@ -1585,8 +1585,8 @@ defineExpose({
   line-height: 1.4;
   margin: 0;
   padding: 8px 12px;
-  background: rgba(102, 126, 234, 0.1);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-2);
+  border: 1px solid var(--accent-surface-3);
   border-radius: 6px;
 }
 
@@ -1596,7 +1596,7 @@ defineExpose({
 
 .internal-call-wrapper,
 .mcp-call-wrapper {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--overlay-light);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
   padding: 12px;
@@ -1622,7 +1622,7 @@ defineExpose({
     font-size: 12px;
     margin-bottom: 8px;
     word-break: break-all;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--overlay-medium);
     padding: 6px 8px;
     border-radius: 4px;
     border: 1px solid rgba(100, 181, 246, 0.2);
@@ -1645,7 +1645,7 @@ defineExpose({
     }
 
     .example-code {
-      background: rgba(0, 0, 0, 0.4);
+      background: var(--overlay-medium);
       border: 1px solid var(--border-primary);
       border-radius: 4px;
       padding: 8px;
@@ -1661,7 +1661,7 @@ defineExpose({
 }
 
 .tab-container {
-  background: rgba(0, 0, 0, 0.2);
+  background: var(--overlay-light);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
   overflow: hidden;
@@ -1669,8 +1669,8 @@ defineExpose({
 
 .tab-header {
   display: flex;
-  background: rgba(0, 0, 0, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--overlay-medium);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .tab-button {
@@ -1683,19 +1683,19 @@ defineExpose({
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--border-default);
 
   &:last-child {
     border-right: none;
   }
 
   &:hover {
-    background: rgba(102, 126, 234, 0.1);
+    background: var(--accent-surface-2);
     color: rgba(var(--text-primary-rgb), 0.8);
   }
 
   &.active {
-    background: rgba(102, 126, 234, 0.2);
+    background: var(--accent-surface-3);
     color: var(--accent-primary, #667eea);
     font-weight: 600;
   }
@@ -1730,7 +1730,7 @@ defineExpose({
     font-size: 12px;
     margin-bottom: 8px;
     word-break: break-all;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--overlay-medium);
     padding: 6px 8px;
     border-radius: 4px;
     border: 1px solid rgba(100, 181, 246, 0.2);
@@ -1753,7 +1753,7 @@ defineExpose({
     }
 
     .example-code {
-      background: rgba(0, 0, 0, 0.4);
+      background: var(--overlay-medium);
       border: 1px solid var(--border-primary);
       border-radius: 4px;
       padding: 8px;
@@ -1792,7 +1792,7 @@ defineExpose({
   }
 
   &.stop-button {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    background: linear-gradient(135deg, var(--error-text) 0%, #ee5a6f 100%);
     color: white;
 
     &:hover:not(:disabled) {

@@ -86,7 +86,6 @@ function render(props: QiankunProps = {}) {
   instance.use(Vue3ColorPicker)
   instance.use(i18n)
   instance.use(router)
-  instance.use(Vue3ColorPicker)
   // Initialize message dialog singleton early to ensure watchEffect is registered
 // This ensures plan execution tracking works regardless of which route is accessed
   useMessageDialogSingleton()

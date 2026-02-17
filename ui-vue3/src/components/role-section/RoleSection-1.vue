@@ -137,7 +137,7 @@
     background: linear-gradient(135deg, #f8f9fa 0%, var(--bg-input, #ffffff) 100%);
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px var(--overlay-subtle);
     transition: all 0.3s ease;
     border: 1px solid #e9ecef;
     cursor: pointer;
@@ -145,7 +145,7 @@
 
   .role-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 25px var(--overlay-subtle);
     border-color: var(--accent-primary, #667eea);
   }
 
@@ -193,7 +193,7 @@
   }
 
   .task-item:hover {
-    background: rgba(102, 126, 234, 0.1);
+    background: var(--accent-surface-2);
     transform: translateX(5px);
   }
 

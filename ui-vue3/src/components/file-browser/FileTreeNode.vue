@@ -321,7 +321,7 @@ onUnmounted(() => {
   background: rgba(20, 20, 20, 0.95);
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
   backdrop-filter: blur(20px);
   padding: 6px;
   min-width: 160px;

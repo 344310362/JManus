@@ -74,7 +74,8 @@ public class NewRepoPlanExecutionRecorder implements PlanExecutionRecorder {
 	 */
 	@Transactional
 	public Long recordPlanExecutionStart(String currentPlanId, String title, String userRequset,
-			List<ExecutionStep> executionSteps, String parentPlanId, String rootPlanId, String toolcallId) {
+			List<ExecutionStep> executionSteps, String parentPlanId, String rootPlanId, String toolcallId,
+			String conversationId) {
 		try {
 			// Check if plan already exists
 			Optional<PlanExecutionRecordEntity> existingPlanOpt = planExecutionRecordRepository
@@ -97,6 +98,7 @@ public class NewRepoPlanExecutionRecorder implements PlanExecutionRecorder {
 			planExecutionRecordEntity.setStartTime(LocalDateTime.now());
 			planExecutionRecordEntity.setTitle(title);
 			planExecutionRecordEntity.setUserRequest(userRequset);
+			planExecutionRecordEntity.setConversationId(conversationId);
 
 			// Process execution steps and create/update AgentExecutionRecordEntity
 			// instances

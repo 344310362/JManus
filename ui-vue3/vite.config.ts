@@ -37,7 +37,16 @@ export default defineConfig(({ mode }) => {
       open: true, // Automatically open browser on startup
       host: true, // Allow external access
       proxy: {
+        '/ws/code-agent': {
+          target: 'http://localhost:18080',
+          ws: true,
+          changeOrigin: true,
+        },
         '/api': {
+          target: 'http://localhost:18080',
+          changeOrigin: true,
+        },
+        '/share': {
           target: 'http://localhost:18080',
           changeOrigin: true,
         },

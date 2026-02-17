@@ -372,6 +372,7 @@ public class DynamicAgent extends ReActAgent {
 
 				// Use streaming response handler for better user experience and content
 				// merging
+				long llmCallStart = System.nanoTime();
 				Flux<ChatResponse> responseFlux = chatClient.prompt(userPrompt)
 					.toolCallbacks(callbacks)
 					.stream()
@@ -387,6 +388,9 @@ public class DynamicAgent extends ReActAgent {
 				String responseByLLm = streamResult.getEffectiveText();
 				int finalInputTokenCount = streamResult.getInputTokenCount();
 				int finalOutputTokenCount = streamResult.getOutputTokenCount();
+
+				log.info("[DynamicAgent Timing] LLM call completed: {}ms, inputTokens={}, outputTokens={}",
+						(System.nanoTime() - llmCallStart) / 1_000_000, finalInputTokenCount, finalOutputTokenCount);
 
 				agentStreamingResult = new AgentStreamingResult(toolCalls, responseByLLm, finalInputTokenCount,
 						finalOutputTokenCount);
@@ -740,6 +744,7 @@ public class DynamicAgent extends ReActAgent {
 
 	@Override
 	protected CompletableFuture<AgentExecResult> act() {
+		long actStart = System.nanoTime();
 		// Check for interruption before starting action process
 		if (agentInterruptionHelper != null && !agentInterruptionHelper.checkInterruptionAndContinue(getRootPlanId())) {
 			log.info("Agent {} action process interrupted for rootPlanId: {}", getName(), getRootPlanId());
@@ -759,7 +764,10 @@ public class DynamicAgent extends ReActAgent {
 			}
 
 			// Unified call to processTools() - chain the async result
-			return processTools(agentStreamingResult.getToolCalls());
+			return processTools(agentStreamingResult.getToolCalls()).whenComplete((result, ex) -> {
+				log.info("[DynamicAgent Timing] Tool execution completed: {}ms",
+						(System.nanoTime() - actStart) / 1_000_000);
+			});
 		}
 		catch (Exception e) {
 			log.error("Error executing tools: {}", e.getMessage(), e);
@@ -1224,7 +1232,22 @@ public class DynamicAgent extends ReActAgent {
 				}
 			}
 			catch (Exception e2) {
-				log.warn("Failed to parse tool arguments as JSON: {}. Using empty map.", arguments, e);
+				// Last resort: try to repair truncated JSON (e.g., from LLM output token limit)
+				try {
+					String repairedJson = repairTruncatedJson(cleanedArguments);
+					if (repairedJson != null) {
+						Object parsed = objectMapper.readValue(repairedJson, Object.class);
+						if (parsed instanceof Map) {
+							log.warn("Repaired truncated JSON for tool arguments (content may be incomplete)");
+							return (Map<String, Object>) parsed;
+						}
+					}
+				}
+				catch (Exception e3) {
+					// Repair also failed
+				}
+				log.warn("Failed to parse tool arguments as JSON: {}. Using empty map.",
+						arguments.length() > 500 ? arguments.substring(0, 500) + "...(truncated, total " + arguments.length() + " chars)" : arguments, e);
 				return new HashMap<>();
 			}
 		}
@@ -1341,6 +1364,79 @@ public class DynamicAgent extends ReActAgent {
 		}
 
 		return -1;
+	}
+
+	/**
+	 * Attempt to repair truncated JSON by closing unclosed strings and braces. This
+	 * handles the common case where LLM output is cut off by token limits mid-JSON.
+	 * @param input The truncated JSON string
+	 * @return Repaired JSON string, or null if repair is not possible
+	 */
+	private String repairTruncatedJson(String input) {
+		if (input == null || input.trim().isEmpty()) {
+			return null;
+		}
+
+		String trimmed = input.trim();
+		// Only attempt repair on JSON objects
+		if (!trimmed.startsWith("{")) {
+			return null;
+		}
+
+		StringBuilder sb = new StringBuilder(trimmed);
+
+		// Track state: are we inside a string?
+		boolean inString = false;
+		boolean escaped = false;
+		// Track nesting depth with a stack of opening chars
+		java.util.Deque<Character> stack = new java.util.ArrayDeque<>();
+
+		for (int i = 0; i < trimmed.length(); i++) {
+			char c = trimmed.charAt(i);
+			if (escaped) {
+				escaped = false;
+				continue;
+			}
+			if (c == '\\' && inString) {
+				escaped = true;
+				continue;
+			}
+			if (c == '"') {
+				inString = !inString;
+				continue;
+			}
+			if (!inString) {
+				if (c == '{' || c == '[') {
+					stack.push(c);
+				}
+				else if (c == '}' || c == ']') {
+					if (!stack.isEmpty()) {
+						stack.pop();
+					}
+				}
+			}
+		}
+
+		// Close unclosed string
+		if (inString) {
+			sb.append('"');
+		}
+
+		// Close unclosed braces/brackets in reverse order
+		while (!stack.isEmpty()) {
+			char open = stack.pop();
+			sb.append(open == '{' ? '}' : ']');
+		}
+
+		String repaired = sb.toString();
+		// Validate the repaired JSON
+		try {
+			objectMapper.readTree(repaired);
+			return repaired;
+		}
+		catch (Exception e) {
+			return null;
+		}
 	}
 
 	/**
@@ -2338,6 +2434,17 @@ public class DynamicAgent extends ReActAgent {
 		}
 
 		ToolCallBackContext context = toolCallBackContext.get(lookupKey);
+		// Fallback: search by unqualified tool name if direct lookup fails
+		if (context == null) {
+			for (Map.Entry<String, ToolCallBackContext> entry : toolCallBackContext.entrySet()) {
+				String key = entry.getKey();
+				if (key.equals(toolCallName) || key.endsWith("-" + toolCallName)) {
+					context = entry.getValue();
+					log.debug("Found tool '{}' via fallback lookup with key '{}'", toolCallName, key);
+					break;
+				}
+			}
+		}
 		if (context != null) {
 			ToolCallBiFunctionDef<?> functionInstance = context.getFunctionInstance();
 			// Use getCurrentToolStateStringWithErrorHandler which provides unified error

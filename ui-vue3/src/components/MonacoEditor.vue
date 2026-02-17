@@ -6,6 +6,24 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch, nextTick } from 'vue'
+
+// Monaco Editor worker 配置（Vite 环境必须显式设置）
+import editorWorker from 'monaco-editor/esm/vs/editor/editor.worker?worker'
+import jsonWorker from 'monaco-editor/esm/vs/language/json/json.worker?worker'
+import cssWorker from 'monaco-editor/esm/vs/language/css/css.worker?worker'
+import htmlWorker from 'monaco-editor/esm/vs/language/html/html.worker?worker'
+import tsWorker from 'monaco-editor/esm/vs/language/typescript/ts.worker?worker'
+
+self.MonacoEnvironment = {
+  getWorker(_, label) {
+    if (label === 'json') return new jsonWorker()
+    if (label === 'css' || label === 'scss' || label === 'less') return new cssWorker()
+    if (label === 'html' || label === 'handlebars' || label === 'razor') return new htmlWorker()
+    if (label === 'typescript' || label === 'javascript') return new tsWorker()
+    return new editorWorker()
+  }
+}
+
 import * as monaco from 'monaco-editor'
 
 interface Props {
@@ -33,11 +51,39 @@ let editor: monaco.editor.IStandaloneCodeEditor | null = null
 const createEditor = () => {
   if (!editorContainer.value) return
 
+  // Define custom theme before creating editor — Monaco requires literal hex colors
+  monaco.editor.defineTheme('custom-dark', {
+    base: 'vs-dark',
+    inherit: true,
+    rules: [
+      { token: 'string', foreground: '34d399' },
+      { token: 'number', foreground: '60a5fa' },
+      { token: 'keyword', foreground: 'a78bfa' },
+      { token: 'comment', foreground: '6b7280' },
+      { token: 'operator', foreground: 'fbbf24' },
+      { token: 'delimiter', foreground: 'fbbf24' }
+    ],
+    colors: {
+      'editor.background': '#0d0d0d',
+      'editor.foreground': '#f9fafb',
+      'editor.lineHighlightBackground': '#1a1a2e',
+      'editor.selectionBackground': '#3b82f640',
+      'editor.inactiveSelectionBackground': '#4b5563',
+      'editorCursor.foreground': '#f9fafb',
+      'editorWhitespace.foreground': '#6b7280',
+      'editorIndentGuide.background': '#2a2a3a',
+      'editorIndentGuide.activeBackground': '#6b7280',
+      'editorLineNumber.foreground': '#6b7280',
+      'editorLineNumber.activeForeground': '#f9fafb',
+      'editorGutter.background': '#0d0d0d'
+    }
+  })
+
   // Configure Monaco editor
   editor = monaco.editor.create(editorContainer.value, {
     value: props.modelValue,
     language: props.language,
-    theme: 'vs-dark',
+    theme: 'custom-dark',
     automaticLayout: true,
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
@@ -68,36 +114,6 @@ const createEditor = () => {
     emit('update:modelValue', value)
     emit('change', value)
   })
-
-  // Custom theme
-  monaco.editor.defineTheme('custom-dark', {
-    base: 'vs-dark',
-    inherit: true,
-    rules: [
-      { token: 'string', foreground: '#34d399' },
-      { token: 'number', foreground: '#60a5fa' },
-      { token: 'keyword', foreground: '#a78bfa' },
-      { token: 'comment', foreground: '#6b7280' },
-      { token: 'operator', foreground: 'var(--warning, #fbbf24)' },
-      { token: 'delimiter', foreground: 'var(--warning, #fbbf24)' }
-    ],
-    colors: {
-      'editor.background': 'var(--scrollbar-track, rgba(255, 255, 255, 0.05))',
-      'editor.foreground': '#f9fafb',
-      'editor.lineHighlightBackground': 'rgba(255, 255, 255, 0.08)',
-      'editor.selectionBackground': 'var(--info, #3b82f6)',
-      'editor.inactiveSelectionBackground': '#4b5563',
-      'editorCursor.foreground': '#f9fafb',
-      'editorWhitespace.foreground': '#6b7280',
-      'editorIndentGuide.background': 'rgba(255, 255, 255, 0.1)',
-      'editorIndentGuide.activeBackground': '#6b7280',
-      'editorLineNumber.foreground': '#9ca3af',
-      'editorLineNumber.activeForeground': '#f9fafb',
-      'editorGutter.background': 'var(--scrollbar-track, rgba(255, 255, 255, 0.05))'
-    }
-  })
-
-  editor.updateOptions({ theme: 'custom-dark' })
 }
 
 // Update editor content
@@ -114,6 +130,16 @@ const updateContent = (content: string) => {
 watch(() => props.modelValue, (newValue) => {
   if (editor) {
     updateContent(newValue)
+  }
+})
+
+// Watch for language changes
+watch(() => props.language, (lang) => {
+  if (editor) {
+    const model = editor.getModel()
+    if (model && lang) {
+      monaco.editor.setModelLanguage(model, lang)
+    }
   }
 })
 

@@ -5,10 +5,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SmRpcAutoConfig {
-    @Bean
-    public LoginUserRequestInterceptor loginUserRequestInterceptor() {
 
-        return new LoginUserRequestInterceptor();
-    }
+	@Bean
+	public LoginUserRequestInterceptor loginUserRequestInterceptor() {
+
+		return new LoginUserRequestInterceptor();
+	}
 
 }

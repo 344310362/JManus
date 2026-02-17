@@ -371,7 +371,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 4px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
 }
 
@@ -431,7 +431,7 @@ onUnmounted(() => {
 
 .file-tree-panel {
   flex: 0 0 300px;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--border-default);
   overflow-y: auto;
 }
 
@@ -526,7 +526,7 @@ onUnmounted(() => {
 }
 
 .actual-error {
-  color: #ff6b6b;
+  color: var(--error-text);
 }
 
 .file-tree {
@@ -537,7 +537,7 @@ onUnmounted(() => {
   display: flex;
   flex-direction: column;
   padding: 10px 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
 }
 
@@ -750,13 +750,13 @@ onUnmounted(() => {
 
 .markdown-content :deep(h1) {
   font-size: 2em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid var(--border-primary);
   padding-bottom: 0.3em;
 }
 
 .markdown-content :deep(h2) {
   font-size: 1.5em;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
   padding-bottom: 0.3em;
 }
 
@@ -769,7 +769,7 @@ onUnmounted(() => {
 }
 
 .markdown-content :deep(code) {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--border-default);
   padding: 2px 6px;
   border-radius: 3px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
@@ -777,7 +777,7 @@ onUnmounted(() => {
 }
 
 .markdown-content :deep(pre) {
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--overlay-medium);
   padding: 12px;
   border-radius: 6px;
   overflow-x: auto;
@@ -800,10 +800,10 @@ onUnmounted(() => {
 }
 
 .markdown-content :deep(blockquote) {
-  border-left: 4px solid rgba(255, 255, 255, 0.3);
+  border-left: 4px solid var(--scrollbar-thumb-hover);
   padding-left: 1em;
   margin: 1em 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
 }
 
 .markdown-content :deep(a) {
@@ -823,7 +823,7 @@ onUnmounted(() => {
 
 .markdown-content :deep(th),
 .markdown-content :deep(td) {
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-primary);
   padding: 8px 12px;
   text-align: left;
 }
@@ -835,7 +835,7 @@ onUnmounted(() => {
 
 .markdown-content :deep(hr) {
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid var(--border-primary);
   margin: 2em 0;
 }
 

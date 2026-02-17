@@ -171,14 +171,14 @@ const selectOption = (option: { id: string }) => {
 }
 
 .select-btn:hover {
-  background: rgba(102, 126, 234, 0.15);
+  background: var(--accent-glow);
   border-color: var(--accent-secondary, #7c9eff);
   color: var(--accent-tertiary, #a3bffa);
-  box-shadow: 0 0 15px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 0 15px var(--accent-surface-3);
 }
 
 .select-btn:focus {
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-border-3);
 }
 
 .current-option {
@@ -214,8 +214,8 @@ const selectOption = (option: { id: string }) => {
   border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
   border-radius: 8px;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(102, 126, 234, 0.2);
+    0 8px 32px var(--overlay-medium),
+    0 0 0 1px var(--accent-surface-3);
   min-width: 300px;
 }
 
@@ -231,11 +231,11 @@ const selectOption = (option: { id: string }) => {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+  border-bottom: 1px solid var(--accent-surface-3);
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary, #ffffff);
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(102, 126, 234, 0.05));
+  background: linear-gradient(135deg, var(--accent-surface-2), var(--accent-surface-1));
 }
 
 .close-btn {
@@ -277,7 +277,7 @@ const selectOption = (option: { id: string }) => {
 }
 
 .select-option.active {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(102, 126, 234, 0.1));
+  background: linear-gradient(135deg, var(--accent-surface-3), var(--accent-surface-2));
   color: var(--accent-secondary, #7c9eff);
   border-left: 3px solid var(--accent-primary, #667eea);
   padding-left: 13px;

@@ -164,6 +164,8 @@ public class DynamicToolPlanExecutor extends AbstractPlanExecutor {
 			Map<String, Object> initialAgentSetting, String expectedReturnInfo, ExecutionStep step, String modelName,
 			List<String> selectedToolKeys, int planDepth, String conversationId, ExecutionContext context) {
 
+		long t0 = System.nanoTime();
+
 		String name = "ConfigurableDynaAgent";
 		String description = "A configurable dynamic agent";
 		String nextStepPrompt = "Based on the current environment information and prompt to make a next step decision";
@@ -211,8 +213,13 @@ public class DynamicToolPlanExecutor extends AbstractPlanExecutor {
 					lynxeProperties.getMaxSteps());
 		}
 
+		log.info("[DynamicToolPlanExecutor Timing] Agent created: {}ms", (System.nanoTime() - t0) / 1_000_000);
+
 		Map<String, ToolCallBackContext> toolCallbackMap = planningFactory.toolCallbackMap(planId, rootPlanId,
-				expectedReturnInfo);
+				expectedReturnInfo, selectedToolKeys);
+
+		log.info("[DynamicToolPlanExecutor Timing] Tool callback map built ({} tools): {}ms",
+				toolCallbackMap.size(), (System.nanoTime() - t0) / 1_000_000);
 		agent.setToolCallbackProvider(new ToolCallbackProvider() {
 			@Override
 			public Map<String, ToolCallBackContext> getToolCallBackContext() {

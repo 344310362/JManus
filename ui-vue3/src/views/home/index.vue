@@ -566,16 +566,16 @@ const selectPlan = async (plan: PlanItem) => {
 .input-container {
   position: relative;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 16px;
   padding: 20px;
   backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px var(--overlay-medium);
   transition: all 0.3s ease;
 
   &:focus-within {
     border-color: var(--accent-primary, #667eea);
-    box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+    box-shadow: 0 8px 32px var(--accent-surface-3);
   }
 }
 
@@ -682,7 +682,7 @@ const selectPlan = async (plan: PlanItem) => {
   align-items: center;
   padding: 16px 24px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
   gap: 16px;
 
   .back-button {

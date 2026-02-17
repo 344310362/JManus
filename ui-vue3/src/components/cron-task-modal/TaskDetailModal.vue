@@ -353,7 +353,7 @@ watch(
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--overlay-heavy);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -362,14 +362,14 @@ watch(
 }
 
 .modal-container {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
+  background: linear-gradient(135deg, var(--accent-surface-2), rgba(118, 75, 162, 0.15));
   border: 1px solid var(--border-primary);
   border-radius: 16px;
   width: 90%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
 }
 
 .modal-header {
@@ -377,7 +377,7 @@ watch(
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .modal-header h3 {
@@ -458,8 +458,8 @@ watch(
 .form-textarea:focus,
 .form-select:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.1);
+  border-color: var(--accent-border-3);
+  box-shadow: 0 0 0 2px var(--accent-surface-2);
 }
 
 .form-input::placeholder,
@@ -516,7 +516,7 @@ watch(
 }
 
 .template-btn.active {
-  background: rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-3);
   border-color: var(--selection-bg, rgba(102, 126, 234, 0.3));
   color: var(--accent-primary, #667eea);
 }
@@ -544,7 +544,7 @@ watch(
 
 .modal-footer {
   padding: 20px 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-default);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -573,7 +573,7 @@ watch(
 }
 
 .save-btn {
-  background: rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-3);
   border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
   color: var(--accent-primary, #667eea);
 }
@@ -646,11 +646,11 @@ watch(
 }
 
 input:checked + .toggle-slider {
-  background-color: rgba(102, 126, 234, 0.6);
+  background-color: var(--accent-primary);
 }
 
 input:focus + .toggle-slider {
-  box-shadow: 0 0 1px rgba(102, 126, 234, 0.6);
+  box-shadow: 0 0 1px var(--accent-primary);
 }
 
 input:checked + .toggle-slider:before {

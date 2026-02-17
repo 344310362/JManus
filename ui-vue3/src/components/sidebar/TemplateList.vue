@@ -525,8 +525,8 @@ onUnmounted(() => {
 
 .organization-select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-surface-3);
 }
 
 .organization-select option {
@@ -590,8 +590,8 @@ onUnmounted(() => {
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-surface-3);
 }
 
 .search-clear-btn {
@@ -645,7 +645,7 @@ onUnmounted(() => {
 .retry-btn {
   padding: 8px 16px;
   background: rgba(var(--bg-primary-rgb), 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-primary);
   border-radius: 4px;
   color: var(--text-primary);
   cursor: pointer;
@@ -667,7 +667,7 @@ onUnmounted(() => {
   color: var(--text-secondary);
   font-size: 13px;
   font-weight: 600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
   cursor: pointer;
   user-select: none;
   transition: background-color 0.2s ease;
@@ -738,7 +738,7 @@ onUnmounted(() => {
 
 .sidebar-content-list-item.grouped-item {
   margin-left: 16px;
-  border-left: 2px solid rgba(102, 126, 234, 0.3);
+  border-left: 2px solid var(--accent-border-3);
 }
 
 .sidebar-content-list-item:hover {
@@ -748,13 +748,13 @@ onUnmounted(() => {
 }
 
 .sidebar-content-list-item.sidebar-content-list-item-active {
-  border: 2px solid #667eea;
-  background: rgba(102, 126, 234, 0.1);
+  border: 2px solid var(--accent-primary);
+  background: var(--accent-surface-2);
 }
 
 .task-icon {
   margin-right: 12px;
-  color: #667eea;
+  color: var(--accent-primary);
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -810,7 +810,7 @@ onUnmounted(() => {
 
 .delete-task-btn:hover {
   background: rgba(255, 0, 0, 0.2);
-  color: #ff6b6b;
+  color: var(--error-text);
 }
 
 @keyframes spin {
@@ -829,7 +829,7 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--overlay-heavy);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -838,12 +838,12 @@ onUnmounted(() => {
 }
 
 .confirm-modal {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, var(--accent-surface-2), rgba(118, 75, 162, 0.15));
+  border: 1px solid var(--border-default);
   border-radius: 16px;
   width: 90%;
   max-width: 480px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
   overflow: hidden;
 }
 
@@ -852,7 +852,7 @@ onUnmounted(() => {
   align-items: center;
   gap: 12px;
   padding: 24px 24px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .warning-icon {
@@ -864,7 +864,7 @@ onUnmounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .confirm-content {
@@ -873,7 +873,7 @@ onUnmounted(() => {
 
 .confirm-content p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   line-height: 1.6;
   font-size: 14px;
 }
@@ -903,7 +903,7 @@ onUnmounted(() => {
 .confirm-btn.cancel-btn {
   background: rgba(156, 163, 175, 0.1);
   border-color: rgba(156, 163, 175, 0.2);
-  color: #9ca3af;
+  color: var(--text-tertiary);
 }
 
 .confirm-btn.cancel-btn:hover {

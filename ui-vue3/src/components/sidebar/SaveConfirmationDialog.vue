@@ -87,7 +87,7 @@ const handleContinueWithoutSave = () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--overlay-heavy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,7 +101,7 @@ const handleContinueWithoutSave = () => {
   min-width: 400px;
   max-width: 500px;
   border: 1px solid var(--border-primary);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px var(--overlay-medium);
 }
 
 .modal-header {
@@ -109,7 +109,7 @@ const handleContinueWithoutSave = () => {
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .modal-header h3 {
@@ -150,7 +150,7 @@ const handleContinueWithoutSave = () => {
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-default);
 }
 
 .btn {

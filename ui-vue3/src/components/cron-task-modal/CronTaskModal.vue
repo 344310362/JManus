@@ -551,7 +551,7 @@ watch(
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--overlay-heavy);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -560,14 +560,14 @@ watch(
 }
 
 .modal-container {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
+  background: linear-gradient(135deg, var(--accent-surface-2), rgba(118, 75, 162, 0.15));
   border: 1px solid var(--border-primary);
   border-radius: 16px;
   width: 90%;
   max-width: 800px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
 }
 
 .modal-header {
@@ -575,7 +575,7 @@ watch(
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .modal-header h3 {
@@ -596,8 +596,8 @@ watch(
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
-  background: rgba(34, 197, 94, 0.1);
-  border: 1px solid rgba(34, 197, 94, 0.2);
+  background: var(--success-border);
+  border: 1px solid var(--success-border);
   border-radius: 8px;
   color: var(--success, #22c55e);
   font-size: 14px;
@@ -607,8 +607,8 @@ watch(
 }
 
 .add-task-btn:hover {
-  background: rgba(34, 197, 94, 0.2);
-  border-color: rgba(34, 197, 94, 0.3);
+  background: var(--success-border);
+  border-color: var(--success-border);
   transform: translateY(-1px);
 }
 
@@ -683,10 +683,10 @@ watch(
 }
 
 .task-item:hover {
-  background: rgba(102, 126, 234, 0.15);
+  background: var(--accent-glow);
   border-color: rgba(102, 126, 234, 0.4);
   transform: translateY(-3px);
-  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 8px 32px var(--accent-surface-3);
 }
 
 .task-main {
@@ -714,7 +714,7 @@ watch(
   font-weight: 700;
   color: rgba(var(--text-primary-rgb), 0.95);
   line-height: 1.3;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.8));
+  background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -741,7 +741,7 @@ watch(
 .task-status-badge.inactive {
   background: rgba(156, 163, 175, 0.1);
   border-color: rgba(156, 163, 175, 0.2);
-  color: #9ca3af;
+  color: var(--text-tertiary);
 }
 
 .task-description {
@@ -841,7 +841,7 @@ watch(
 .dropdown-btn {
   background: rgba(156, 163, 175, 0.1);
   border-color: rgba(156, 163, 175, 0.2);
-  color: #9ca3af;
+  color: var(--text-tertiary);
 }
 
 .dropdown-btn:hover {
@@ -860,7 +860,7 @@ watch(
   background: rgba(30, 30, 30, 0.95);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
   backdrop-filter: blur(8px);
   z-index: 100;
   min-width: 140px;
@@ -928,12 +928,12 @@ watch(
 
 /* Confirmation modal styles */
 .confirm-modal {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
+  background: linear-gradient(135deg, var(--accent-surface-2), rgba(118, 75, 162, 0.15));
   border: 1px solid var(--border-primary);
   border-radius: 16px;
   width: 90%;
   max-width: 480px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
   overflow: hidden;
 }
 
@@ -942,7 +942,7 @@ watch(
   align-items: center;
   gap: 12px;
   padding: 24px 24px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .warning-icon {
@@ -993,7 +993,7 @@ watch(
 .confirm-btn.cancel-btn {
   background: rgba(156, 163, 175, 0.1);
   border-color: rgba(156, 163, 175, 0.2);
-  color: #9ca3af;
+  color: var(--text-tertiary);
 }
 
 .confirm-btn.cancel-btn:hover {
@@ -1049,7 +1049,7 @@ watch(
 
 .create-option-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 24px var(--overlay-light);
 }
 
 .create-option-btn .iconify {

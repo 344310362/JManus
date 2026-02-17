@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:zread.ai)",
+      "Bash(npx vue-tsc:*)",
+      "Bash(npx vite build:*)",
+      "Bash(mvn compile:*)",
+      "Bash(mvn spring-javaformat:apply:*)",
+      "Bash(echo:*)",
+      "Bash(pnpm add:*)",
+      "Bash(node bin/replace-hardcoded-colors.mjs:*)"
+    ]
+  }
+}

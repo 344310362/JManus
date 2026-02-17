@@ -451,8 +451,8 @@ onMounted(() => {
 .description-section {
   margin-bottom: 24px;
   padding: 16px;
-  background: rgba(102, 126, 234, 0.1);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-2);
+  border: 1px solid var(--accent-surface-3);
   border-radius: 8px;
   flex-shrink: 0;
 }
@@ -475,7 +475,7 @@ onMounted(() => {
 }
 
 .config-list {
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--border-default);
   padding-right: 24px;
   overflow-y: auto;
 }
@@ -487,7 +487,7 @@ onMounted(() => {
   gap: 12px;
   margin-bottom: 24px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .list-header > div {
@@ -520,7 +520,7 @@ onMounted(() => {
   width: 100%;
   padding: 10px 36px 10px 12px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   font-size: 14px;
   color: rgba(var(--text-primary-rgb), 0.9);
@@ -529,7 +529,7 @@ onMounted(() => {
 
 .search-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
@@ -557,7 +557,7 @@ onMounted(() => {
 .config-card {
   padding: 16px;
   background: rgba(var(--bg-primary-rgb), 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--surface-default);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -567,13 +567,13 @@ onMounted(() => {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   border-color: rgba(var(--text-primary-rgb), 0.15);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px var(--overlay-light);
 }
 
 .config-card.active {
-  border-color: rgba(102, 126, 234, 0.5);
-  background: rgba(102, 126, 234, 0.1);
-  box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.2);
+  border-color: var(--accent-border-3);
+  background: var(--accent-surface-2);
+  box-shadow: 0 0 0 1px var(--accent-surface-3);
 }
 
 .config-card-header {
@@ -746,7 +746,7 @@ onMounted(() => {
   align-items: center;
   margin-bottom: 24px;
   padding-bottom: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .detail-header h3 {
@@ -800,7 +800,7 @@ onMounted(() => {
 
 .action-btn.secondary {
   background: rgba(var(--bg-primary-rgb), 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--surface-strong);
   color: rgba(var(--text-primary-rgb), 0.8);
 }
 
@@ -871,7 +871,7 @@ onMounted(() => {
 
 .btn-secondary {
   background: rgba(var(--bg-primary-rgb), 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--surface-strong);
   color: rgba(var(--text-primary-rgb), 0.8);
 }
 

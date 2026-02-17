@@ -393,7 +393,7 @@ const testConnection = async () => {
   width: 100%;
   padding: 10px 12px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   font-size: 14px;
   color: rgba(var(--text-primary-rgb), 0.9);
@@ -402,7 +402,7 @@ const testConnection = async () => {
 
 .config-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
@@ -418,41 +418,41 @@ const testConnection = async () => {
 }
 
 .config-input select {
-  background: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   padding: 10px 12px;
 }
 
 select.config-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
 select.config-input option {
   background: #2a2a2a;
-  color: rgba(255, 255, 255, 0.95);
+  color: var(--text-primary);
   padding: 8px 12px;
 }
 
 select.config-input option:hover,
 select.config-input option:checked {
-  background: rgba(102, 126, 234, 0.3);
+  background: var(--accent-border-3);
   color: #ffffff;
 }
 
 select.config-input option:disabled,
 select.config-input option[value=''] {
   background: #1a1a1a;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
   font-style: italic;
 }
 
 select.config-input option[value='']:hover {
   background: #1a1a1a;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
 }
 
 .toggle-container {
@@ -496,7 +496,7 @@ select.config-input option[value='']:hover {
   background-color: var(--text-primary);
   transition: all 0.4s ease;
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px var(--overlay-light);
 }
 
 .toggle-switch input:checked + .toggle-slider {
@@ -559,7 +559,7 @@ select.config-input option[value='']:hover {
 .test-connection-btn {
   width: 100%;
   padding: 12px;
-  background: rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-3);
   border: 1px solid rgba(102, 126, 234, 0.4);
   border-radius: 6px;
   font-size: 14px;
@@ -575,7 +575,7 @@ select.config-input option[value='']:hover {
 
 .test-connection-btn:hover:not(:disabled) {
   background: var(--selection-bg, rgba(102, 126, 234, 0.3));
-  border-color: rgba(102, 126, 234, 0.6);
+  border-color: var(--accent-primary);
   transform: translateY(-1px);
 }
 

@@ -399,19 +399,19 @@ onMounted(() => {
 .stat-item {
   display: flex;
   align-items: center;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-subtle);
   padding: 4px 8px;
   border-radius: 4px;
   font-size: 12px;
 }
 
 .stat-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
   margin-right: 4px;
 }
 
 .stat-value {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -421,10 +421,10 @@ onMounted(() => {
 }
 
 .action-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: var(--surface-default);
+  border: 1px solid var(--surface-strong);
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   padding: 6px 12px;
   font-size: 14px;
   cursor: pointer;
@@ -436,9 +436,9 @@ onMounted(() => {
 }
 
 .action-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.95);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: var(--surface-strong);
+  color: var(--text-primary);
+  border-color: var(--text-faint);
 }
 
 .action-btn:disabled {
@@ -452,14 +452,14 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
 }
 
 .loading-spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid #667eea;
+  border: 2px solid var(--scrollbar-thumb-hover);
+  border-top: 2px solid var(--accent-primary);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 16px;
@@ -481,8 +481,8 @@ onMounted(() => {
 }
 
 .template-group {
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-hover);
+  border: 1px solid var(--surface-default);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -492,14 +492,14 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
-  background: rgba(255, 255, 255, 0.05);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-subtle);
+  border-bottom: 1px solid var(--border-default);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .group-header:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--surface-default);
 }
 
 .group-header-left {
@@ -511,7 +511,7 @@ onMounted(() => {
 
 .collapse-icon {
   font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   transition: transform 0.2s ease;
 }
 
@@ -519,22 +519,22 @@ onMounted(() => {
   margin: 0;
   font-size: 16px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .group-count {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.6);
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-tertiary);
+  background: var(--surface-subtle);
   padding: 2px 8px;
   border-radius: 12px;
 }
 
 .group-export-btn {
-  background: rgba(102, 126, 234, 0.15);
-  border: 1px solid rgba(102, 126, 234, 0.3);
+  background: var(--accent-glow);
+  border: 1px solid var(--accent-border-3);
   border-radius: 4px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   padding: 4px 10px;
   font-size: 12px;
   cursor: pointer;
@@ -545,8 +545,8 @@ onMounted(() => {
 }
 
 .group-export-btn:hover:not(:disabled) {
-  background: rgba(102, 126, 234, 0.25);
-  border-color: rgba(102, 126, 234, 0.4);
+  background: var(--accent-surface-3);
+  border-color: var(--accent-border-3);
   color: white;
 }
 
@@ -583,8 +583,8 @@ onMounted(() => {
 }
 
 .template-item {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--surface-hover);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   padding: 12px 16px;
   transition: all 0.3s ease;
@@ -592,8 +592,8 @@ onMounted(() => {
 }
 
 .template-item:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--surface-subtle);
+  border-color: var(--surface-strong);
 }
 
 .template-info {
@@ -614,14 +614,14 @@ onMounted(() => {
   margin: 0;
   font-size: 16px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .template-id {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
   font-family: monospace;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-subtle);
   padding: 2px 6px;
   border-radius: 4px;
 }
@@ -641,11 +641,11 @@ onMounted(() => {
 }
 
 .meta-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
 }
 
 .meta-value {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -655,7 +655,7 @@ onMounted(() => {
   align-items: center;
   justify-content: center;
   padding: 60px 20px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
 }
 
 .message-toast {
@@ -667,7 +667,7 @@ onMounted(() => {
   color: white;
   font-weight: 500;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px var(--overlay-medium);
   transform: translateX(100%);
   animation: slide-in 0.3s ease-out forwards;
 }

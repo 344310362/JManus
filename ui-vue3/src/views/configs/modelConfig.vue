@@ -1103,10 +1103,10 @@ onMounted(() => {
   color: var(--text-secondary);
   gap: 6px;
   padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--surface-hover);
+  border: 1px solid var(--border-primary);
   border-radius: 6px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 13px;
@@ -1202,7 +1202,7 @@ onMounted(() => {
 }
 
 .required {
-  color: #ff6b6b;
+  color: var(--error-text);
 }
 
 .action-btn {
@@ -1533,7 +1533,7 @@ onMounted(() => {
 
 .description-field:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 

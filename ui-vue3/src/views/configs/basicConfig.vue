@@ -1250,7 +1250,7 @@ onMounted(() => {
 
 .config-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
@@ -1281,7 +1281,7 @@ onMounted(() => {
   color: var(--text-primary);
   font-weight: 500;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px var(--overlay-medium);
   transform: translateX(100%);
   animation: slide-in 0.3s ease-out forwards;
 }
@@ -1436,7 +1436,7 @@ onMounted(() => {
 
 .search-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
   width: 260px;
 }
@@ -1473,7 +1473,7 @@ onMounted(() => {
 
 .toggle-btn.active {
   background: var(--accent-primary);
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   color: var(--accent-primary, var(--accent-primary));
 }
 
@@ -1492,7 +1492,7 @@ onMounted(() => {
 
 .action-btn {
   background: rgba(var(--bg-primary-rgb), 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--surface-strong);
   border-radius: 4px;
   color: var(--text-secondary);
   padding: 6px 10px;
@@ -1532,20 +1532,20 @@ onMounted(() => {
 .version-info-section {
   margin-top: 32px;
   padding-top: 32px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-default);
 }
 
 .version-info-card {
-  background: rgba(102, 126, 234, 0.1);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-2);
+  border: 1px solid var(--accent-surface-3);
   border-radius: 12px;
   padding: 20px;
   transition: all 0.3s ease;
 }
 
 .version-info-card:hover {
-  background: rgba(102, 126, 234, 0.15);
-  border-color: rgba(102, 126, 234, 0.3);
+  background: var(--accent-glow);
+  border-color: var(--accent-border-3);
 }
 
 .version-header {
@@ -1554,7 +1554,7 @@ onMounted(() => {
   gap: 12px;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .version-icon {
@@ -1565,7 +1565,7 @@ onMounted(() => {
   margin: 0;
   font-size: 16px;
   font-weight: 500;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
 }
 
 .version-content {
@@ -1582,15 +1582,15 @@ onMounted(() => {
 }
 
 .version-label {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
   min-width: 120px;
   font-weight: 500;
 }
 
 .version-value {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-family: monospace;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-subtle);
   padding: 4px 8px;
   border-radius: 4px;
   font-weight: 500;

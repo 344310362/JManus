@@ -431,9 +431,9 @@ defineExpose({
   margin-top: 16px;
   padding: 16px;
   background: rgba(var(--bg-primary-rgb), 0.03);
-  border: 1px solid rgba(102, 126, 234, 0.5);
+  border: 1px solid var(--accent-border-3);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--overlay-subtle);
   position: relative;
 }
 
@@ -454,7 +454,7 @@ defineExpose({
   gap: 8px;
   margin-bottom: 12px;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .instructions-icon {
@@ -525,12 +525,12 @@ defineExpose({
 }
 
 .instructions-list code {
-  background: rgba(102, 126, 234, 0.15);
+  background: var(--accent-glow);
   color: #a8b3ff;
   padding: 1px 4px;
   border-radius: 3px;
   font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
   font-size: 12px;
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid var(--accent-surface-3);
 }
 </style>

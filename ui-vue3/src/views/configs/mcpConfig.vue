@@ -1113,7 +1113,7 @@ const getConnectionTypeIcon = (type: string) => {
 
 .search-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
   width: 100%;
 }
@@ -1212,7 +1212,7 @@ const getConnectionTypeIcon = (type: string) => {
 
 .search-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
   width: 100%;
 }
@@ -1682,7 +1682,7 @@ const getConnectionTypeIcon = (type: string) => {
 
 .format-btn:hover:not(:disabled) {
   background: var(--accent-primary);
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
 }
 
 .format-btn:disabled {
@@ -1724,7 +1724,7 @@ const getConnectionTypeIcon = (type: string) => {
 
 .config-textarea:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
@@ -1745,7 +1745,7 @@ const getConnectionTypeIcon = (type: string) => {
 
 .config-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
@@ -1779,7 +1779,7 @@ const getConnectionTypeIcon = (type: string) => {
   color: var(--text-primary);
   font-weight: 500;
   z-index: 9999; /* Increase z-index to ensure top layer */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px var(--overlay-medium);
   max-width: 400px; /* Limit max width */
   word-wrap: break-word; /* Allow text wrapping */
   white-space: pre-line; /* Preserve line breaks */
@@ -1888,7 +1888,7 @@ const getConnectionTypeIcon = (type: string) => {
   top: 3px;
   left: 3px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px var(--overlay-light);
 }
 
 .status-toggle.enabled .toggle-thumb {

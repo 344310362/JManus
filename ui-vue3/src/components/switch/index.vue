@@ -100,8 +100,8 @@ const handleChange = (event: Event) => {
 
   input {
     &:checked + .slider {
-      background: rgba(102, 126, 234, 0.1);
-      border-color: rgba(102, 126, 234, 0.2);
+      background: var(--accent-surface-2);
+      border-color: var(--accent-surface-3);
     }
 
     &:checked + .slider:before {

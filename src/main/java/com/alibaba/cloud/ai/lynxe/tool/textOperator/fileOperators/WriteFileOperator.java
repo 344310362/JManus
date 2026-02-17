@@ -26,6 +26,7 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.alibaba.cloud.ai.lynxe.codeagent.CodeAgentFileNotifier;
 import com.alibaba.cloud.ai.lynxe.tool.AbstractBaseTool;
 import com.alibaba.cloud.ai.lynxe.tool.ToolStateInfo;
 import com.alibaba.cloud.ai.lynxe.tool.code.ToolExecuteResult;
@@ -84,6 +85,12 @@ public class WriteFileOperator extends AbstractBaseTool<WriteFileOperator.WriteF
 	private final ShortUrlService shortUrlService;
 
 	private final ToolI18nService toolI18nService;
+
+	private CodeAgentFileNotifier fileNotifier;
+
+	public void setFileNotifier(CodeAgentFileNotifier fileNotifier) {
+		this.fileNotifier = fileNotifier;
+	}
 
 	public WriteFileOperator(TextFileService textFileService, SmartContentSavingService innerStorageService,
 			ShortUrlService shortUrlService, ToolI18nService toolI18nService) {
@@ -197,6 +204,11 @@ public class WriteFileOperator extends AbstractBaseTool<WriteFileOperator.WriteF
 		// Normalize the file path to remove plan ID prefixes
 		String normalizedPath = normalizeFilePath(filePath);
 
+		// Reject empty paths (would resolve to the plan directory itself)
+		if (normalizedPath == null || normalizedPath.isEmpty() || normalizedPath.equals("/")) {
+			throw new IOException("Error: file path is empty or invalid after normalization: " + filePath);
+		}
+
 		// Check file type for non-directory operations
 		if (!normalizedPath.isEmpty() && !normalizedPath.endsWith("/") && !isSupportedFileType(normalizedPath)) {
 			throw new IOException("Unsupported file type. Only text-based files are supported.");
@@ -279,6 +291,11 @@ public class WriteFileOperator extends AbstractBaseTool<WriteFileOperator.WriteF
 
 			Path absolutePath = validateGlobalPath(filePath);
 
+			// Guard against writing to a directory path
+			if (Files.isDirectory(absolutePath)) {
+				return new ToolExecuteResult("Error: path resolves to a directory, not a file: " + filePath);
+			}
+
 			// Check if file exists before writing
 			boolean fileExisted = Files.exists(absolutePath);
 
@@ -293,6 +310,12 @@ public class WriteFileOperator extends AbstractBaseTool<WriteFileOperator.WriteF
 			// Force flush to disk
 			try (FileChannel channel = FileChannel.open(absolutePath, StandardOpenOption.WRITE)) {
 				channel.force(true);
+			}
+
+			// Notify event listeners (for real-time WebSocket push)
+			if (fileNotifier != null && this.rootPlanId != null) {
+				String normalizedPath = normalizeFilePath(filePath);
+				fileNotifier.notifyFileWritten(this.rootPlanId, normalizedPath, contents);
 			}
 
 			if (fileExisted) {

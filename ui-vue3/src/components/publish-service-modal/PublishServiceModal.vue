@@ -687,7 +687,7 @@ defineExpose({
   font-size: 16px;
   font-weight: 500;
   color: var(--text-primary);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
   padding-bottom: 8px;
 }
 
@@ -705,7 +705,7 @@ defineExpose({
 }
 
 .required {
-  color: #ff6b6b;
+  color: var(--error-text);
 }
 
 /* Field description styles */
@@ -741,7 +741,7 @@ defineExpose({
   border-color: var(--accent-primary, #667eea);
   outline: none;
   background: rgba(var(--bg-primary-rgb), 0.08);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
 .form-item input::placeholder,
@@ -769,7 +769,7 @@ defineExpose({
   backdrop-filter: blur(20px);
   border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
   border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 32px var(--overlay-heavy);
   max-height: 200px;
   overflow-y: auto;
 }
@@ -788,7 +788,7 @@ defineExpose({
 }
 
 .service-group-option:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--accent-surface-2);
   color: var(--accent-primary, #667eea);
 }
 
@@ -806,8 +806,8 @@ defineExpose({
   color: var(--text-secondary, #ffffff);
   line-height: 1.4;
   padding: 6px 8px;
-  background: rgba(102, 126, 234, 0.1);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-2);
+  border: 1px solid var(--accent-surface-3);
   border-radius: 4px;
 }
 
@@ -839,7 +839,7 @@ defineExpose({
 
 .parameter-table td {
   padding: 8px 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-default);
 }
 
 .parameter-input {
@@ -912,7 +912,7 @@ defineExpose({
   border-color: var(--accent-primary, #667eea);
   outline: none;
   background-color: rgba(var(--text-primary-rgb), 0.08);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+  box-shadow: 0 0 0 3px var(--accent-glow);
   transform: translateY(-1px);
 }
 
@@ -945,7 +945,7 @@ defineExpose({
   overflow: hidden;
   max-height: 200px;
   overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
   backdrop-filter: blur(10px);
   z-index: 10;
   margin-top: 4px;
@@ -966,13 +966,13 @@ defineExpose({
 }
 
 .dropdown-item:hover {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(102, 126, 234, 0.1));
+  background: linear-gradient(135deg, var(--accent-surface-3), var(--accent-surface-2));
   color: #a8b3ff;
   transform: translateX(4px);
 }
 
 .dropdown-item.selected {
-  background: linear-gradient(135deg, var(--selection-bg, rgba(102, 126, 234, 0.3)), rgba(102, 126, 234, 0.2));
+  background: linear-gradient(135deg, var(--selection-bg, rgba(102, 126, 234, 0.3)), var(--accent-surface-3));
   color: #a8b3ff;
   font-weight: 500;
 }
@@ -1025,7 +1025,7 @@ defineExpose({
 }
 
 .action-btn.primary {
-  background: rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-3);
   border-color: var(--selection-bg, rgba(102, 126, 234, 0.3));
   color: #a8b3ff;
 }
@@ -1037,7 +1037,7 @@ defineExpose({
 .action-btn.danger {
   background: rgba(234, 102, 102, 0.2);
   border-color: rgba(234, 102, 102, 0.3);
-  color: #ff6b6b;
+  color: var(--error-text);
 }
 
 .action-btn.danger:hover:not(:disabled) {
@@ -1091,7 +1091,7 @@ defineExpose({
   align-items: center;
   gap: 8px;
   background: rgba(20, 20, 25, 0.95);
-  border: 2px solid rgba(102, 126, 234, 0.6);
+  border: 2px solid var(--accent-primary);
   border-radius: 12px;
   color: var(--accent-primary, #667eea);
   transition: all 0.3s ease;
@@ -1170,7 +1170,7 @@ defineExpose({
 }
 
 .select-arrow-btn:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--accent-surface-2);
   color: var(--accent-primary, #667eea);
 }
 
@@ -1191,7 +1191,7 @@ defineExpose({
   backdrop-filter: blur(20px);
   border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 32px var(--overlay-heavy);
   width: 280px; /* Keep consistent with select-btn width */
   max-height: 280px;
   overflow: hidden;
@@ -1211,11 +1211,11 @@ defineExpose({
   align-items: center;
   justify-content: space-between;
   padding: 14px 18px;
-  border-bottom: 1px solid rgba(102, 126, 234, 0.2);
+  border-bottom: 1px solid var(--accent-surface-3);
   font-size: 14px;
   font-weight: 600;
   color: var(--accent-primary, #667eea);
-  background: rgba(102, 126, 234, 0.05);
+  background: var(--accent-surface-1);
 }
 
 .close-btn {
@@ -1255,12 +1255,12 @@ defineExpose({
 }
 
 .select-option:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--accent-surface-2);
   color: var(--accent-primary, #667eea);
 }
 
 .select-option.active {
-  background: rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-3);
   color: var(--accent-primary, #667eea);
   border-left: 3px solid var(--accent-primary, #667eea);
   padding-left: 15px;
@@ -1291,7 +1291,7 @@ defineExpose({
 /* Manual input area styles */
 .manual-input-section {
   padding: 14px 18px;
-  border-top: 1px solid rgba(102, 126, 234, 0.2);
+  border-top: 1px solid var(--accent-surface-3);
   background: rgba(102, 126, 234, 0.03);
 }
 
@@ -1317,16 +1317,16 @@ defineExpose({
   border-color: rgba(102, 126, 234, 0.8);
   outline: none;
   background: rgba(20, 20, 25, 0.9);
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 0 0 2px var(--accent-surface-3);
 }
 
 .manual-input::placeholder {
-  color: rgba(102, 126, 234, 0.5);
+  color: var(--accent-border-3);
 }
 
 .add-manual-btn {
   padding: 8px 12px;
-  background: rgba(102, 126, 234, 0.15);
+  background: var(--accent-glow);
   border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
   border-radius: 8px;
   color: var(--accent-primary, #667eea);
@@ -1339,7 +1339,7 @@ defineExpose({
 
 .add-manual-btn:hover {
   background: rgba(102, 126, 234, 0.25);
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
 }
 
 /* Service publishing option styles */
@@ -1401,7 +1401,7 @@ defineExpose({
 }
 
 .checkbox-label.disabled .checkbox-text {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-tertiary);
 }
 
 .validation-warning {
@@ -1533,13 +1533,13 @@ defineExpose({
 .form-item input.error,
 .form-item textarea.error {
   border-color: #ff4d4f;
-  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.1);
+  box-shadow: 0 0 0 2px var(--error-surface);
 }
 
 .form-item input.error:focus,
 .form-item textarea.error:focus {
   border-color: #ff4d4f;
-  box-shadow: 0 0 0 2px rgba(255, 77, 79, 0.2);
+  box-shadow: 0 0 0 2px var(--error-border);
 }
 
 /* Tooltip messages */

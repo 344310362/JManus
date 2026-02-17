@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<configuration scan="true" scanPeriod="60 seconds" debug="false">
+<configuration scan="true" scanPeriod="60 seconds" debug="true">
     <!-- Property definitions -->
     <!--Log save path-->
     <property name="LOG_HOME" value="${user.dir}/logs/"/>
@@ -168,7 +168,7 @@
 
     <!-- Block logs from specific classes -->
     <logger name="org.docx4j.convert.in.xhtml.XHTMLImporterImp" level="OFF" additivity="false"/>
-    
+
     <!-- Suppress netty DNS native library warning - fallback to system defaults works fine -->
     <logger name="io.netty.resolver.dns.DnsServerAddressStreamProviders" level="INFO" additivity="false"/>
 

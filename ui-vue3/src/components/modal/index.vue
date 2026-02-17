@@ -147,14 +147,14 @@ onUnmounted(() => {
 }
 
 .modal-container {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
+  background: linear-gradient(135deg, var(--accent-surface-2), rgba(118, 75, 162, 0.15));
   border: 1px solid var(--border-primary);
   border-radius: 16px;
   width: 90%;
   max-width: 900px;
   max-height: 90vh;
   overflow-y: auto;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
 }
 
 .modal-header {
@@ -162,7 +162,7 @@ onUnmounted(() => {
   justify-content: space-between;
   align-items: center;
   padding: 20px 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .header-content {
@@ -196,7 +196,7 @@ onUnmounted(() => {
 
 .status-icon.pending {
   color: var(--warning, #fbbf24);
-  background: rgba(251, 191, 36, 0.1);
+  background: var(--warning-surface);
 }
 
 .close-btn {
@@ -221,7 +221,7 @@ onUnmounted(() => {
 
 .modal-footer {
   padding: 20px 24px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-default);
   display: flex;
   justify-content: flex-end;
   gap: 12px;
@@ -247,13 +247,13 @@ onUnmounted(() => {
 }
 
 .confirm-btn {
-  background: rgba(102, 126, 234, 0.1);
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-2);
+  border: 1px solid var(--accent-surface-3);
   color: var(--accent-primary, #667eea);
 }
 
 .confirm-btn:hover {
-  background: rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-3);
 }
 
 /* Transition animations */

@@ -17,15 +17,6 @@
   <div class="right-panel">
     <div class="preview-header">
       <div class="preview-tabs">
-        <!-- Func-Agent Config tab -->
-        <div
-          class="tab-item"
-          :class="{ active: activeTab === 'config' }"
-          @click="activeTab = 'config'"
-        >
-          <Icon icon="carbon:settings" />
-          <span>{{ t('sidebar.configuration') }}</span>
-        </div>
         <!-- Step Execution Details tab -->
         <div
           class="tab-item"
@@ -48,62 +39,6 @@
     </div>
 
     <div class="preview-content">
-      <!-- Func-Agent Config -->
-      <div v-if="activeTab === 'config'" class="config-tab-content">
-        <div v-if="templateConfig.selectedTemplate.value" class="config-container">
-          <!-- Template Info Header -->
-          <div class="template-info-header">
-            <div class="template-info">
-              <h3>
-                {{ templateConfig.selectedTemplate.value.title || t('sidebar.unnamedPlan') }}
-              </h3>
-              <span class="template-id"
-              >ID: {{ templateConfig.selectedTemplate.value.planTemplateId }}</span
-              >
-            </div>
-            <button class="back-to-list-btn" @click="sidebarStore.switchToTab('list')">
-              <Icon icon="carbon:arrow-left" width="16" />
-            </button>
-          </div>
-
-          <!-- JSON Editor -->
-          <JsonEditorV2 />
-
-          <!-- Execution Controller -->
-          <ExecutionController />
-        </div>
-        <div v-else class="no-template-selected">
-          <div class="action-buttons">
-            <button class="new-task-btn" @click="handleCreateNewPlan">
-              <Icon icon="carbon:add" width="16" />
-              {{ t('rightPanel.newFuncAgentPlan') }}
-            </button>
-            <label class="new-task-btn" :title="t('rightPanel.importExistingPlan')">
-              <Icon icon="carbon:import" width="16" />
-              {{ t('rightPanel.importExistingPlan') }}
-              <input
-                type="file"
-                accept=".json"
-                @change="handleImportExistingPlan"
-                style="display: none"
-              />
-            </label>
-          </div>
-          <p class="import-description">
-            {{ t('rightPanel.importDescription') }}
-            <a
-              href="https://github.com/Lynxe-public/Lynxe-public-prompts"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="prompt-library-link"
-            >
-              {{ t('rightPanel.promptLibrary') }}
-            </a>
-            {{ t('rightPanel.importDescriptionSuffix') }}
-          </p>
-        </div>
-      </div>
-
       <!-- Step Execution Details -->
       <div v-if="activeTab === 'details'" class="step-details">
         <!-- Step basic information -->
@@ -117,23 +52,6 @@
           </h3>
 
           <div class="agent-info" v-if="selectedStep.agentExecution">
-            <div class="info-item">
-              <span class="label">{{ t('rightPanel.executingAgent') }}:</span>
-              <span
-                class="value"
-                :title="
-                  selectedStep.agentExecution.agentName === 'ConfigurableDynaAgent'
-                    ? t('chat.clickToViewExecutionDetails')
-                    : ''
-                "
-              >
-                {{
-                  selectedStep.agentExecution.agentName === 'ConfigurableDynaAgent'
-                    ? t('chat.funcAgentExecutionDetails')
-                    : selectedStep.agentExecution.agentName
-                }}
-              </span>
-            </div>
             <div class="info-item">
               <span class="label">{{ t('rightPanel.callingModel') }}:</span>
               <span class="value">{{ selectedStep.agentExecution.modelName }}</span>
@@ -180,9 +98,6 @@
                 >
                   <div class="step-header">
                     <span class="step-number">#{{ index + 1 }}</span>
-                    <span class="step-status" :class="tas.status">{{
-                        tas.status || t('rightPanel.executing')
-                      }}</span>
                   </div>
 
                   <!-- Think section - strictly follow right-sidebar.js logic -->
@@ -204,7 +119,7 @@
                               <Icon icon="carbon:copy" />
                             </button>
                             <span class="char-count-badge"
-                            >{{ tas.inputCharCount ?? 0 }} chars</span
+                              >{{ tas.inputCharCount ?? 0 }} chars</span
                             >
                           </div>
                         </div>
@@ -224,7 +139,7 @@
                               <Icon icon="carbon:copy" />
                             </button>
                             <span class="char-count-badge"
-                            >{{ tas.outputCharCount ?? 0 }} chars</span
+                              >{{ tas.outputCharCount ?? 0 }} chars</span
                             >
                           </div>
                         </div>
@@ -279,8 +194,8 @@
                           <div class="sub-plan-info">
                             <span class="label">{{ $t('rightPanel.subPlanId') }}:</span>
                             <span class="value">{{
-                                tas.subPlanExecutionRecord.currentPlanId
-                              }}</span>
+                              tas.subPlanExecutionRecord.currentPlanId
+                            }}</span>
                           </div>
                           <div class="sub-plan-info" v-if="tas.subPlanExecutionRecord.title">
                             <span class="label">{{ $t('rightPanel.title') }}:</span>
@@ -325,8 +240,8 @@
                   <div class="info-item">
                     <span class="label">{{ t('rightPanel.stepName') }}:</span>
                     <span class="value">{{
-                        selectedStep.title || selectedStep.description || selectedStep.stepId
-                      }}</span>
+                      selectedStep.title || selectedStep.description || selectedStep.stepId
+                    }}</span>
                   </div>
                   <div class="info-item" v-if="selectedStep.description">
                     <span class="label">{{ $t('rightPanel.description') }}:</span>
@@ -414,14 +329,11 @@
 
 <script setup lang="ts">
 import FileBrowser from '@/components/file-browser/index.vue'
-import ExecutionController from '@/components/sidebar/ExecutionController.vue'
-import JsonEditorV2 from '@/components/sidebar/JsonEditorV2.vue'
 import { useAvailableToolsSingleton } from '@/composables/useAvailableTools'
 import { usePlanTemplateConfigSingleton } from '@/composables/usePlanTemplateConfig'
 import { usePlanTemplateImport } from '@/composables/usePlanTemplateImport'
 import { useRightPanelSingleton } from '@/composables/useRightPanel'
 import { useToast } from '@/plugins/useToast'
-import { sidebarStore } from '@/stores/sidebar'
 import { templateStore } from '@/stores/templateStore'
 import { Icon } from '@iconify/vue'
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
@@ -477,7 +389,7 @@ const shouldAutoScrollToBottom = ref(true)
 const selectedStep = computed(() => rightPanel.selectedStep.value)
 const activeTab = computed({
   get: () => rightPanel.activeTab.value,
-  set: (value: 'config' | 'details' | 'files') => rightPanel.setActiveTab(value),
+  set: (value: 'details' | 'files') => rightPanel.setActiveTab(value),
 })
 const fileBrowserPlanId = computed(() => rightPanel.fileBrowserPlanId.value)
 const shouldShowNoTaskMessage = computed(() => rightPanel.shouldShowNoTaskMessage.value)
@@ -488,71 +400,6 @@ const stepStatusText = computed(() => {
   if (selectedStep.value.current) return t('rightPanel.status.executing')
   return t('rightPanel.status.waiting')
 })
-
-// Actions - Template creation and import
-/**
- * Handle creating a new Func-Agent plan
- */
-const handleCreateNewPlan = async () => {
-  try {
-    // Use default plan type or get from templateConfig
-    const planType = templateConfig.getPlanType() || 'dynamic_agent'
-    await templateStore.createNewTemplate(planType)
-
-    // Load template config for new template
-    const newTemplate = templateConfig.selectedTemplate.value
-    if (newTemplate) {
-      templateConfig.reset()
-      templateConfig.setPlanType(newTemplate.planType || 'dynamic_agent')
-      if (newTemplate.planTemplateId) {
-        templateConfig.setPlanTemplateId(newTemplate.planTemplateId)
-      }
-      templateConfig.setTitle(newTemplate.title || '')
-    }
-
-    // Reload available tools to ensure fresh tool list
-    console.log('[RightPanel] 🔄 Reloading available tools for new template')
-    await availableToolsStore.loadAvailableTools()
-  } catch (error) {
-    console.error('[RightPanel] Failed to create new plan:', error)
-    const message = error instanceof Error ? error.message : t('rightPanel.createPlanFailed')
-    toast.error(message)
-  }
-}
-
-/**
- * Handle importing an existing plan
- */
-const handleImportExistingPlan = async (event: Event) => {
-  await handleImportPlanTemplate(event, {
-    onSuccess: async result => {
-      const successMsg = t('rightPanel.importSuccess', {
-        total: result.total,
-        success: result.successCount,
-        failed: result.failureCount,
-      })
-      toast.success(successMsg)
-    },
-    onError: error => {
-      const errorMessage = error instanceof Error ? error.message : t('rightPanel.importFailed')
-      toast.error(errorMessage)
-    },
-    onReload: async () => {
-      // Reload template list
-      await templateStore.loadPlanTemplateList()
-      // Reload available tools to show newly imported tools and dependencies
-      await availableToolsStore.loadAvailableTools()
-    },
-    onSingleTemplateImported: async template => {
-      // If only one template was imported, select it
-      if (template.planTemplateId) {
-        templateConfig.setPlanTemplateId(template.planTemplateId)
-        await templateConfig.load(template.planTemplateId)
-      }
-    },
-  })
-}
-
 // Actions - Step selection and refresh control
 
 /**
@@ -737,7 +584,7 @@ defineExpose({
 }
 
 .preview-header {
-  padding: 20px 24px;
+  padding: 8px 12px;
   border-bottom: 1px solid var(--bg-secondary, #1a1a1a);
   background: rgba(var(--bg-primary-rgb), 0.02);
 
@@ -745,7 +592,7 @@ defineExpose({
     padding: 8px 16px;
     border: 1px solid var(--border-primary);
     border-radius: 6px;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    background: linear-gradient(135deg, var(--accent-surface-3) 0%, rgba(118, 75, 162, 0.2) 100%);
     border-color: var(--accent-primary, #667eea);
     color: var(--accent-primary, #667eea);
     cursor: default;
@@ -777,19 +624,19 @@ defineExpose({
 
 /* Step basic information */
 .step-info {
-  padding: 20px;
+  padding: 12px 16px;
   margin: 0 20px;
   background: rgba(41, 42, 45, 0.8);
   border-radius: 8px;
-  margin-bottom: 16px;
-  min-height: 100px; /* Ensure minimum height */
+  margin-bottom: 12px;
+  min-height: 60px; /* Ensure minimum height */
 
   h3 {
     color: var(--text-primary, #ffffff);
     margin: 0 0 16px 0;
     font-size: 18px;
     font-weight: 600;
-    padding-bottom: 8px;
+    padding-bottom: 6px;
     border-bottom: 2px solid var(--accent-primary, #667eea);
   }
 }
@@ -826,12 +673,12 @@ defineExpose({
 
 /* Step information styles - for fixed top */
 .agent-info {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 
   .info-item {
     display: flex;
-    margin-bottom: 8px;
-    font-size: 14px;
+    margin-bottom: 6px;
+    font-size: 12px;
     line-height: 1.4;
 
     .label {
@@ -839,12 +686,14 @@ defineExpose({
       font-weight: 600;
       color: #888888;
       flex-shrink: 0;
+      font-size: 12px;
     }
 
     .value {
       flex: 1;
       color: var(--text-secondary, #cccccc);
       word-break: break-word;
+      font-size: 12px;
 
       &.success {
         color: #27ae60;
@@ -854,17 +703,17 @@ defineExpose({
 }
 
 .execution-status {
-  margin-top: 16px;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-default);
 
   .status-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
 
     .status-icon {
-      font-size: 16px;
+      font-size: 14px;
 
       &.success {
         color: #27ae60;
@@ -880,8 +729,9 @@ defineExpose({
     }
 
     .status-text {
-      color: var(--text-secondary, #cccccc);
+      color: #cccccc;
       font-weight: 500;
+      font-size: 12px;
     }
   }
 }
@@ -1082,28 +932,6 @@ defineExpose({
       color: var(--accent-primary, #667eea);
       font-size: 14px;
     }
-
-    .step-status {
-      padding: 4px 8px;
-      border-radius: 4px;
-      font-size: 12px;
-      font-weight: 500;
-
-      &.completed {
-        background: rgba(39, 174, 96, 0.2);
-        color: #27ae60;
-      }
-
-      &.running {
-        background: rgba(52, 152, 219, 0.2);
-        color: #3498db;
-      }
-
-      &.pending {
-        background: rgba(243, 156, 18, 0.2);
-        color: #f39c12;
-      }
-    }
   }
 
   .think-section,
@@ -1131,9 +959,9 @@ defineExpose({
     .tool-execution-item {
       margin-bottom: 20px;
       padding: 12px;
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--overlay-light);
       border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--surface-subtle);
 
       &:last-child {
         margin-bottom: 0;
@@ -1179,19 +1007,19 @@ defineExpose({
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--overlay-medium);
+        border: 1px solid var(--border-default);
         border-radius: 4px;
         padding: 4px 6px;
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
         cursor: pointer;
         transition: all 0.2s;
         font-size: 12px;
 
         &:hover {
-          background: rgba(0, 0, 0, 0.5);
-          border-color: rgba(255, 255, 255, 0.2);
-          color: rgba(255, 255, 255, 0.9);
+          background: var(--overlay-heavy);
+          border-color: var(--border-primary);
+          color: var(--text-primary);
         }
 
         &:active {
@@ -1209,7 +1037,7 @@ defineExpose({
       }
 
       pre {
-        background: rgba(0, 0, 0, 0.3);
+        background: var(--overlay-medium);
         border: 1px solid var(--border-primary);
         border-radius: 4px;
         padding: 12px;
@@ -1224,12 +1052,12 @@ defineExpose({
       }
 
       .char-count-badge {
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: var(--overlay-heavy);
+        border: 1px solid var(--border-primary);
         border-radius: 4px;
         padding: 2px 6px;
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
         font-weight: 500;
       }
     }
@@ -1238,7 +1066,7 @@ defineExpose({
   /* Sub plan styles */
   .sub-plan-content {
     .sub-plan-header {
-      background: rgba(102, 126, 234, 0.1);
+      background: var(--accent-surface-2);
       border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
       border-radius: 6px;
       padding: 12px;
@@ -1272,7 +1100,7 @@ defineExpose({
         align-items: center;
         gap: 6px;
         padding-top: 8px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid var(--border-default);
 
         .status-icon {
           font-size: 14px;
@@ -1341,14 +1169,14 @@ defineExpose({
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px var(--overlay-medium);
   transition: all 0.3s ease;
   z-index: 100;
 
   &:hover {
     background: rgba(74, 144, 226, 1);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 16px var(--overlay-medium);
   }
 
   &:active {
@@ -1504,7 +1332,7 @@ defineExpose({
   justify-content: space-between;
   margin-bottom: 16px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-subtle);
   border-radius: 8px;
 
   .template-info {
@@ -1523,7 +1351,7 @@ defineExpose({
 
     .template-id {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--text-tertiary);
     }
   }
 
@@ -1533,7 +1361,7 @@ defineExpose({
     background: transparent;
     border: none;
     border-radius: 4px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1541,7 +1369,7 @@ defineExpose({
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--border-default);
       color: white;
     }
   }
@@ -1567,7 +1395,7 @@ defineExpose({
   .new-task-btn {
     width: 100%;
     padding: 10px 16px;
-    background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
+  background: linear-gradient(135deg, var(--accent-primary, var(--accent-primary)) 0%, #09df75 100%);
     border: none;
     border-radius: 6px;
     color: white;
@@ -1583,7 +1411,7 @@ defineExpose({
 
     &:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 4px 12px var(--accent-border-3);
     }
   }
 
@@ -1592,12 +1420,12 @@ defineExpose({
     padding: 0 16px;
     font-size: 12px;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     text-align: center;
     max-width: 400px;
 
     .prompt-library-link {
-      color: #667eea;
+      color: var(--accent-primary);
       text-decoration: none;
       transition: color 0.2s ease;
 

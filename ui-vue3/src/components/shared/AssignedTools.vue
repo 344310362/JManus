@@ -229,7 +229,7 @@ const getToolDescription = (toolId: string): string => {
   overflow-x: hidden;
   position: relative;
   scrollbar-width: thin;
-  scrollbar-color: rgba(102, 126, 234, 0.5) transparent;
+  scrollbar-color: var(--accent-border-3) transparent;
 }
 
 .tools-grid.grid-layout::-webkit-scrollbar {
@@ -241,7 +241,7 @@ const getToolDescription = (toolId: string): string => {
 }
 
 .tools-grid.grid-layout::-webkit-scrollbar-thumb {
-  background: rgba(102, 126, 234, 0.5);
+  background: var(--accent-border-3);
   border-radius: 3px;
 }
 
@@ -256,7 +256,7 @@ const getToolDescription = (toolId: string): string => {
   left: 0;
   right: 0;
   height: 20px;
-  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.3));
+  background: linear-gradient(to bottom, transparent, var(--overlay-medium));
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.3s ease;
@@ -290,7 +290,7 @@ const getToolDescription = (toolId: string): string => {
 
 .tool-item.assigned {
   border-color: var(--selection-bg, rgba(102, 126, 234, 0.3));
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--accent-surface-2);
 }
 
 .tool-item.non-existent {

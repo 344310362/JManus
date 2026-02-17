@@ -32,7 +32,8 @@ public interface PlanExecutionRecorder {
 	 * @return Plan execution record ID
 	 */
 	public Long recordPlanExecutionStart(String currentPlanId, String title, String userRequset,
-			List<ExecutionStep> executionSteps, String parentPlanId, String rootPlanId, String toolcallId);
+			List<ExecutionStep> executionSteps, String parentPlanId, String rootPlanId, String toolcallId,
+			String conversationId);
 
 	/**
 	 * Interface 3: Record plan completion. This method handles plan completion recording

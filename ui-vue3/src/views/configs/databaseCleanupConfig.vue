@@ -220,7 +220,7 @@ onMounted(() => {
 
 .description-text {
   margin: 0;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.6;
   white-space: pre-line;
@@ -240,15 +240,15 @@ onMounted(() => {
 
 .table-card {
   padding: 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--surface-hover);
+  border: 1px solid var(--surface-default);
   border-radius: 8px;
   transition: all 0.3s ease;
 }
 
 .table-card:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: var(--surface-subtle);
+  border-color: var(--surface-strong);
 }
 
 .table-header {
@@ -262,24 +262,24 @@ onMounted(() => {
   margin: 0;
   font-size: 18px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-family: monospace;
 }
 
 .table-count-badge {
   padding: 6px 12px;
-  background: rgba(102, 126, 234, 0.2);
+  background: var(--accent-surface-3);
   border: 1px solid rgba(102, 126, 234, 0.4);
   border-radius: 6px;
   font-size: 16px;
   font-weight: 600;
-  color: #667eea;
+  color: var(--accent-primary);
   font-family: monospace;
 }
 
 .table-description {
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -298,15 +298,15 @@ onMounted(() => {
 }
 
 .action-btn.refresh-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--surface-default);
+  border: 1px solid var(--surface-strong);
+  color: var(--text-secondary);
 }
 
 .action-btn.refresh-btn:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.95);
+  background: var(--surface-strong);
+  border-color: var(--text-faint);
+  color: var(--text-primary);
 }
 
 .action-btn.danger-btn {
@@ -331,7 +331,7 @@ onMounted(() => {
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
 }
 
 .loading-icon,
@@ -339,7 +339,7 @@ onMounted(() => {
   font-size: 48px;
   margin-bottom: 16px;
   opacity: 0.5;
-  color: rgba(255, 255, 255, 0.4);
+  color: var(--text-muted);
 }
 
 .empty-icon {
@@ -366,7 +366,7 @@ onMounted(() => {
 
 .warning-text {
   margin: 0 0 20px 0;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -374,7 +374,7 @@ onMounted(() => {
 .tables-to-clear {
   margin: 0;
   padding-left: 20px;
-  color: rgba(255, 255, 255, 0.8);
+  color: var(--text-secondary);
   font-size: 14px;
 }
 
@@ -384,12 +384,12 @@ onMounted(() => {
 }
 
 .tables-to-clear strong {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--text-primary);
   font-family: monospace;
 }
 
 .count-preview {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
   margin-left: 8px;
 }
 
@@ -405,15 +405,15 @@ onMounted(() => {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.8);
+  background: var(--surface-default);
+  border: 1px solid var(--surface-strong);
+  color: var(--text-secondary);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.95);
+  background: var(--surface-strong);
+  border-color: var(--text-faint);
+  color: var(--text-primary);
 }
 
 .btn-danger {

@@ -107,6 +107,10 @@ public class PlanExecutionRecordEntity {
 	@Column(name = "model_name")
 	private String modelName;
 
+	// Conversation ID for grouping multiple plans in the same session
+	@Column(name = "conversation_id")
+	private String conversationId;
+
 	/**
 	 * Default constructor for Jackson and other frameworks.
 	 */
@@ -277,6 +281,14 @@ public class PlanExecutionRecordEntity {
 
 	public void setToolCallId(String toolCallId) {
 		this.toolCallId = toolCallId;
+	}
+
+	public String getConversationId() {
+		return conversationId;
+	}
+
+	public void setConversationId(String conversationId) {
+		this.conversationId = conversationId;
 	}
 
 }

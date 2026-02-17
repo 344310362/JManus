@@ -36,6 +36,7 @@ import com.alibaba.cloud.ai.lynxe.recorder.entity.vo.ActToolInfo;
 import com.alibaba.cloud.ai.lynxe.recorder.entity.vo.AgentExecutionRecord;
 import com.alibaba.cloud.ai.lynxe.recorder.entity.vo.ExecutionStatus;
 import com.alibaba.cloud.ai.lynxe.recorder.entity.vo.PlanExecutionRecord;
+import com.alibaba.cloud.ai.lynxe.recorder.entity.vo.ThinkActRecord;
 import com.alibaba.cloud.ai.lynxe.recorder.repository.ActToolInfoRepository;
 import com.alibaba.cloud.ai.lynxe.recorder.repository.AgentExecutionRecordRepository;
 import com.alibaba.cloud.ai.lynxe.recorder.repository.PlanExecutionRecordRepository;
@@ -312,6 +313,34 @@ public class PlanHierarchyReaderService {
 					vo.setLatestMethodArgs(latestTool.getParameters()); // Already JSON
 																		// string
 				}
+
+				// Convert ThinkActRecordEntities to ThinkActRecord VOs for frontend display
+				List<ThinkActRecord> thinkActRecords = new ArrayList<>();
+				for (ThinkActRecordEntity tare : thinkActEntities) {
+					ThinkActRecord tar = new ThinkActRecord(tare.getParentExecutionId());
+					tar.setId(tare.getId());
+					tar.setThinkInput(tare.getThinkInput());
+					tar.setThinkOutput(tare.getThinkOutput());
+					tar.setErrorMessage(tare.getErrorMessage());
+					tar.setInputCharCount(tare.getInputCharCount());
+					tar.setOutputCharCount(tare.getOutputCharCount());
+					tar.setModelContextLimit(tare.getModelContextLimit());
+
+					if (tare.getActToolInfoList() != null && !tare.getActToolInfoList().isEmpty()) {
+						List<ActToolInfo> actToolInfoList = new ArrayList<>();
+						for (ActToolInfoEntity toolInfoEntity : tare.getActToolInfoList()) {
+							ActToolInfo actToolInfo = new ActToolInfo(toolInfoEntity.getName(),
+									toolInfoEntity.getParameters(), toolInfoEntity.getToolCallId());
+							actToolInfo.setResult(toolInfoEntity.getResult());
+							actToolInfoList.add(actToolInfo);
+						}
+						tar.setActToolInfoList(actToolInfoList);
+						tar.setActionNeeded(true);
+					}
+
+					thinkActRecords.add(tar);
+				}
+				vo.setThinkActSteps(thinkActRecords);
 			}
 		}
 		catch (Exception e) {

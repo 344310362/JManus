@@ -677,7 +677,7 @@ const handleLogoClick = () => {
   transition: all 0.2s ease;
 
   &:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--surface-subtle);
   }
 
   &:active {
@@ -803,7 +803,7 @@ const handleLogoClick = () => {
 
 .back-button {
   padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   color: var(--text-primary, #ffffff);
@@ -826,7 +826,7 @@ const handleLogoClick = () => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   color: var(--text-primary, #ffffff);
@@ -845,7 +845,7 @@ const handleLogoClick = () => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   color: var(--text-primary, #ffffff);
@@ -878,7 +878,7 @@ const handleLogoClick = () => {
   max-width: 480px;
   padding: 16px 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px var(--overlay-light);
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -26,7 +26,9 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 
 import java.io.IOException;
 
@@ -34,8 +36,8 @@ import java.io.IOException;
 @EnableScheduling
 @EnableJpaRepositories(basePackages = { "com.alibaba.cloud.ai.lynxe" })
 @EntityScan(basePackages = { "com.alibaba.cloud.ai.lynxe" })
-@EnableFeignClients(basePackages = {"cn.iocoder.cloud.devops.api"})
-@ComponentScan(basePackages = { "com.alibaba.cloud.ai.lynxe","cn.iocoder.cloud.devops.api" })
+@EnableFeignClients(basePackages = { "cn.iocoder.cloud.devops.api" })
+@ComponentScan(basePackages = { "com.alibaba.cloud.ai.lynxe", "cn.iocoder.cloud.devops.api" })
 public class OpenLynxeSpringBootApplication {
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -47,6 +49,14 @@ public class OpenLynxeSpringBootApplication {
 		else {
 			SpringApplication.run(OpenLynxeSpringBootApplication.class, args);
 		}
+	}
+
+	@Bean
+	public TaskScheduler taskScheduler() {
+		ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+		scheduler.setPoolSize(4);
+		scheduler.setThreadNamePrefix("cron-scheduler-");
+		return scheduler;
 	}
 
 	@Bean
@@ -65,6 +75,5 @@ public class OpenLynxeSpringBootApplication {
 			}
 		};
 	}
-
 
 }

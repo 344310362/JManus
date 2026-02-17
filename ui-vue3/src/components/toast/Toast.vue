@@ -129,7 +129,7 @@ defineExpose<ToastInstance>({ show })
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--overlay-heavy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -145,7 +145,7 @@ defineExpose<ToastInstance>({ show })
   padding: 24px;
   min-width: 320px;
   max-width: 480px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 32px var(--overlay-heavy);
   backdrop-filter: blur(20px);
 }
 
@@ -206,7 +206,7 @@ defineExpose<ToastInstance>({ show })
 
 .toast-btn--primary:hover {
   background: rgba(102, 126, 234, 1);
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   transform: translateY(-1px);
 }
 

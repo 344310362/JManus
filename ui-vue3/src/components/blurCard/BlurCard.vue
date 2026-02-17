@@ -61,8 +61,8 @@ const handleClick = () => {
   align-items: flex-start;
   gap: 16px;
   &:hover {
-    border-color: rgba(102, 126, 234, 0.5);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--accent-border-3);
+    box-shadow: 0 12px 40px var(--overlay-medium);
     transform: translateY(-2px);
   }
 

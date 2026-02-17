@@ -212,7 +212,7 @@ const handleConnectionTypeUpdate = (value: string | null) => {
 .config-input:focus,
 .config-textarea:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
@@ -231,9 +231,9 @@ const handleConnectionTypeUpdate = (value: string | null) => {
   margin-top: 24px;
   padding: 16px;
   background: var(--bg-secondary);
-  border: 1px solid rgba(102, 126, 234, 0.5);
+  border: 1px solid var(--accent-border-3);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px var(--overlay-subtle);
   position: relative;
 }
 

@@ -1014,7 +1014,7 @@ watch(
 }
 
 .required {
-  color: #ff6b6b;
+  color: var(--error-text);
 }
 
 .model-section {
@@ -1206,7 +1206,7 @@ watch(
 }
 
 .model-btn:focus {
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-border-3);
 }
 
 .current-model {
@@ -1234,7 +1234,7 @@ watch(
   border: 1px solid var(--selection-bg, var(--selection-bg));
   border-radius: 8px;
   box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 8px 32px var(--overlay-medium),
     0 0 0 1px var(--accent-primary);
   min-width: 300px;
   animation: slideDown 0.2s ease;
@@ -1249,7 +1249,7 @@ watch(
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary, var(--text-primary));
-  background: linear-gradient(135deg, var(--accent-primary), rgba(102, 126, 234, 0.05));
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-surface-1));
 }
 
 .close-btn {
@@ -1479,30 +1479,30 @@ watch(
 @media (prefers-color-scheme: light) {
   .model-dropdown {
     background: rgba(var(--bg-primary-rgb), 0.95);
-    border-color: rgba(0, 0, 0, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border-color: var(--overlay-subtle);
+    box-shadow: 0 8px 32px var(--overlay-subtle);
   }
 
   .dropdown-header {
     color: rgba(0, 0, 0, 0.8);
-    border-bottom-color: rgba(0, 0, 0, 0.1);
+    border-bottom-color: var(--overlay-subtle);
   }
 
   .close-btn {
-    color: rgba(0, 0, 0, 0.6);
+    color: var(--overlay-heavy);
   }
 
   .close-btn:hover {
-    background: rgba(0, 0, 0, 0.1);
+    background: var(--overlay-subtle);
     color: rgba(0, 0, 0, 0.8);
   }
 
   .model-option {
-    color: rgba(0, 0, 0, 0.7);
+    color: var(--overlay-heavy);
   }
 
   .model-option:hover {
-    background: rgba(0, 0, 0, 0.05);
+    background: var(--overlay-subtle);
     color: rgba(0, 0, 0, 0.9);
   }
 }

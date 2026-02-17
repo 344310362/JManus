@@ -323,7 +323,8 @@ public abstract class AbstractPlanExecutor implements PlanExecutorInterface {
 		}
 
 		recorder.recordPlanExecutionStart(context.getCurrentPlanId(), context.getPlan().getTitle(), context.getTitle(),
-				steps, context.getParentPlanId(), context.getRootPlanId(), context.getToolCallId());
+				steps, context.getParentPlanId(), context.getRootPlanId(), context.getToolCallId(),
+				context.getConversationId());
 
 		// Build async chain for step execution
 		PlanExecutionResult result = new PlanExecutionResult();

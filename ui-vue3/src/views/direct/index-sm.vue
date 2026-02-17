@@ -34,7 +34,7 @@
       </div>
     </header>
     <div class="direct-chat">
-      <Sidebar ref="sidebarRef" :width="sidebarWidth" />
+
       <!-- Sidebar Resizer -->
       <div
         ref="sidebarResizerRef"
@@ -47,7 +47,7 @@
       <!-- Left Panel - Config/Preview (RightPanel component) -->
       <RightPanel
         ref="rightPanelRef"
-        :style="{ width: 100 - sidebarWidth - leftPanelWidth + '%' }"
+        :style="{ width: 100 - leftPanelWidth + '%' }"
         :current-root-plan-id="currentRootPlanId"
       />
 
@@ -106,8 +106,7 @@ import ChatContainer from '@/components/chat/ChatContainer.vue'
 import InputArea from '@/components/input/InputArea.vue'
 import LanguageSwitcher from '@/components/language-switcher/LanguageSwitcher.vue'
 import Memory from '@/components/memory/Memory.vue'
-import RightPanel from '@/components/right-panel/RightPanel.vue'
-import Sidebar from '@/components/sidebar/Sidebar.vue'
+import RightPanel from '@/components/right-panel/RightPanelSM.vue'
 import { useConversationHistorySingleton } from '@/composables/useConversationHistory'
 import { useMessageDialogSingleton } from '@/composables/useMessageDialog'
 import { usePlanExecutionSingleton } from '@/composables/usePlanExecution'
@@ -143,7 +142,7 @@ const currentRootPlanId = ref<string | null>(null)
 // Related to panel width
 // Note: leftPanelWidth variable name is kept for backward compatibility
 // It actually controls the chat panel width (which is now on the right side)
-const leftPanelWidth = ref(80) // Chat panel width percentage
+const leftPanelWidth = ref(60) // Chat panel width percentage
 const sidebarWidth = ref(30) // Sidebar width percentage
 const isResizing = ref(false)
 const startX = ref(0)
@@ -282,17 +281,6 @@ onMounted(() => {
     }
   }
 
-  // Restore panel width from localStorage
-  const savedWidth = localStorage.getItem('directPanelWidth')
-  if (savedWidth) {
-    leftPanelWidth.value = parseFloat(savedWidth)
-  }
-
-  // Restore sidebar width from localStorage
-  const savedSidebarWidth = localStorage.getItem('sidebarWidth')
-  if (savedSidebarWidth) {
-    sidebarWidth.value = parseFloat(savedSidebarWidth)
-  }
 
   // Add event listeners directly with passive option for touch events
   nextTick(() => {
@@ -550,8 +538,8 @@ const handleSidebarTouchEnd = () => {
 }
 
 const resetSidebarWidth = () => {
-  sidebarWidth.value = 30
-  localStorage.setItem('sidebarWidth', '30')
+  sidebarWidth.value = 80
+  localStorage.setItem('sidebarWidth', '80')
 }
 
 // Helper function to check if the event should be processed for the current plan
@@ -777,7 +765,7 @@ const newChat = () => {
 
 .back-button {
   padding: 8px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   color: var(--text-primary, #ffffff);
@@ -800,7 +788,7 @@ const newChat = () => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   color: var(--text-primary, #ffffff);
@@ -819,7 +807,7 @@ const newChat = () => {
   justify-content: center;
   width: 32px;
   height: 32px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 6px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   color: var(--text-primary, #ffffff);
@@ -852,7 +840,7 @@ const newChat = () => {
   max-width: 480px;
   padding: 16px 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 20px var(--overlay-light);
   display: flex;
   align-items: center;
   justify-content: space-between;

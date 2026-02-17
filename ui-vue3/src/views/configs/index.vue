@@ -50,7 +50,7 @@
               style="
                 display: inline-block;
                 flex-shrink: 0;
-                color: rgba(255, 255, 255, 0.8);
+                color: var(--text-secondary);
                 font-size: 20px;
               "
             />

@@ -40,6 +40,35 @@ Lynxe 也提供了 http 的服务调用能力，适合被集成到既有的项�
 原生支持模型上下文协议（Model Context Protocol），实现与外部服务和工具的无缝集成。
 ![Image](https://github.com/user-attachments/assets/dc4df65b-40be-4a6c-8790-cc091d5aa1a1)
 
+### 💻 **Code Agent**：
+
+内置于 Lynxe 的 AI 驱动代码生成平台。用自然语言描述你想构建的内容，Code Agent 会实时生成完整、可运行的 Web 应用并提供实时预览 — 全部在浏览器中完成。
+
+**核心能力：**
+
+- **自然语言转代码** — 基于 WebSocket 的 LLM 流式对话界面。描述你的需求，即可实时生成完整的 React + TypeScript + Tailwind CSS 项目。
+- **Monaco 编辑器** — 功能完整的代码编辑器，支持语法高亮、多文件标签页和语言自动检测。可直接编辑 AI 生成的代码并即时查看变更。
+- **实时预览 (WebContainer)** — 基于 [WebContainer API](https://webcontainers.io/) 的浏览器端 Node.js 沙箱。自动安装依赖、启动 Vite 开发服务器，并在 iframe 中渲染实时预览 — 无需后端服务器。
+- **终端输出** — 实时终端面板，展示 `pnpm install` 和 `vite` 的输出，完整呈现沙箱构建过程。
+
+**架构：**
+
+```
+┌─────────────┐  WebSocket   ┌──────────────────┐  Spring AI   ┌─────┐
+│  Vue 3 SPA  │◄────────────►│ CodeAgentService │◄────────────►│ LLM │
+│             │  /ws/code-   │  (streaming +    │  Flux<Chat   │     │
+│ ┌─────────┐ │   agent      │  file parsing)   │  Response>   └─────┘
+│ │  Chat   │ │              └──────────────────┘
+│ ├─────────┤ │
+│ │ Monaco  │ │  writeFiles()  ┌──────────────┐
+│ ├─────────┤ │───────────────►│ WebContainer │──► Live Preview
+│ │Terminal │ │                │ (in-browser) │
+│ └─────────┘ │                └──────────────┘
+└─────────────┘
+```
+
+**访问方式：** 启动应用后，在 Lynxe UI 中导航至 `/code-agent`。
+
 ## 🚀 快速开始
 
 在 5 分钟内启动并运行 Lynxe：

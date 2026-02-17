@@ -58,7 +58,7 @@ const backHome = () => {
   padding: 48px;
   border-radius: 24px;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   backdrop-filter: blur(20px);
 }
 
@@ -66,14 +66,14 @@ const backHome = () => {
   width: 120px;
   height: 120px;
   border-radius: 60px;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+  background: linear-gradient(135deg, var(--accent-surface-3) 0%, rgba(118, 75, 162, 0.2) 100%);
   display: flex;
   align-items: center;
   justify-content: center;
 
   .java-logo {
     color: var(--accent-primary, #667eea);
-    filter: drop-shadow(0 0 12px rgba(102, 126, 234, 0.5));
+    filter: drop-shadow(0 0 12px var(--accent-border-3));
   }
 }
 
@@ -97,7 +97,7 @@ const backHome = () => {
 
 .back-button {
   padding: 12px 24px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
   background: linear-gradient(135deg, var(--accent-primary, #667eea) 0%, #09df75 100%);
   color: var(--text-primary, #ffffff);

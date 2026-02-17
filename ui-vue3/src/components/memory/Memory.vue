@@ -392,7 +392,7 @@ const confirmDelete = async () => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.7);
+  background: var(--overlay-heavy);
   backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
@@ -406,9 +406,9 @@ const confirmDelete = async () => {
   overflow-y: auto;
   border-radius: 16px;
   width: 90%;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.15));
+  background: linear-gradient(135deg, var(--accent-surface-2), rgba(118, 75, 162, 0.15));
   border: 1px solid var(--border-primary);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
   max-width: 800px;
   max-height: 80vh;
   min-height: 500px;
@@ -430,7 +430,7 @@ const confirmDelete = async () => {
 .main-title {
   font-size: 1.25rem;
   font-weight: bold;
-  background: linear-gradient(135deg, #667eea 0%, var(--primer-color) 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--primer-color) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -485,7 +485,7 @@ const confirmDelete = async () => {
 
 .search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--accent-primary);
 }
 
 .search-icon {
@@ -513,7 +513,7 @@ const confirmDelete = async () => {
 
 .message-item:hover {
   background-color: #333333;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
 }
 
 .message-header {
@@ -547,7 +547,7 @@ const confirmDelete = async () => {
 }
 
 .sender-div:hover:not(:has(.edit-btn:hover, .down-btn:hover, .delete-btn:hover)) .sender-name {
-  color: #667eea;
+  color: var(--accent-primary);
 }
 
 .sender-name {
@@ -561,7 +561,7 @@ const confirmDelete = async () => {
 .message-preview {
   margin-bottom: 0.25rem;
   padding: 8px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--overlay-medium);
   border: 1px solid var(--border-primary);
   border-radius: 6px;
 }
@@ -591,7 +591,7 @@ const confirmDelete = async () => {
 
 .message-id {
   font-size: 0.75rem;
-  color: #667eea;
+  color: var(--accent-primary);
 }
 
 .message-time {
@@ -602,8 +602,8 @@ const confirmDelete = async () => {
 
 .unread-count {
   font-size: 0.75rem;
-  background-color: rgba(102, 126, 234, 0.2);
-  color: #667eea;
+  background-color: var(--accent-surface-3);
+  color: var(--accent-primary);
   padding: 0.125rem 0.375rem;
   margin-top: 2px;
   border-radius: 1rem;
@@ -631,7 +631,7 @@ const confirmDelete = async () => {
 }
 
 .edit-btn:hover {
-  color: #667eea;
+  color: var(--accent-primary);
 }
 
 .down-btn {
@@ -639,7 +639,7 @@ const confirmDelete = async () => {
 }
 
 .down-btn:hover {
-  color: #667eea;
+  color: var(--accent-primary);
 }
 
 .delete-btn {
@@ -652,7 +652,7 @@ const confirmDelete = async () => {
 }
 
 .delete-btn:hover {
-  color: #ff6b6b;
+  color: var(--error-text);
 }
 
 .expanded-content {
@@ -684,7 +684,7 @@ const confirmDelete = async () => {
 
 .bubble-content {
   padding: 8px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--overlay-medium);
   border: 1px solid var(--border-primary);
   border-radius: 6px;
 }
@@ -704,7 +704,7 @@ const confirmDelete = async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: var(--overlay-heavy);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -759,7 +759,7 @@ const confirmDelete = async () => {
 }
 
 .confirm-btn {
-  background-color: #667eea;
+  background-color: var(--accent-primary);
   color: var(--text-primary);
 }
 
@@ -768,7 +768,7 @@ const confirmDelete = async () => {
 }
 
 .delete-btn-confirm {
-  background-color: #ff6b6b;
+  background-color: var(--error-text);
   color: var(--text-primary);
 }
 
@@ -788,8 +788,8 @@ const confirmDelete = async () => {
 
 .edit-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.3);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 1px var(--accent-border-3);
 }
 
 .char-count {

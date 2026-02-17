@@ -201,13 +201,13 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
 
         :deep(h1) {
           font-size: 24px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid var(--border-default);
           padding-bottom: 8px;
         }
 
         :deep(h2) {
           font-size: 20px;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid var(--border-default);
           padding-bottom: 6px;
         }
 
@@ -247,7 +247,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
 
         // Inline code
         :deep(code:not(pre code)) {
-          background: rgba(0, 0, 0, 0.3);
+          background: var(--overlay-medium);
           padding: 2px 6px;
           border-radius: 4px;
           font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
@@ -257,12 +257,12 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
 
         // Code blocks
         :deep(pre) {
-          background: rgba(0, 0, 0, 0.4);
+          background: var(--overlay-medium);
           padding: 12px;
           border-radius: 8px;
           overflow-x: auto;
           margin: 12px 0;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid var(--border-default);
 
           code {
             background: none;
@@ -296,9 +296,9 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
 
         // Links
         :deep(a) {
-          color: #667eea;
+          color: var(--accent-primary);
           text-decoration: none;
-          border-bottom: 1px solid rgba(102, 126, 234, 0.3);
+          border-bottom: 1px solid var(--accent-border-3);
           transition: all 0.2s ease;
 
           &:hover {
@@ -311,8 +311,8 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
         :deep(blockquote) {
           margin: 12px 0;
           padding: 8px 16px;
-          border-left: 4px solid #667eea;
-          background: rgba(102, 126, 234, 0.1);
+          border-left: 4px solid var(--accent-primary);
+          background: var(--accent-surface-2);
           border-radius: 4px;
           color: var(--text-primary, #ffffff);
           font-style: italic;
@@ -322,7 +322,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
         :deep(hr) {
           margin: 16px 0;
           border: none;
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          border-top: 1px solid var(--border-default);
         }
 
         // Tables
@@ -330,20 +330,20 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
           width: 100%;
           border-collapse: collapse;
           margin: 12px 0;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          border: 1px solid var(--border-default);
           border-radius: 6px;
           overflow: hidden;
         }
 
         :deep(thead) {
-          background: rgba(102, 126, 234, 0.2);
+          background: var(--accent-surface-3);
         }
 
         :deep(th),
         :deep(td) {
           padding: 8px 12px;
           text-align: left;
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          border-bottom: 1px solid var(--border-default);
         }
 
         :deep(th) {
@@ -356,7 +356,7 @@ const handleUserInputSubmitted = (inputData: Record<string, unknown>) => {
         }
 
         :deep(tbody tr:hover) {
-          background: rgba(255, 255, 255, 0.05);
+          background: var(--surface-subtle);
         }
 
         // Images

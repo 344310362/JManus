@@ -47,6 +47,35 @@ Natively supports the Model Context Protocol (MCP) for seamless integration with
 
 ![Image](https://github.com/user-attachments/assets/231b05e5-9c72-43ac-85b2-fd7d0b500be8)
 
+### 💻 **Code Agent**:
+
+An AI-powered code generation platform built into Lynxe. Describe what you want to build in natural language, and Code Agent generates complete, runnable web applications with live preview — all in the browser.
+
+**Key capabilities:**
+
+- **Natural Language to Code** — Chat-based interface powered by LLM streaming via WebSocket. Describe your requirements and get complete React + TypeScript + Tailwind CSS projects generated in real time.
+- **Monaco Editor** — Full-featured code editor with syntax highlighting, multi-file tabs, and language auto-detection. Edit AI-generated code directly and see changes reflected instantly.
+- **Live Preview (WebContainer)** — Browser-based Node.js sandbox powered by [WebContainer API](https://webcontainers.io/). Auto-installs dependencies, starts a Vite dev server, and renders a live preview in an iframe — no backend server needed.
+- **Terminal Output** — Real-time terminal panel showing `pnpm install` and `vite` output for full visibility into the sandbox build process.
+
+**Architecture:**
+
+```
+┌─────────────┐  WebSocket   ┌──────────────────┐  Spring AI   ┌─────┐
+│  Vue 3 SPA  │◄────────────►│ CodeAgentService │◄────────────►│ LLM │
+│             │  /ws/code-   │  (streaming +    │  Flux<Chat   │     │
+│ ┌─────────┐ │   agent      │  file parsing)   │  Response>   └─────┘
+│ │  Chat   │ │              └──────────────────┘
+│ ├─────────┤ │
+│ │ Monaco  │ │  writeFiles()  ┌──────────────┐
+│ ├─────────┤ │───────────────►│ WebContainer │──► Live Preview
+│ │Terminal │ │                │ (in-browser) │
+│ └─────────┘ │                └──────────────┘
+└─────────────┘
+```
+
+**Access:** Navigate to `/code-agent` in the Lynxe UI after starting the application.
+
 ## 🚀 Quick Start
 
 Get Lynxe up and running in under 5 minutes:

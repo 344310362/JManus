@@ -367,7 +367,7 @@ defineExpose({
   flex-shrink: 0;
 
   &:hover {
-    color: #ff6b6b;
+    color: var(--error-text);
     background: rgba(255, 107, 107, 0.1);
   }
 }

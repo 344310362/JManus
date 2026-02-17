@@ -127,7 +127,7 @@ const selectOption = (option: { id: string }) => {
 }
 
 .select-btn:focus {
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 0 3px var(--accent-border-3);
 }
 
 .current-option {
@@ -154,7 +154,7 @@ const selectOption = (option: { id: string }) => {
   backdrop-filter: blur(16px);
   border: 1px solid var(--selection-bg, var(--selection-bg));
   border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px var(--accent-primary);
+  box-shadow: 0 8px 32px var(--overlay-medium), 0 0 0 1px var(--accent-primary);
   min-width: 300px;
 }
 
@@ -167,7 +167,7 @@ const selectOption = (option: { id: string }) => {
   font-size: 14px;
   font-weight: 600;
   color: var(--text-primary, var(--text-primary));
-  background: linear-gradient(135deg, var(--accent-primary), rgba(102, 126, 234, 0.05));
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-surface-1));
 }
 
 .close-btn {

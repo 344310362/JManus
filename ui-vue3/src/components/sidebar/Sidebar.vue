@@ -104,7 +104,7 @@ defineExpose({
   position: relative;
   height: 100vh;
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 1px solid var(--border-default);
   transition: width 0.1s ease;
   overflow: hidden;
   display: flex;
@@ -124,7 +124,7 @@ defineExpose({
     justify-content: space-between;
     margin-bottom: 0px;
     padding: 12px 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-default);
     overflow: hidden;
 
     .sidebar-content-title {
@@ -161,7 +161,7 @@ defineExpose({
 
       &:hover {
         transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 4px 12px var(--accent-border-3);
       }
     }
   }
@@ -204,7 +204,7 @@ defineExpose({
   min-width: 400px;
   max-width: 500px;
   border: 1px solid var(--border-primary);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px var(--overlay-medium);
 }
 
 .modal-header {
@@ -212,7 +212,7 @@ defineExpose({
   align-items: center;
   justify-content: space-between;
   padding: 16px 20px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .modal-header h3 {
@@ -246,7 +246,7 @@ defineExpose({
   justify-content: flex-end;
   gap: 12px;
   padding: 16px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-default);
 }
 
 .form-row {
@@ -265,7 +265,7 @@ defineExpose({
   padding: 10px 12px;
   border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
   border-radius: 6px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--overlay-medium);
   color: var(--text-primary);
   font-size: 13px;
   transition: all 0.2s ease;
@@ -274,7 +274,7 @@ defineExpose({
 .form-input:focus {
   outline: none;
   border-color: var(--accent-primary, #667eea);
-  box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 0 0 2px var(--accent-surface-3);
 }
 
 .btn {

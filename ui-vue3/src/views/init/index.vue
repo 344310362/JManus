@@ -511,12 +511,12 @@ onMounted(() => {
 .init-card {
   background: var(--scrollbar-track, rgba(255, 255, 255, 0.05));
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 20px;
   padding: 40px;
   width: 100%;
   max-width: 480px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px var(--overlay-medium);
   position: relative;
   z-index: 10;
   margin: auto;
@@ -671,7 +671,7 @@ onMounted(() => {
 
 .language-option.active {
   border-color: var(--accent-primary, #667eea);
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--accent-surface-2);
   transform: translateY(-2px);
 }
 
@@ -751,7 +751,7 @@ onMounted(() => {
 .form-input:focus {
   outline: none;
   border-color: var(--accent-primary, #667eea);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  box-shadow: 0 0 0 3px var(--accent-surface-3);
   background: rgba(var(--bg-primary-rgb), 0.08);
 }
 
@@ -832,7 +832,7 @@ onMounted(() => {
 
 .radio-option.active {
   border-color: var(--accent-primary, #667eea);
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--accent-surface-2);
 }
 
 .radio-option input[type="radio"] {
@@ -861,7 +861,7 @@ onMounted(() => {
 }
 
 .custom-config-section {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-default);
   border-radius: 12px;
   padding: 20px;
   background: rgba(var(--bg-primary-rgb), 0.02);
@@ -912,7 +912,7 @@ onMounted(() => {
 
 .back-btn:hover:not(:disabled) {
   border-color: var(--accent-primary, #667eea);
-  background: rgba(102, 126, 234, 0.1);
+  background: var(--accent-surface-2);
   transform: translateY(-2px);
 }
 
@@ -1012,7 +1012,7 @@ onMounted(() => {
 
 .floating-shape {
   position: absolute;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+  background: linear-gradient(135deg, var(--accent-surface-2) 0%, rgba(118, 75, 162, 0.1) 100%);
   border-radius: 50%;
   animation: float 20s infinite linear;
 }

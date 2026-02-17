@@ -254,7 +254,7 @@ onUnmounted(() => {
   background: var(--bg-secondary, #1a1a1a);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 32px var(--overlay-medium);
   z-index: 1000;
   max-height: 500px;
   overflow: hidden;
@@ -267,7 +267,7 @@ onUnmounted(() => {
   align-items: center;
   justify-content: space-between;
   padding: 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .dropdown-header h3 {
@@ -295,7 +295,7 @@ onUnmounted(() => {
 .search-container {
   position: relative;
   padding: 12px 16px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .search-input {

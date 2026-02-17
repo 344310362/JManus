@@ -459,7 +459,7 @@ watch(visible, newVisible => {
 
 .search-input:focus {
   outline: none;
-  border-color: rgba(102, 126, 234, 0.5);
+  border-color: var(--accent-border-3);
   background: rgba(var(--bg-primary-rgb), 0.1);
 }
 
@@ -485,7 +485,7 @@ watch(visible, newVisible => {
 .tool-summary {
   margin-bottom: 16px;
   padding: 8px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .summary-text {
@@ -508,7 +508,7 @@ watch(visible, newVisible => {
   background: var(--scrollbar-track, var(--bg-primary-rgb));
   cursor: pointer;
   transition: all 0.3s;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--border-default);
 }
 
 .tool-group-header:hover {

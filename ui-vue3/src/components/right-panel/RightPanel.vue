@@ -754,7 +754,7 @@ defineExpose({
     padding: 8px 16px;
     border: 1px solid var(--border-primary);
     border-radius: 6px;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    background: linear-gradient(135deg, var(--accent-surface-3) 0%, rgba(118, 75, 162, 0.2) 100%);
     border-color: var(--accent-primary, #667eea);
     color: var(--accent-primary, #667eea);
     cursor: default;
@@ -867,7 +867,7 @@ defineExpose({
 .execution-status {
   margin-top: 12px;
   padding-top: 12px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--border-default);
 
   .status-item {
     display: flex;
@@ -1121,9 +1121,9 @@ defineExpose({
     .tool-execution-item {
       margin-bottom: 20px;
       padding: 12px;
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--overlay-light);
       border-radius: 6px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--surface-subtle);
 
       &:last-child {
         margin-bottom: 0;
@@ -1169,19 +1169,19 @@ defineExpose({
         display: flex;
         align-items: center;
         justify-content: center;
-        background: rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--overlay-medium);
+        border: 1px solid var(--border-default);
         border-radius: 4px;
         padding: 4px 6px;
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
         cursor: pointer;
         transition: all 0.2s;
         font-size: 12px;
 
         &:hover {
-          background: rgba(0, 0, 0, 0.5);
-          border-color: rgba(255, 255, 255, 0.2);
-          color: rgba(255, 255, 255, 0.9);
+          background: var(--overlay-heavy);
+          border-color: var(--border-primary);
+          color: var(--text-primary);
         }
 
         &:active {
@@ -1199,7 +1199,7 @@ defineExpose({
       }
 
       pre {
-        background: rgba(0, 0, 0, 0.3);
+        background: var(--overlay-medium);
         border: 1px solid var(--border-primary);
         border-radius: 4px;
         padding: 12px;
@@ -1214,12 +1214,12 @@ defineExpose({
       }
 
       .char-count-badge {
-        background: rgba(0, 0, 0, 0.6);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: var(--overlay-heavy);
+        border: 1px solid var(--border-primary);
         border-radius: 4px;
         padding: 2px 6px;
         font-size: 10px;
-        color: rgba(255, 255, 255, 0.7);
+        color: var(--text-secondary);
         font-weight: 500;
       }
     }
@@ -1228,7 +1228,7 @@ defineExpose({
   /* Sub plan styles */
   .sub-plan-content {
     .sub-plan-header {
-      background: rgba(102, 126, 234, 0.1);
+      background: var(--accent-surface-2);
       border: 1px solid var(--selection-bg, rgba(102, 126, 234, 0.3));
       border-radius: 6px;
       padding: 12px;
@@ -1262,7 +1262,7 @@ defineExpose({
         align-items: center;
         gap: 6px;
         padding-top: 8px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        border-top: 1px solid var(--border-default);
 
         .status-icon {
           font-size: 14px;
@@ -1331,14 +1331,14 @@ defineExpose({
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 12px var(--overlay-medium);
   transition: all 0.3s ease;
   z-index: 100;
 
   &:hover {
     background: rgba(74, 144, 226, 1);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 6px 16px var(--overlay-medium);
   }
 
   &:active {
@@ -1494,7 +1494,7 @@ defineExpose({
   justify-content: space-between;
   margin-bottom: 16px;
   padding: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--surface-subtle);
   border-radius: 8px;
 
   .template-info {
@@ -1513,7 +1513,7 @@ defineExpose({
 
     .template-id {
       font-size: 11px;
-      color: rgba(255, 255, 255, 0.5);
+      color: var(--text-tertiary);
     }
   }
 
@@ -1523,7 +1523,7 @@ defineExpose({
     background: transparent;
     border: none;
     border-radius: 4px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -1531,7 +1531,7 @@ defineExpose({
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.1);
+      background: var(--border-default);
       color: white;
     }
   }
@@ -1573,7 +1573,7 @@ defineExpose({
 
     &:hover {
       transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 4px 12px var(--accent-border-3);
     }
   }
 
@@ -1582,12 +1582,12 @@ defineExpose({
     padding: 0 16px;
     font-size: 12px;
     line-height: 1.6;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     text-align: center;
     max-width: 400px;
 
     .prompt-library-link {
-      color: #667eea;
+      color: var(--accent-primary);
       text-decoration: none;
       transition: color 0.2s ease;
 

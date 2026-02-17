@@ -279,8 +279,8 @@ const handleNestedStepSelected = (stepId: string) => {
 
 <style lang="less" scoped>
 .recursive-sub-plan {
-  background: rgba(102, 126, 234, 0.05);
-  border: 1px solid rgba(102, 126, 234, 0.1);
+  background: var(--accent-surface-1);
+  border: 1px solid var(--accent-surface-2);
   border-radius: 6px;
   padding: 0;
   margin-bottom: 8px;
@@ -288,19 +288,19 @@ const handleNestedStepSelected = (stepId: string) => {
   overflow: hidden;
 
   &:hover {
-    background: rgba(102, 126, 234, 0.1);
-    border-color: rgba(102, 126, 234, 0.2);
+    background: var(--accent-surface-2);
+    border-color: var(--accent-surface-3);
   }
 
   &.running {
     border-color: var(--selection-bg, rgba(102, 126, 234, 0.3));
     background: rgba(102, 126, 234, 0.08);
-    box-shadow: 0 0 8px rgba(102, 126, 234, 0.15);
+    box-shadow: 0 0 8px var(--accent-glow);
   }
 
   &.completed {
-    border-color: rgba(34, 197, 94, 0.3);
-    background: rgba(34, 197, 94, 0.05);
+    border-color: var(--success-border);
+    background: var(--success-surface);
   }
 
   &.pending {
@@ -310,7 +310,7 @@ const handleNestedStepSelected = (stepId: string) => {
   // Nesting level styles
   &.nesting-level-1 {
     margin-left: 16px;
-    border-left: 3px solid rgba(102, 126, 234, 0.3);
+    border-left: 3px solid var(--accent-border-3);
   }
 
   &.nesting-level-2 {
@@ -320,7 +320,7 @@ const handleNestedStepSelected = (stepId: string) => {
 
   &.nesting-level-3 {
     margin-left: 48px;
-    border-left: 3px solid rgba(34, 197, 94, 0.3);
+    border-left: 3px solid var(--success-border);
   }
 
   .sub-plan-header {
@@ -328,7 +328,7 @@ const handleNestedStepSelected = (stepId: string) => {
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--surface-hover);
     cursor: pointer;
     transition: background 0.2s ease;
     margin-bottom: 8px;
@@ -337,11 +337,11 @@ const handleNestedStepSelected = (stepId: string) => {
     z-index: 1;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.05);
+      background: var(--surface-subtle);
     }
 
     &:active {
-      background: rgba(255, 255, 255, 0.08);
+      background: var(--surface-default);
     }
 
     .sub-plan-info {
@@ -395,7 +395,7 @@ const handleNestedStepSelected = (stepId: string) => {
         align-items: center;
         gap: 4px;
         padding: 2px 6px;
-        background: rgba(102, 126, 234, 0.1);
+        background: var(--accent-surface-2);
         border-radius: 4px;
         font-size: 10px;
 
@@ -410,6 +410,7 @@ const handleNestedStepSelected = (stepId: string) => {
         }
       }
     }
+    }
 
     .sub-plan-status-badge {
       padding: 2px 6px;
@@ -418,23 +419,23 @@ const handleNestedStepSelected = (stepId: string) => {
       font-weight: 500;
 
       &.completed {
-        background: rgba(34, 197, 94, 0.2);
+        background: var(--success-border);
         color: var(--success, #22c55e);
       }
 
       &.running {
-        background: rgba(102, 126, 234, 0.2);
+        background: var(--accent-surface-3);
         color: var(--accent-primary, #667eea);
       }
 
       &.in-progress {
-        background: rgba(251, 191, 36, 0.2);
+        background: var(--warning-border);
         color: var(--warning, #fbbf24);
       }
 
       &.pending {
         background: rgba(156, 163, 175, 0.2);
-        color: #9ca3af;
+        color: var(--text-tertiary);
       }
     }
   }
@@ -458,18 +459,18 @@ const handleNestedStepSelected = (stepId: string) => {
         border: 1px solid var(--border-primary);
         border-radius: 6px;
         padding: 8px;
-        background: rgba(0, 0, 0, 0.05);
+        background: var(--overlay-subtle);
         cursor: pointer;
         transition: all 0.2s;
 
         &:hover {
-          background: rgba(0, 0, 0, 0.1);
+          background: var(--overlay-subtle);
           border-color: var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
         }
 
         &.completed {
-          border-color: rgba(34, 197, 94, 0.3);
-          background: rgba(34, 197, 94, 0.05);
+          border-color: var(--success-border);
+          background: var(--success-surface);
         }
 
         &.running {
@@ -499,7 +500,7 @@ const handleNestedStepSelected = (stepId: string) => {
             }
 
             &.pending {
-              color: #9ca3af;
+              color: var(--text-tertiary);
             }
           }
 
@@ -517,18 +518,18 @@ const handleNestedStepSelected = (stepId: string) => {
             font-weight: 500;
 
             &.completed {
-              background: rgba(34, 197, 94, 0.2);
+              background: var(--success-border);
               color: var(--success, #22c55e);
             }
 
             &.running {
-              background: rgba(102, 126, 234, 0.2);
+              background: var(--accent-surface-3);
               color: var(--accent-primary, #667eea);
             }
 
             &.pending {
               background: rgba(156, 163, 175, 0.2);
-              color: #9ca3af;
+              color: var(--text-tertiary);
             }
           }
         }
@@ -573,7 +574,7 @@ const handleNestedStepSelected = (stepId: string) => {
             .error-content {
               margin: 0;
               padding: 6px;
-              background: rgba(0, 0, 0, 0.2);
+              background: var(--overlay-light);
               border-radius: 3px;
               font-family: monospace;
               font-size: 10px;
@@ -616,14 +617,14 @@ const handleNestedStepSelected = (stepId: string) => {
                 align-items: center;
                 gap: 6px;
                 padding: 4px 6px;
-                background: rgba(0, 0, 0, 0.1);
+                background: var(--overlay-subtle);
                 border-radius: 3px;
                 cursor: pointer;
                 transition: all 0.2s;
                 font-size: 10px;
 
                 &:hover {
-                  background: rgba(0, 0, 0, 0.2);
+                  background: var(--overlay-light);
                 }
 
                 .step-number {

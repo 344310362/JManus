@@ -348,7 +348,7 @@ onUnmounted(() => {
   margin-top: 20px;
   padding: 16px;
   background: rgba(var(--bg-primary-rgb));
-  border: 1px solid rgba(102, 126, 234, 0.2);
+  border: 1px solid var(--accent-surface-3);
   border-radius: 8px;
 
   .user-input-header {
@@ -413,7 +413,7 @@ onUnmounted(() => {
     }
 
     :deep(code) {
-      background: rgba(0, 0, 0, 0.3);
+      background: var(--overlay-medium);
       padding: 2px 6px;
       border-radius: 3px;
       font-family: 'Courier New', monospace;
@@ -422,7 +422,7 @@ onUnmounted(() => {
     }
 
     :deep(pre) {
-      background: rgba(0, 0, 0, 0.3);
+      background: var(--overlay-medium);
       padding: 12px;
       border-radius: 6px;
       overflow-x: auto;
@@ -445,7 +445,7 @@ onUnmounted(() => {
     }
 
     :deep(blockquote) {
-      border-left: 3px solid #667eea;
+      border-left: 3px solid var(--accent-primary);
       padding-left: 12px;
       margin-left: 0;
       color: #cccccc;
@@ -453,7 +453,7 @@ onUnmounted(() => {
     }
 
     :deep(a) {
-      color: #667eea;
+      color: var(--accent-primary);
       text-decoration: none;
     }
 
@@ -496,7 +496,7 @@ onUnmounted(() => {
 
       .form-input {
         padding: 8px 12px;
-        background: rgba(0, 0, 0, 0.3);
+        background: var(--overlay-medium);
         border: 1px solid var(--scrollbar-thumb, rgba(255, 255, 255, 0.2));
         border-radius: 6px;
         color: var(--text-primary, #ffffff);
@@ -506,7 +506,7 @@ onUnmounted(() => {
         &:focus {
           outline: none;
           border-color: var(--accent-primary, #667eea);
-          box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+          box-shadow: 0 0 0 2px var(--accent-surface-3);
         }
 
         &::placeholder {

@@ -720,7 +720,7 @@ defineExpose({
   bottom: 0;
   z-index: 100;
   /* Add a slight shadow to distinguish the message area */
-  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 -4px 12px var(--overlay-subtle);
   backdrop-filter: blur(20px);
   display: flex;
   flex-direction: column;

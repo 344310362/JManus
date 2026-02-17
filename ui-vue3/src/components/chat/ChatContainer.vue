@@ -359,7 +359,7 @@ onUnmounted(() => {
       color: var(--text-primary);
       padding: 12px 16px;
       border-radius: 18px 18px 4px 18px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 2px 8px var(--overlay-subtle);
       position: relative;
 
       .message-text {
@@ -419,7 +419,7 @@ onUnmounted(() => {
       font-size: 12px;
 
       &.error {
-        color: #ff6b6b;
+        color: var(--error-text);
 
         .status-icon {
           font-size: 14px;
@@ -470,7 +470,7 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 12px var(--overlay-medium);
     transition: all 0.2s ease;
     z-index: 10;
 

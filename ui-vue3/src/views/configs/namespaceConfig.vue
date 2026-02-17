@@ -709,7 +709,7 @@ onMounted(() => {
 }
 
 .required {
-  color: #ff6b6b;
+  color: var(--error-text);
 }
 
 .section-header {
